@@ -8,6 +8,7 @@ export interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   asChild?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export function Button({
@@ -18,6 +19,7 @@ export function Button({
   onClick,
   disabled = false,
   asChild = false,
+  type = 'button',
 }: ButtonProps) {
   const variantClasses = {
     primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
@@ -45,6 +47,7 @@ export function Button({
       className: buttonClasses,
       onClick,
       disabled,
+      type,
     });
   }
 
@@ -53,6 +56,7 @@ export function Button({
       className={buttonClasses}
       onClick={onClick}
       disabled={disabled}
+      type={type}
     >
       {children}
     </button>

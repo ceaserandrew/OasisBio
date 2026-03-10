@@ -1,6 +1,7 @@
 import React from 'react';
 
 export interface InputProps {
+  id?: string;
   type?: string;
   placeholder?: string;
   value?: string;
@@ -11,6 +12,7 @@ export interface InputProps {
 }
 
 export function Input({
+  id,
   type = 'text',
   placeholder,
   value,
@@ -21,6 +23,7 @@ export function Input({
 }: InputProps) {
   return (
     <input
+      id={id}
       type={type}
       placeholder={placeholder}
       value={value}
