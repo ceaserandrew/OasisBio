@@ -212,3 +212,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
     />
   );
 });
+
+Button.displayName = 'Button';
+```
+
+#### Card Component
+```tsx
+// src/components/Card.tsx
+import React from 'react';
