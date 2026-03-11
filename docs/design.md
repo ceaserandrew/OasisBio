@@ -246,4 +246,7 @@ export const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(({ c
 ));
 CardHeader.displayName = 'CardHeader';
 
-export const Card
+export const CardTitle = React.forwardRef<HTMLParagraphElement, CardTitleProps>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className
