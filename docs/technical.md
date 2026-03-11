@@ -251,4 +251,10 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="[YOUR-ANON-KEY]"
 ## Security Considerations
 - Passwords are hashed using bcryptjs
 - Authentication is handled through NextAuth.js
-- Protected
+- Protected routes require valid session
+- Environment variables are kept secure
+- Input validation is implemented for all user inputs
+
+## Performance Optimization
+- Next.js App Router for efficient routing
+- Server-side rendering
