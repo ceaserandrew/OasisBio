@@ -198,4 +198,11 @@ OasisBio/
 - **Worlds**: `GET|POST|PUT|DELETE /api/oasisbios/[id]/worlds`
 
 ### Model Management
-- `GET /api/oasisbios/[id]/models` -
+- `GET /api/oasisbios/[id]/models` - Get models for OasisBio
+- `POST /api/oasisbios/[id]/models` - Upload model to OasisBio
+- `DELETE /api/models/[id]` - Delete model
+
+## Deployment
+
+### Supabase Setup
+1. Create a Supabase project
