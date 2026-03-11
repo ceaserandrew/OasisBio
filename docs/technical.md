@@ -212,4 +212,12 @@ OasisBio/
 ### Cloudflare Pages Deployment
 1. Connect your GitHub repository to Cloudflare Pages
 2. Configure build settings:
-   - Build command
+   - Build command: `npm run build`
+   - Publish directory: `.next/static`
+3. Add environment variables
+4. Deploy the project
+
+### Environment Variables
+```
+# Supabase Database URL
+DATABASE_URL="postgresql://postgres:[YOUR-PASSWORD]@db.dhkgfdllgtmbkwcb
