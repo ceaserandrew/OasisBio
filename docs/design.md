@@ -154,3 +154,17 @@ h1, h2, h3, h4, h5, h6 {
   background: #888;
   border-radius: 4px;
 }
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+```
+
+### Component Styles
+
+#### Button Component
+```tsx
+// src/components/Button.tsx
+import React from 'react';
+
+export interface ButtonProps
