@@ -38,4 +38,12 @@ OasisBio/
 │   │   ├── auth/            # Authentication pages
 │   │   ├── dashboard/       # User dashboard
 │   │   ├── bio/             # Public OasisBio pages
-│
+│   │   └── (other pages)    # Additional website pages
+│   ├── components/          # Reusable React components
+│   ├── lib/                 # Utility functions
+│   └── generated/           # Generated Prisma client
+├── docs/                    # Project documentation
+├── .env                     # Environment variables
+├── package.json             # Project dependencies
+└── tailwind.config.js       # Tailwind CSS configuration
+```
