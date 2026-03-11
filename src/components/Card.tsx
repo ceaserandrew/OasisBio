@@ -3,11 +3,18 @@ import React from 'react';
 export interface CardProps {
   children: React.ReactNode;
   className?: string;
+  variant?: 'default' | 'elevated' | 'outlined';
 }
 
-export function Card({ children, className = '' }: CardProps) {
+export function Card({ children, className = '', variant = 'default' }: CardProps) {
+  const variantClasses = {
+    default: 'bg-card border border-border shadow-sm',
+    elevated: 'bg-card border border-border shadow-md',
+    outlined: 'bg-card border border-border',
+  };
+  
   return (
-    <div className={`bg-card border border-border rounded-lg p-6 shadow-sm ${className}`}>
+    <div className={`${variantClasses[variant]} rounded-lg p-6 ${className}`}>
       {children}
     </div>
   );

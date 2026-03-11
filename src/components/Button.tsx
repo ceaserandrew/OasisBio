@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 export interface ButtonProps {
   children: ReactNode;
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   onClick?: () => void;
   disabled?: boolean;
@@ -32,13 +32,14 @@ export function Button({
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-base',
     lg: 'px-6 py-3 text-lg',
+    xl: 'px-8 py-4 text-xl',
   };
 
   const buttonClasses = `
     ${variantClasses[variant]}
     ${sizeClasses[size]}
-    rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
-    ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+    rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
+    ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}
     ${className}
   `;
 

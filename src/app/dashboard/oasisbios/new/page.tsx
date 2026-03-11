@@ -57,10 +57,10 @@ export default function CreateOasisBioPage() {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="container mx-auto max-w-3xl">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Create New OasisBio</h1>
+          <h1 className="text-3xl font-display font-bold">Create New OasisBio</h1>
           <Button asChild>
             <a href="/dashboard">Cancel</a>
           </Button>
@@ -70,10 +70,10 @@ export default function CreateOasisBioPage() {
         <div className="flex items-center justify-between mb-12">
           {[1, 2, 3, 4, 5, 6, 7].map((stepNum) => (
             <div key={stepNum} className="flex flex-col items-center">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${stepNum <= step ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-mono ${stepNum <= step ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
                 {stepNum}
               </div>
-              <div className="mt-2 text-xs text-center">
+              <div className="mt-2 text-xs font-mono text-center">
                 {stepNum === 1 && 'Identity Mode'}
                 {stepNum === 2 && 'Name'}
                 {stepNum === 3 && 'Basic Info'}
@@ -91,7 +91,7 @@ export default function CreateOasisBioPage() {
 
         {/* Step 1: Identity Mode */}
         {step === 1 && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 1: Choose Identity Mode</CardTitle>
             </CardHeader>
@@ -106,7 +106,7 @@ export default function CreateOasisBioPage() {
                     { value: 'future', label: 'Future', description: 'Your future self' },
                     { value: 'alternate', label: 'Alternate', description: 'A parallel version of you' },
                   ].map((mode) => (
-                    <div key={mode.value} className="border rounded-md p-4 cursor-pointer hover:bg-muted transition-colors">
+                    <div key={mode.value} className="border border-border rounded-md p-4 cursor-pointer hover:bg-muted transition-colors">
                       <input
                         type="radio"
                         id={`mode-${mode.value}`}
@@ -132,7 +132,7 @@ export default function CreateOasisBioPage() {
 
         {/* Step 2: Name */}
         {step === 2 && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 2: Name Your OasisBio</CardTitle>
             </CardHeader>
@@ -180,7 +180,7 @@ export default function CreateOasisBioPage() {
 
         {/* Step 3: Basic Info */}
         {step === 3 && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 3: Basic Profile</CardTitle>
             </CardHeader>
@@ -285,7 +285,7 @@ export default function CreateOasisBioPage() {
 
         {/* Step 4: Abilities */}
         {step === 4 && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 4: Build Your Ability Pool</CardTitle>
             </CardHeader>
@@ -293,7 +293,7 @@ export default function CreateOasisBioPage() {
               <p className="text-muted-foreground mb-4">
                 Add abilities to your OasisBio. You can add custom abilities or choose from presets.
               </p>
-              <div className="border rounded-md p-4 mb-4">
+              <div className="border border-border rounded-md p-4 mb-4">
                 <h3 className="font-medium mb-2">Add New Ability</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input placeholder="Ability Name" />
@@ -306,7 +306,7 @@ export default function CreateOasisBioPage() {
                 </div>
                 <Button className="mt-4">Add Ability</Button>
               </div>
-              <div className="border rounded-md p-4">
+              <div className="border border-border rounded-md p-4">
                 <h3 className="font-medium mb-2">Your Abilities</h3>
                 <p className="text-muted-foreground">No abilities added yet.</p>
               </div>
@@ -316,7 +316,7 @@ export default function CreateOasisBioPage() {
 
         {/* Step 5: Repositories */}
         {step === 5 && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 5: Build Your Repositories</CardTitle>
             </CardHeader>
@@ -350,7 +350,7 @@ export default function CreateOasisBioPage() {
 
         {/* Step 6: Model */}
         {step === 6 && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 6: Upload 3D Model</CardTitle>
             </CardHeader>
@@ -358,7 +358,7 @@ export default function CreateOasisBioPage() {
               <p className="text-muted-foreground mb-4">
                 Upload an OBJ file to represent your identity visually.
               </p>
-              <div className="border dashed rounded-md p-8 text-center">
+              <div className="border border-dashed border-border rounded-md p-8 text-center">
                 <p className="text-muted-foreground mb-4">
                   Drag and drop your OBJ file here, or click to browse
                 </p>
@@ -373,7 +373,7 @@ export default function CreateOasisBioPage() {
 
         {/* Step 7: Publish */}
         {step === 7 && (
-          <Card>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 7: Preview & Publish</CardTitle>
             </CardHeader>
@@ -381,7 +381,7 @@ export default function CreateOasisBioPage() {
               <p className="text-muted-foreground mb-4">
                 Review your OasisBio and publish it to make it public.
               </p>
-              <div className="border rounded-md p-4 mb-4">
+              <div className="border border-border rounded-md p-4 mb-4">
                 <h3 className="font-medium mb-2">OasisBio Preview</h3>
                 <p className="text-muted-foreground">Preview will appear here</p>
               </div>

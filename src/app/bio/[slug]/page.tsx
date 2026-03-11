@@ -123,17 +123,17 @@ export default function PublicOasisBioPage() {
   const [activeTab, setActiveTab] = useState('profile');
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Hero Section */}
-      <section className="py-20 md:py-32 border-b border-gray-100">
+      <section className="py-20 md:py-32 border-b border-border">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-block px-3 py-1 bg-gray-100 text-sm font-medium rounded-full mb-6">
+            <div className="inline-block px-3 py-1 bg-muted text-sm font-mono rounded-full mb-6">
               {oasisBioData.identityMode.charAt(0).toUpperCase() + oasisBioData.identityMode.slice(1)} Identity
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">{oasisBioData.title}</h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-600">{oasisBioData.tagline}</p>
-            <div className="inline-block px-3 py-1 bg-black text-white text-sm font-medium rounded-full">
+            <h1 className="text-4xl md:text-6xl font-display font-bold mb-4">{oasisBioData.title}</h1>
+            <p className="text-xl md:text-2xl mb-8 text-muted-foreground">{oasisBioData.tagline}</p>
+            <div className="inline-block px-3 py-1 bg-primary text-primary-foreground text-sm font-mono rounded-full">
               {oasisBioData.currentEra} Era
             </div>
           </div>
@@ -141,10 +141,10 @@ export default function PublicOasisBioPage() {
       </section>
 
       {/* Era Selector */}
-      <section className="py-12 border-b border-gray-100">
+      <section className="py-12 border-b border-border">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6 text-center">Identity Timeline</h2>
+            <h2 className="text-2xl font-display font-bold mb-6 text-center">Identity Timeline</h2>
             <div className="flex justify-center space-x-4">
               {oasisBioData.eras.map(era => (
                 <Button 
@@ -161,7 +161,7 @@ export default function PublicOasisBioPage() {
       </section>
 
       {/* Navigation Tabs */}
-      <section className="sticky top-0 bg-white z-10 border-b border-gray-100">
+      <section className="sticky top-0 bg-background z-10 border-b border-border">
         <div className="container mx-auto px-4">
           <div className="flex overflow-x-auto">
             <Button 
@@ -217,7 +217,7 @@ export default function PublicOasisBioPage() {
             {/* Profile Section */}
             {activeTab === 'profile' && (
               <div className="space-y-12">
-                <Card className="border-0 shadow-sm">
+                <Card variant="outlined">
                   <CardHeader>
                     <CardTitle>Basic Profile</CardTitle>
                   </CardHeader>
@@ -225,37 +225,37 @@ export default function PublicOasisBioPage() {
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <h3 className="text-sm font-medium text-gray-600 mb-1">Birth Date</h3>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Birth Date</h3>
                           <p>{oasisBioData.birthDate}</p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-medium text-gray-600 mb-1">Gender</h3>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Gender</h3>
                           <p>{oasisBioData.gender}</p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-medium text-gray-600 mb-1">Pronouns</h3>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Pronouns</h3>
                           <p>{oasisBioData.pronouns}</p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-medium text-gray-600 mb-1">Place of Origin</h3>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Place of Origin</h3>
                           <p>{oasisBioData.placeOfOrigin}</p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-medium text-gray-600 mb-1">Current Era</h3>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Current Era</h3>
                           <p>{oasisBioData.currentEra}</p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-medium text-gray-600 mb-1">Species</h3>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Species</h3>
                           <p>{oasisBioData.species}</p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-medium text-gray-600 mb-1">Status</h3>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Status</h3>
                           <p>{oasisBioData.status}</p>
                         </div>
                       </div>
                       <div>
-                        <h3 className="text-sm font-medium text-gray-600 mb-1">Description</h3>
-                        <p className="text-gray-700">{oasisBioData.description}</p>
+                        <h3 className="text-sm font-medium text-muted-foreground mb-1">Description</h3>
+                        <p className="text-foreground">{oasisBioData.description}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -266,10 +266,10 @@ export default function PublicOasisBioPage() {
             {/* Abilities Section */}
             {activeTab === 'abilities' && (
               <div className="space-y-8">
-                <h2 className="text-2xl font-bold">Ability Pool</h2>
+                <h2 className="text-2xl font-display font-bold">Ability Pool</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {oasisBioData.abilities.map(ability => (
-                    <Card key={ability.id} className="border-0 shadow-sm">
+                    <Card key={ability.id} variant="outlined">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-lg">{ability.name}</CardTitle>
                         <CardDescription>{ability.category.charAt(0).toUpperCase() + ability.category.slice(1)}</CardDescription>
@@ -280,20 +280,20 @@ export default function PublicOasisBioPage() {
                             <span className="text-sm font-medium">Level</span>
                             <span className="text-sm font-medium">{ability.level}/5</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-muted rounded-full h-2">
                             <div 
-                              className="bg-black h-2 rounded-full" 
+                              className="bg-primary h-2 rounded-full" 
                               style={{ width: `${(ability.level / 5) * 100}%` }}
                             ></div>
                           </div>
                         </div>
                         <div className="mb-4">
-                          <span className="inline-block px-2 py-1 bg-gray-100 text-xs font-medium rounded">
+                          <span className="inline-block px-2 py-1 bg-muted text-xs font-mono rounded">
                             {ability.type === 'official' ? 'Official' : 'Custom'}
                           </span>
                         </div>
                         {ability.description && (
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             {ability.description}
                           </p>
                         )}
@@ -307,9 +307,9 @@ export default function PublicOasisBioPage() {
             {/* DCOS Section */}
             {activeTab === 'dcos' && (
               <div className="space-y-8">
-                <h2 className="text-2xl font-bold">DCOS - Core Identity Scripts</h2>
+                <h2 className="text-2xl font-display font-bold">DCOS - Core Identity Scripts</h2>
                 {oasisBioData.dcosFiles.map(file => (
-                  <Card key={file.id} className="border-0 shadow-sm">
+                  <Card key={file.id} variant="outlined">
                     <CardHeader>
                       <CardTitle>{file.title}</CardTitle>
                     </CardHeader>
@@ -338,16 +338,16 @@ export default function PublicOasisBioPage() {
             {/* References Section */}
             {activeTab === 'references' && (
               <div className="space-y-8">
-                <h2 className="text-2xl font-bold">References Library</h2>
+                <h2 className="text-2xl font-display font-bold">References Library</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {oasisBioData.references.map(reference => (
-                    <Card key={reference.id} className="border-0 shadow-sm">
+                    <Card key={reference.id} variant="outlined">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-lg">{reference.title}</CardTitle>
                         <CardDescription>{reference.type.charAt(0).toUpperCase() + reference.type.slice(1)}</CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-sm text-gray-600 mb-4">
+                        <p className="text-sm text-muted-foreground mb-4">
                           {reference.description}
                         </p>
                         <div className="mb-4">
@@ -355,14 +355,14 @@ export default function PublicOasisBioPage() {
                             href={reference.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-sm text-black hover:underline"
+                            className="text-sm text-foreground hover:underline"
                           >
                             {reference.url}
                           </a>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {reference.tags.map((tag, index) => (
-                            <span key={index} className="inline-block px-2 py-1 bg-gray-100 text-xs font-medium rounded">
+                            <span key={index} className="inline-block px-2 py-1 bg-muted text-xs font-mono rounded">
                               {tag}
                             </span>
                           ))}
@@ -377,16 +377,16 @@ export default function PublicOasisBioPage() {
             {/* Worlds Section */}
             {activeTab === 'worlds' && (
               <div className="space-y-8">
-                <h2 className="text-2xl font-bold">Worlds</h2>
+                <h2 className="text-2xl font-display font-bold">Worlds</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {oasisBioData.worlds.map(world => (
-                    <Card key={world.id} className="border-0 shadow-sm">
+                    <Card key={world.id} variant="outlined">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-lg">{world.name}</CardTitle>
                         <CardDescription>{world.timeSetting}</CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-gray-700">{world.summary}</p>
+                        <p className="text-foreground">{world.summary}</p>
                         <Button asChild className="mt-4">
                           <a href={`/worlds/${world.id}`}>Explore World</a>
                         </Button>
@@ -400,10 +400,10 @@ export default function PublicOasisBioPage() {
             {/* 3D Model Section */}
             {activeTab === 'model' && (
               <div className="space-y-8">
-                <h2 className="text-2xl font-bold">3D Model</h2>
-                <Card className="border-0 shadow-sm">
+                <h2 className="text-2xl font-display font-bold">3D Model</h2>
+                <Card variant="outlined">
                   <CardContent>
-                    <div className="aspect-[16/9] bg-gray-100 rounded-md flex items-center justify-center overflow-hidden mb-4">
+                    <div className="aspect-[16/9] bg-muted rounded-md flex items-center justify-center overflow-hidden mb-4">
                       <img 
                         src={oasisBioData.models[0].previewImage} 
                         alt={oasisBioData.models[0].name} 
@@ -425,11 +425,11 @@ export default function PublicOasisBioPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-gray-100">
+      <footer className="py-12 border-t border-border">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <p className="text-gray-600">OasisBio - A cross-era identity system</p>
-            <p className="text-gray-400 text-sm mt-2">© 2024 OasisBio. All rights reserved.</p>
+            <p className="text-muted-foreground">OasisBio - A cross-era identity system</p>
+            <p className="text-muted-foreground text-sm mt-2">© 2024 OasisBio. All rights reserved.</p>
           </div>
         </div>
       </footer>

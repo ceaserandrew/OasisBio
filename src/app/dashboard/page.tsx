@@ -44,12 +44,12 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">Dashboard</h1>
-            <p className="text-gray-600">Welcome back, {session.user?.name || 'User'}</p>
+            <h1 className="text-3xl md:text-4xl font-display font-bold mb-2">Dashboard</h1>
+            <p className="text-muted-foreground">Welcome back, {session.user?.name || 'User'}</p>
           </div>
           <Button asChild size="lg">
             <a href="/dashboard/oasisbios/new">Create New OasisBio</a>
@@ -58,7 +58,7 @@ export default function DashboardPage() {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <Card className="border-0 shadow-sm">
+          <Card variant="outlined">
             <CardHeader className="pb-4">
               <CardTitle className="text-xl">Your OasisBios</CardTitle>
               <CardDescription>Total identities</CardDescription>
@@ -71,7 +71,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card variant="outlined">
             <CardHeader className="pb-4">
               <CardTitle className="text-xl">Worlds</CardTitle>
               <CardDescription>Created worlds</CardDescription>
@@ -84,7 +84,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card variant="outlined">
             <CardHeader className="pb-4">
               <CardTitle className="text-xl">Models</CardTitle>
               <CardDescription>Uploaded models</CardDescription>
@@ -100,14 +100,14 @@ export default function DashboardPage() {
 
         {/* OasisBios Status */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="border-0 shadow-sm">
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Drafts</CardTitle>
               <CardDescription>In-progress OasisBios</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground">
                   <p>You have no draft OasisBios</p>
                   <Button className="mt-4" asChild>
                     <a href="/dashboard/oasisbios/new">Create New Draft</a>
@@ -117,14 +117,14 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Published Bios</CardTitle>
               <CardDescription>Publicly available OasisBios</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground">
                   <p>You have no published OasisBios</p>
                   <Button className="mt-4" asChild>
                     <a href="/dashboard/oasisbios">Manage Bios</a>
@@ -136,7 +136,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent Updates */}
-        <Card className="border-0 shadow-sm mb-12">
+        <Card variant="outlined" className="mb-12">
           <CardHeader>
             <CardTitle>Recent Updates</CardTitle>
             <CardDescription>Your recent activity</CardDescription>
@@ -144,16 +144,16 @@ export default function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {recentUpdates.map((update) => (
-                <div key={update.id} className="flex items-start gap-4 p-4 border-b border-gray-100 last:border-b-0">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div key={update.id} className="flex items-start gap-4 p-4 border-b border-border last:border-b-0">
+                  <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                     </svg>
                   </div>
                   <div>
                     <h3 className="font-medium">{update.title}</h3>
-                    <p className="text-gray-600 text-sm mb-1">{update.description}</p>
-                    <p className="text-gray-400 text-xs">{update.timestamp}</p>
+                    <p className="text-muted-foreground text-sm mb-1">{update.description}</p>
+                    <p className="text-muted-foreground text-xs">{update.timestamp}</p>
                   </div>
                 </div>
               ))}

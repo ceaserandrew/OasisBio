@@ -1,53 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: oklch(0.9816 0.0017 247.8577);
-  --foreground: oklch(0.1221 0.0036 255.5078);
-  --card: oklch(1.0000 0 0);
-  --card-foreground: oklch(0.1221 0.0036 255.5078);
-  --popover: oklch(1.0000 0 0);
-  --popover-foreground: oklch(0.1221 0.0036 255.5078);
-  --primary: oklch(0.1221 0.0036 255.5078);
-  --primary-foreground: oklch(1.0000 0 0);
-  --secondary: oklch(0.9653 0 0);
-  --secondary-foreground: oklch(0.5560 0 0);
-  --muted: oklch(0.9653 0 0);
-  --muted-foreground: oklch(0.5560 0 0);
-  --accent: oklch(0.9653 0 0);
-  --accent-foreground: oklch(0.1221 0.0036 255.5078);
-  --destructive: oklch(0.5948 0.2007 25.5645);
-  --destructive-foreground: oklch(1.0000 0 0);
-  --border: oklch(0.9288 0 0);
-  --input: oklch(0.9288 0 0);
-  --ring: oklch(0.1221 0.0036 255.5078);
+  /* 主色 */
+  --black: #000000;
+  --white: #FFFFFF;
+  /* 辅助色（灰度） */
+  --dark-gray: #111111;
+  --medium-gray: #666666;
+  --light-gray: #D9D9D9;
+  --very-light-gray: #F5F5F5;
+  /* 功能色 */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+  /* 应用颜色 */
+  --background: var(--white);
+  --foreground: var(--black);
+  --card: var(--white);
+  --card-foreground: var(--black);
+  --popover: var(--white);
+  --popover-foreground: var(--black);
+  --primary: var(--black);
+  --primary-foreground: var(--white);
+  --secondary: var(--very-light-gray);
+  --secondary-foreground: var(--medium-gray);
+  --muted: var(--very-light-gray);
+  --muted-foreground: var(--medium-gray);
+  --accent: var(--very-light-gray);
+  --accent-foreground: var(--black);
+  --destructive: var(--error);
+  --destructive-foreground: var(--white);
+  --border: var(--light-gray);
+  --input: var(--light-gray);
+  --ring: var(--black);
+  /* 字体 */
+  --font-display: 'Inter Tight', 'Helvetica Now', 'Satoshi', sans-serif;
+  --font-sans: 'Inter', 'Suisse Intl', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
 }
 
 .dark {
-  --background: oklch(0.1221 0.0036 255.5078);
-  --foreground: oklch(0.9816 0.0017 247.8577);
-  --card: oklch(0.1590 0 0);
-  --card-foreground: oklch(1.0000 0 0);
-  --popover: oklch(0.1221 0.0036 255.5078);
-  --popover-foreground: oklch(1.0000 0 0);
-  --primary: oklch(1.0000 0 0);
-  --primary-foreground: oklch(0.1221 0.0036 255.5078);
-  --secondary: oklch(0.2690 0 0);
-  --secondary-foreground: oklch(1.0000 0 0);
-  --muted: oklch(0.2690 0 0);
-  --muted-foreground: oklch(0.7150 0 0);
-  --accent: oklch(0.2690 0 0);
-  --accent-foreground: oklch(1.0000 0 0);
-  --destructive: oklch(0.6368 0.2066 25.3313);
-  --destructive-foreground: oklch(1.0000 0 0);
-  --border: oklch(0.2690 0 0);
-  --input: oklch(0.2690 0 0);
-  --ring: oklch(0.7150 0 0);
+  /* 主色 */
+  --black: #000000;
+  --white: #FFFFFF;
+  /* 辅助色（灰度） */
+  --dark-gray: #111111;
+  --medium-gray: #666666;
+  --light-gray: #D9D9D9;
+  --very-light-gray: #F5F5F5;
+  /* 功能色 */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+  /* 应用颜色 */
+  --background: var(--black);
+  --foreground: var(--white);
+  --card: var(--dark-gray);
+  --card-foreground: var(--white);
+  --popover: var(--black);
+  --popover-foreground: var(--white);
+  --primary: var(--white);
+  --primary-foreground: var(--black);
+  --secondary: var(--dark-gray);
+  --secondary-foreground: var(--white);
+  --muted: var(--dark-gray);
+  --muted-foreground: var(--medium-gray);
+  --accent: var(--dark-gray);
+  --accent-foreground: var(--white);
+  --destructive: var(--error);
+  --destructive-foreground: var(--white);
+  --border: var(--dark-gray);
+  --input: var(--dark-gray);
+  --ring: var(--medium-gray);
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+  code, pre, .font-mono {
+    @apply font-mono;
+  }
+  /* 可访问性 */
+  * {
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+  
+  /* 跳过链接 */
+  .skip-link {
+    @apply absolute top-[-40px] left-0 bg-primary text-primary-foreground px-4 py-2 transition-all duration-200 focus:top-0 z-50;
+  }
+  
+  /* 键盘导航焦点样式 */
+  button:focus,
+  a:focus,
+  input:focus,
+  select:focus,
+  textarea:focus {
+    @apply outline-none ring-2 ring-ring ring-offset-2;
+  }
+  
+  /* 屏幕阅读器专用 */
+  .sr-only {
+    @apply absolute w-px h-px p-0 m-[-1px] overflow-hidden clip-rect-0 whitespace-nowrap border-0;
+  }
+  
+  /* 高对比度模式支持 */
+  @media (prefers-contrast: high) {
+    :root {
+      --background: #FFFFFF;
+      --foreground: #000000;
+      --border: #000000;
+    }
+    
+    .dark {
+      --background: #000000;
+      --foreground: #FFFFFF;
+      --border: #FFFFFF;
+    }
+  }
+  
+  /* 减少动画模式支持 */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* 微交互效果 */
+  .hover-lift {
+    @apply transition-all duration-300 hover:translate-y-[-2px] hover:shadow-md;
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+  
+  .hover-opacity {
+    @apply transition-opacity duration-200 hover:opacity-80;
+  }
+  
+  .focus-ring {
+    @apply transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+  
+  /* 关键帧动画 */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+  
+  .animate-typewriter {
+    animation: typewriter 3s steps(40, end);
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-rotate-slow {
+    animation: rotate 20s linear infinite;
+  }
+}
+
+/* 动画关键帧 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

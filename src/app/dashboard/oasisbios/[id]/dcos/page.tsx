@@ -83,37 +83,41 @@ export default function DcosPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">DCOS Repository</h1>
-            <p className="text-gray-600">Dynamic Core Operating Scripts</p>
+    <div className="min-h-screen bg-white">
+      <div className="container mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="mb-12">
+          <div className="flex items-center gap-4 mb-4">
+            <span className="text-sm font-mono text-gray-500">01</span>
+            <div className="h-px flex-grow bg-gray-200"></div>
           </div>
-          <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {showAddForm ? 'Cancel' : 'Add New File'}
-          </Button>
+          <h1 className="text-4xl md:text-5xl font-display font-bold mb-2">DCOS Repository</h1>
+          <p className="text-gray-600 max-w-2xl">Dynamic Core Operating Scripts — The intellectual foundation of your identity</p>
         </div>
 
         {/* Add File Form */}
         {showAddForm && (
-          <Card className="mb-8 border-0 shadow-sm">
+          <Card className="mb-12 border border-gray-200">
             <CardHeader>
-              <CardTitle>Add New DCOS File</CardTitle>
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-1 bg-black text-white text-xs font-mono">NEW</span>
+                <CardTitle className="font-display">Add New DCOS File</CardTitle>
+              </div>
               <CardDescription>Create a new core narrative file</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium mb-1">File Title</label>
+                  <label className="block text-sm font-medium mb-2">File Title</label>
                   <Input 
                     value={newFile.title} 
                     onChange={(e) => setNewFile({ ...newFile, title: e.target.value })} 
                     placeholder="e.g., Core Identity"
+                    className="border-gray-300 focus:ring-black"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Folder</label>
+                  <label className="block text-sm font-medium mb-2">Folder</label>
                   <select 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                     value={newFile.folder}
@@ -127,121 +131,137 @@ export default function DcosPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Content</label>
+                <label className="block text-sm font-medium mb-2">Content</label>
                 <textarea 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                  className="w-full px-4 py-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black font-sans"
                   value={newFile.content}
                   onChange={(e) => setNewFile({ ...newFile, content: e.target.value })}
-                  placeholder="Write your core narrative here..."
-                  rows={8}
+                  placeholder="Write your core narrative here...\n\n# Heading\n\n- Bullet points\n- More bullet points\n"
+                  rows={10}
                 />
               </div>
-              <Button onClick={handleAddFile} className="mt-2">
-                Add File
-              </Button>
+              <div className="flex justify-end gap-3">
+                <Button variant="secondary" onClick={() => setShowAddForm(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleAddFile}>
+                  Add File
+                </Button>
+              </div>
             </CardContent>
           </Card>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* File List */}
-          <div className="lg:col-span-1">
-            <Card className="border-0 shadow-sm h-full">
-              <CardHeader>
-                <CardTitle>Files</CardTitle>
-                <CardDescription>Your DCOS repository</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {dcosFiles.map(file => (
-                    <div 
-                      key={file.id}
-                      className={`p-3 rounded-md cursor-pointer transition-colors ${selectedFile?.id === file.id ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
-                      onClick={() => {
-                        setSelectedFile(file);
-                        setEditContent(file.content);
-                        setIsEditing(false);
-                      }}
-                    >
-                      <div className="flex justify-between items-start">
+          <div className="lg:col-span-3">
+            <div className="sticky top-8">
+              <div className="mb-6 flex justify-between items-center">
+                <h2 className="text-xl font-display font-bold">Files</h2>
+                <Button size="sm" onClick={() => setShowAddForm(!showAddForm)}>
+                  {showAddForm ? 'Cancel' : 'Add File'}
+                </Button>
+              </div>
+              <div className="space-y-3">
+                {dcosFiles.map((file, index) => (
+                  <div 
+                    key={file.id}
+                    className={`p-4 border border-gray-200 rounded-sm cursor-pointer transition-all ${selectedFile?.id === file.id ? 'border-black bg-gray-50' : 'hover:border-gray-300 hover:bg-gray-50'}`}
+                    onClick={() => {
+                      setSelectedFile(file);
+                      setEditContent(file.content);
+                      setIsEditing(false);
+                    }}
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="text-xs font-mono text-gray-500 mb-1">{String(index + 1).padStart(2, '0')}</div>
                         <h3 className="font-medium">{file.title}</h3>
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
-                          onClick={() => handleDeleteFile(file.id)}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </Button>
+                        <p className="text-xs text-gray-500 mt-1">{file.folder}</p>
                       </div>
-                      <p className="text-xs text-gray-500">{file.folder}</p>
-                      <p className="text-xs text-gray-400 mt-1">
-                        Updated: {new Date(file.updatedAt).toLocaleDateString()}
-                      </p>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => handleDeleteFile(file.id)}
+                        className="h-8 w-8 p-0"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </Button>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <p className="text-xs text-gray-400 mt-3">
+                      Updated: {new Date(file.updatedAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* File Editor */}
-          <div className="lg:col-span-3">
-            <Card className="border-0 shadow-sm h-full">
-              <CardHeader className="flex justify-between items-center">
-                <div>
-                  <CardTitle>{selectedFile?.title}</CardTitle>
-                  <CardDescription>{selectedFile?.folder} • Last updated: {selectedFile ? new Date(selectedFile.updatedAt).toLocaleDateString() : ''}</CardDescription>
+          <div className="lg:col-span-9">
+            {selectedFile && (
+              <div className="border border-gray-200 p-8">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-mono">{selectedFile.folder.toUpperCase()}</span>
+                      <span className="text-xs font-mono text-gray-500">V{String(selectedFile.id).padStart(2, '0')}</span>
+                    </div>
+                    <h2 className="text-3xl font-display font-bold">{selectedFile.title}</h2>
+                    <p className="text-sm text-gray-500 mt-1">Last updated: {new Date(selectedFile.updatedAt).toLocaleDateString()}</p>
+                  </div>
+                  <div className="flex gap-3">
+                    {isEditing ? (
+                      <>
+                        <Button size="sm" onClick={handleSaveFile}>
+                          Save
+                        </Button>
+                        <Button size="sm" variant="secondary" onClick={() => {
+                          setIsEditing(false);
+                          setEditContent(selectedFile.content);
+                        }}>
+                          Cancel
+                        </Button>
+                      </>
+                    ) : (
+                      <Button size="sm" onClick={() => setIsEditing(true)}>
+                        Edit
+                      </Button>
+                    )}
+                  </div>
                 </div>
-                <div className="flex gap-2">
+                
+                <div className="min-h-[600px]">
                   {isEditing ? (
-                    <>
-                      <Button size="sm" onClick={handleSaveFile}>
-                        Save
-                      </Button>
-                      <Button size="sm" variant="secondary" onClick={() => {
-                        setIsEditing(false);
-                        setEditContent(selectedFile?.content || '');
-                      }}>
-                        Cancel
-                      </Button>
-                    </>
+                    <textarea 
+                      className="w-full px-6 py-8 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-black font-sans text-lg leading-relaxed"
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      placeholder="Write your core narrative here..."
+                      rows={20}
+                    />
                   ) : (
-                    <Button size="sm" onClick={() => setIsEditing(true)}>
-                      Edit
-                    </Button>
+                    <div className="prose max-w-none">
+                      {selectedFile.content.split('\n').map((line, index) => {
+                        if (line.startsWith('# ')) {
+                          return <h1 key={index} className="font-display font-bold">{line.replace('# ', '')}</h1>;
+                        } else if (line.startsWith('## ')) {
+                          return <h2 key={index} className="font-display font-bold">{line.replace('## ', '')}</h2>;
+                        } else if (line.startsWith('- ')) {
+                          return <li key={index}>{line.replace('- ', '')}</li>;
+                        } else if (line.trim() === '') {
+                          return <br key={index} />;
+                        } else {
+                          return <p key={index}>{line}</p>;
+                        }
+                      })}
+                    </div>
                   )}
                 </div>
-              </CardHeader>
-              <CardContent>
-                {isEditing ? (
-                  <textarea 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    placeholder="Write your core narrative here..."
-                    rows={16}
-                  />
-                ) : (
-                  <div className="prose max-w-none">
-                    {selectedFile?.content.split('\n').map((line, index) => {
-                      if (line.startsWith('# ')) {
-                        return <h1 key={index}>{line.replace('# ', '')}</h1>;
-                      } else if (line.startsWith('## ')) {
-                        return <h2 key={index}>{line.replace('## ', '')}</h2>;
-                      } else if (line.startsWith('- ')) {
-                        return <li key={index}>{line.replace('- ', '')}</li>;
-                      } else if (line.trim() === '') {
-                        return <br key={index} />;
-                      } else {
-                        return <p key={index}>{line}</p>;
-                      }
-                    })}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+              </div>
+            )}
           </div>
         </div>
       </div>
