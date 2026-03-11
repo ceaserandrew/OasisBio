@@ -81,3 +81,8 @@ OasisBio/
 ## Database Models
 
 ### User
+- id: String (primary key)
+- name: String (optional)
+- email: String (unique)
+- emailVerified: DateTime (optional)
+- image: String
