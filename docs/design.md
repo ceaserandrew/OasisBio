@@ -84,4 +84,16 @@ module.exports = {
           600: '#4D4D4D',
           700: '#333333',
           800: '#1A1A1A',
-          900
+          900: '#111111',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+      },
+      maxWidth: {
+        '8xl':
