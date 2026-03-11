@@ -184,4 +184,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   
   const variantClasses = {
     primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
-    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80
+    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+    outline: 'border border-border hover:bg-accent hover:text-accent-foreground',
+  };
+  
+  const sizeClasses = {
+    sm: 'h-9 px-4 py-2 text-sm',
+    md:
