@@ -400,4 +400,10 @@ Input.displayName = 'Input';
 - **Forms**: Inputs, selects, textareas
 - **Navigation**: Header, sidebar, footer
 - **Layout**: Containers, grids, sections
-- **Typography**: Headings,
+- **Typography**: Headings, body text, captions
+
+### Design Tokens
+- **Colors**: Primary, secondary, grayscale
+- **Spacing**: Base units and scale
+- **Typography**: Font families, sizes, weights
+- **Shadows**: Elevation
