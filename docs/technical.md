@@ -172,3 +172,12 @@ OasisBio/
 - previewImage: String (optional)
 - relatedWorldId: String (optional)
 - relatedEraId: String (optional)
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/[...nextauth]` - NextAuth.js authentication endpoints
+
+### OasisBio Management
+- `GET /api/oasisbios` - Get
