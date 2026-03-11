@@ -126,4 +126,12 @@ OasisBio/
 - description: String (optional)
 
 ### Ability
-- id: String (primary
+- id: String (primary key)
+- oasisBioId: String (foreign key to OasisBio)
+- name: String
+- category: String
+- type: String (default: "custom")
+- level: Int (default: 1)
+- description: String (optional)
+- relatedWorldId: String (optional)
+-
