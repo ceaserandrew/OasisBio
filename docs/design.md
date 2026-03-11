@@ -297,4 +297,9 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   className,
   type,
-  ...
+  ...props
+}, ref) => {
+  return (
+    <input
+      type={type}
+      className={`flex h-10 w-full rounded-md border border-border bg-background px
