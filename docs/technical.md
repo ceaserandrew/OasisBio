@@ -57,4 +57,11 @@ OasisBio/
 
 ### 2. Ability Pool System
 - Custom and official ability categories
-- Skill levels (1-5
+- Skill levels (1-5)
+- Era and world binding
+- Categorized skill system
+
+### 3. Repositories
+- **DCOS (Dynamic Core Operating Script)**: Core identity narrative files
+- **References**: External links and resources
+- **Worlds**: Fictional world creation and management
