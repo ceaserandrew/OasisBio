@@ -324,4 +324,10 @@ Input.displayName = 'Input';
 #### Implementation Examples
 ```css
 /* Fade-in animation */
-@keyframes
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
