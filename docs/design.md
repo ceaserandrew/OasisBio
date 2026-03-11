@@ -318,3 +318,10 @@ Input.displayName = 'Input';
 - **Page Transitions**: Fade-in effects
 - **Hover States**: Subtle scale and color changes
 - **Card Interactions**: Slight elevation on hover
+- **Text Reveals**: Mask-based animations
+- **3D Model Interactions**: Controlled rotation and zoom
+
+#### Implementation Examples
+```css
+/* Fade-in animation */
+@keyframes
