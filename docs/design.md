@@ -331,3 +331,14 @@ Input.displayName = 'Input';
   }
   to {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Hover animation for cards */
+.card-hover {
+  transition: all 0.3s
