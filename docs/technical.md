@@ -239,3 +239,16 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="[YOUR-ANON-KEY]"
 
 ### Getting Started
 1. Clone the repository
+2. Install dependencies: `npm install`
+3. Configure environment variables
+4. Run database migrations: `npx prisma migrate dev`
+5. Start development server: `npm run dev`
+
+### Testing
+- Run build: `npm run build`
+- Run lint: `npm run lint`
+
+## Security Considerations
+- Passwords are hashed using bcryptjs
+- Authentication is handled through NextAuth.js
+- Protected
