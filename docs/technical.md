@@ -118,4 +118,12 @@ OasisBio/
 
 ### EraIdentity
 - id: String (primary key)
-- oasisBioId: String (foreign key to Oasis
+- oasisBioId: String (foreign key to OasisBio)
+- name: String
+- eraType: String
+- startDate: DateTime (optional)
+- endDate: DateTime (optional)
+- description: String (optional)
+
+### Ability
+- id: String (primary
