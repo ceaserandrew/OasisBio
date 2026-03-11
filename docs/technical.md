@@ -180,4 +180,8 @@ OasisBio/
 - `POST /api/auth/[...nextauth]` - NextAuth.js authentication endpoints
 
 ### OasisBio Management
-- `GET /api/oasisbios` - Get
+- `GET /api/oasisbios` - Get user's OasisBios
+- `POST /api/oasisbios` - Create new OasisBio
+- `GET /api/oasisbios/[id]` - Get specific OasisBio
+- `PUT /api/oasisbios/[id]` - Update OasisBio
+- `DELETE /api/oasisbios/[id]
