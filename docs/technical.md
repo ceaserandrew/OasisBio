@@ -85,4 +85,11 @@ OasisBio/
 - name: String (optional)
 - email: String (unique)
 - emailVerified: DateTime (optional)
-- image: String
+- image: String (optional)
+- password: String
+- createdAt: DateTime
+- updatedAt: DateTime
+- oasisBios: Array of OasisBio
+
+### OasisBio
+- id: String (
