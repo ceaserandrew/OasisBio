@@ -92,4 +92,10 @@ OasisBio/
 - oasisBios: Array of OasisBio
 
 ### OasisBio
-- id: String (
+- id: String (primary key)
+- userId: String (foreign key to User)
+- title: String
+- slug: String (unique)
+- tagline: String (optional)
+- identityMode: String (default: "real")
+- birthDate: DateTime (optional)
