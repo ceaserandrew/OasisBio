@@ -106,3 +106,8 @@ OasisBio/
 - species: String (optional)
 - status: String (optional)
 - description: String (optional)
+- visibility: String (default: "private")
+- createdAt: DateTime
+- updatedAt: DateTime
+- abilities: Array of Ability
+- dcosFiles: Array of Dcos
