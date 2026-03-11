@@ -226,4 +226,16 @@ DATABASE_URL="postgresql://postgres:[YOUR-PASSWORD]@db.dhkgfdllgtmbkwcbubqt.supa
 NEXTAUTH_SECRET="[YOUR-NEXTAUTH-SECRET]"
 
 # Supabase API Keys
-NEXT_PUBLIC_SUPABASE_URL="https://dhkgfdllgtmbkwcbubqt
+NEXT_PUBLIC_SUPABASE_URL="https://dhkgfdllgtmbkwcbubqt.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="[YOUR-ANON-KEY]"
+```
+
+## Development
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Supabase account
+
+### Getting Started
+1. Clone the repository
