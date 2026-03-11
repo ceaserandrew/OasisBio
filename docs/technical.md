@@ -190,4 +190,8 @@ OasisBio/
 - `GET /api/oasisbios/[id]/abilities` - Get abilities for OasisBio
 - `POST /api/oasisbios/[id]/abilities` - Add ability to OasisBio
 - `PUT /api/abilities/[id]` - Update ability
--
+- `DELETE /api/abilities/[id]` - Delete ability
+
+### Repository Management
+- **DCOS**: `GET|POST|PUT|DELETE /api/oasisbios/[id]/dcos`
+- **References**: `GET|POST|PUT|DELETE /
