@@ -123,4 +123,13 @@ module.exports = {
   --muted: #f5f5f5;
   --muted-foreground: #666666;
   --accent: #f5f5f5;
-  --
+  --accent-foreground: #000000;
+  --border: #d9d9d9;
+  --ring: #000000;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  line
