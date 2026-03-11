@@ -395,4 +395,7 @@ Input.displayName = 'Input';
 ## Design System
 
 ### Component Library
-- **
+- **Buttons**: Primary, secondary, outline variants
+- **Cards**: Standard, elevated, compact styles
+- **Forms**: Inputs, selects, textareas
+- **Navigation**: Header, sidebar,
