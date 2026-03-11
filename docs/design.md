@@ -175,4 +175,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   className,
-  variant
+  variant = 'primary',
+  size = 'md',
+  asChild = false,
+  ...props
+}, ref) => {
+  const baseClasses = 'inline-flex items
