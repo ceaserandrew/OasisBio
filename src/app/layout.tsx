@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'OasisBio',
-  description: '跨时代的身份系统',
+  description: 'A cross-era identity system for building expandable digital identities',
 };
 
 export default function RootLayout({
