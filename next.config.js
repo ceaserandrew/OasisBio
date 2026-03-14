@@ -34,7 +34,47 @@ const nextConfig = {
         '@prisma/client': false,
         '@/generated/prisma/client': false,
         '@/generated/prisma/internal/class': false,
+        '@/generated/prisma/internal/prismaNamespace': false,
       };
+      
+      // 处理 node: 前缀的模块导入
+      config.resolve.plugins = [
+        ...(config.resolve.plugins || []),
+        {
+          apply: (resolver) => {
+            resolver
+              .getHook('resolve')
+              .tapAsync('NodeSchemeResolver', (request, resolveContext, callback) => {
+                if (request.request && request.request.startsWith('node:')) {
+                  const mod = request.request.replace(/^node:/, '');
+                  switch (mod) {
+                    case 'child_process':
+                    case 'fs':
+                    case 'fs/promises':
+                    case 'module':
+                    case 'os':
+                      callback(null, {
+                        path: false,
+                        external: true,
+                      });
+                      return;
+                    default:
+                      request.request = mod;
+                      resolver.doResolve(
+                        resolver.getHook('resolve'),
+                        request,
+                        null,
+                        resolveContext,
+                        callback
+                      );
+                      return;
+                  }
+                }
+                callback();
+              });
+          },
+        },
+      ];
     }
     return config;
   },
