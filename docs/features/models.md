@@ -6,35 +6,27 @@ The 3D Character Model system is a key feature of OasisBio that allows users to 
 
 ## Supported Formats
 
-### OBJ Format
-- **Description**: Wavefront OBJ file format
-- **Advantages**: Widely supported, simple structure, compatible with most 3D software
-- **Limitations**: Does not support animations or advanced features
-- **File Extension**: `.obj`
+### GLB Format
+- **Description**: Binary GLTF file format
+- **Advantages**: Single file format, supports animations, efficient loading, widely supported
+- **File Extension**: `.glb`
 
-### MTL Format
-- **Description**: Material library file for OBJ models
-- **Purpose**: Defines materials, textures, and rendering properties
-- **File Extension**: `.mtl`
-
-### Texture Files
-- **Description**: Image files used for textures
-- **Supported Formats**: JPEG, PNG, GIF, BMP
+### Texture Files (Embedded in GLB)
+- **Description**: Image files used for textures, embedded within the GLB file
+- **Supported Formats**: JPEG, PNG, WebP
 - **Purpose**: Add details and realism to the 3D model
 
 ## Model Management
 
 ### Uploading Models
-1. **Select File**: Choose an OBJ file from your device
-2. **Add Materials**: Optional MTL file and texture files
-3. **Preview**: View the model before uploading
-4. **Name Model**: Provide a name for the model
-5. **Set Properties**: Configure model settings and associations
-6. **Upload**: Submit the model to the system
+1. **Select File**: Choose a GLB file from your device
+2. **Preview**: View the model before uploading
+3. **Name Model**: Provide a name for the model
+4. **Set Properties**: Configure model settings and associations
+5. **Upload**: Submit the model to the system
 
 ### Editing Models
-- **Update Model**: Replace the OBJ file with a new version
-- **Modify Materials**: Update MTL and texture files
+- **Update Model**: Replace the GLB file with a new version
 - **Change Properties**: Update model name, description, and associations
 - **Adjust Preview**: Set a new default view for the model
 
@@ -46,13 +38,15 @@ The 3D Character Model system is a key feature of OasisBio that allows users to 
 
 - **Name**: The name of the model
 - **Description**: A brief description of the model
-- **OBJ URL**: The storage location of the OBJ file
-- **MTL URL**: The storage location of the MTL file (optional)
+- **File Path**: The storage location of the GLB file
+- **Model Format**: Format of the model (default: GLB)
 - **Preview Image**: A static image of the model for preview purposes
 - **Related World**: World the model is associated with (optional)
 - **Related Era**: Era the model is associated with (optional)
+- **Is Primary**: Whether this is the primary model for the identity
 - **Version**: Version number of the model
-- **Uploaded At**: Date and time the model was uploaded
+- **Created At**: Date and time the model was uploaded
+- **Updated At**: Date and time the model was last updated
 
 ## 3D Viewer
 
@@ -66,7 +60,7 @@ The 3D Character Model system is a key feature of OasisBio that allows users to 
 - **Model Information**: Display model details and properties
 
 ### Implementation
-- **Technology**: Three.js / React Three Fiber
+- **Technology**: Three.js with GLTFLoader
 - **Performance**: Optimized for web-based viewing
 - **Compatibility**: Works across modern browsers
 - **Loading**: Progressive loading for large models
@@ -89,19 +83,16 @@ The 3D Character Model system is a key feature of OasisBio that allows users to 
 
 ```
 models/
-├── oasis-prime.obj          # Main model file
-├── oasis-prime.mtl          # Material file
-├── textures/                # Texture files
-│   ├── skin.jpg
-│   └── clothing.png
-└── previews/                # Preview images
-    └── oasis-prime.jpg
+├── {user_id}/                # User-specific directory
+│   ├── {character_id}/        # Character-specific directory
+│   │   ├── model-123.glb      # GLB model file
+│   │   └── preview.webp       # Preview image
 ```
 
 ### Storage Options
-- **Local Development**: Stored in the `public/models` directory
-- **Production**: Stored in cloud storage (S3 / Cloudflare R2)
-- **Access**: Secure access with appropriate permissions
+- **Development**: Stored in Supabase Storage
+- **Production**: Stored in Supabase Storage
+- **Access**: Public buckets for images, private bucket for 3D models
 
 ## Model Optimization
 
@@ -115,7 +106,7 @@ models/
 ### Optimization Techniques
 - **Mesh Simplification**: Reduce polygon count while maintaining visual quality
 - **Texture Compression**: Use appropriate image formats and compression levels
-- **Asset Bundling**: Combine multiple assets into a single file
+- **Asset Bundling**: GLB format already bundles all assets in one file
 - **Lazy Loading**: Load models only when needed
 
 ## Preview Generation
@@ -123,7 +114,7 @@ models/
 ### Automatic Preview
 - **Process**: System automatically generates a preview image when a model is uploaded
 - **Method**: Renders the model from a default angle
-- **Format**: JPEG or PNG format
+- **Format**: WebP format for optimal size and quality
 - **Resolution**: Optimized for web display
 
 ### Custom Preview
@@ -168,7 +159,7 @@ models/
 
 ## Future Enhancements
 
-- **Animation Support**: Add animated models with骨骼 rigs
+- **Animation Support**: Add animated models with skeletal rigs
 - **Interactive Models**: Allow users to customize model features in real-time
 - **Model Sharing**: Enable users to share models with others
 - **AI Model Generation**: Generate 3D models from descriptions or images

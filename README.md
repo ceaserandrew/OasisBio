@@ -29,10 +29,12 @@ OasisBio is a comprehensive identity management system that allows users to crea
 - **Account and system status** information
 
 ### 4. 3D Model Support
-- **Interactive 3D viewer** using Three.js
+- **Interactive 3D viewer** using Three.js with GLTFLoader
 - **Orbit controls** for rotating and zooming
 - **Real-time rendering** with lighting effects
-- **Placeholder models** for demonstration
+- **GLB format support** for efficient loading
+- **Model preview generation** for quick visualization
+- **Supabase Storage integration** for secure model storage
 
 ### 5. Era System
 - **Visual timeline** with interactive elements

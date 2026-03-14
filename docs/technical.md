@@ -67,10 +67,11 @@ OasisBio/
 - **Worlds**: Fictional world creation and management
 
 ### 4. 3D Model Support
-- OBJ file uploads
+- GLB file uploads (single binary format)
 - 3D model preview
 - Era-specific models
 - World-bound visuals
+- Model versioning
 
 ### 5. User Authentication
 - Secure registration and login
@@ -167,11 +168,81 @@ OasisBio/
 - id: String (primary key)
 - oasisBioId: String (foreign key to OasisBio)
 - name: String
-- objUrl: String
-- mtlUrl: String (optional)
+- filePath: String (GLB file path)
+- modelFormat: String (default: "glb")
 - previewImage: String (optional)
 - relatedWorldId: String (optional)
 - relatedEraId: String (optional)
+- isPrimary: Boolean (default: false)
+- version: Int (default: 1)
+- createdAt: DateTime
+- updatedAt: DateTime
+
+## Supabase Storage Configuration
+
+### Storage Buckets
+
+#### 1. avatars
+- **Purpose**: User avatars
+- **Access**: Public
+- **Allowed MIME Types**: `image/webp`, `image/png`, `image/jpeg`
+- **Max File Size**: 512 KB
+- **Path Structure**: `{user_id}/avatar.{extension}`
+
+#### 2. character-covers
+- **Purpose**: Character cover images
+- **Access**: Public
+- **Allowed MIME Types**: `image/webp`, `image/png`, `image/jpeg`
+- **Max File Size**: 800 KB
+- **Path Structure**: `{user_id}/{character_id}/cover.{extension}`
+
+#### 3. model-previews
+- **Purpose**: Character model preview images
+- **Access**: Public
+- **Allowed MIME Types**: `image/webp`, `image/png`, `image/jpeg`
+- **Max File Size**: 600 KB
+- **Path Structure**: `{user_id}/{character_id}/preview.{extension}`
+
+#### 4. models
+- **Purpose**: 3D model files (GLB format)
+- **Access**: Private
+- **Allowed MIME Types**: `model/gltf-binary`, `application/octet-stream`
+- **Max File Size**: 10 MB
+- **Path Structure**: `{user_id}/{character_id}/{model_id}.glb`
+
+### RLS Policies
+
+#### models Bucket RLS Policies
+
+**Read Policy**:
+```sql
+CREATE POLICY "Users can read their own models" 
+ON storage.objects FOR SELECT 
+USING (
+  bucket_id = 'models' 
+  AND auth.uid() = (SELECT split_part(name, '/', 1)::uuid)
+);
+```
+
+**Write Policy**:
+```sql
+CREATE POLICY "Users can write their own models" 
+ON storage.objects FOR INSERT 
+WITH CHECK (
+  bucket_id = 'models' 
+  AND auth.uid() = (SELECT split_part(name, '/', 1)::uuid)
+);
+```
+
+**Delete Policy**:
+```sql
+CREATE POLICY "Users can delete their own models" 
+ON storage.objects FOR DELETE 
+USING (
+  bucket_id = 'models' 
+  AND auth.uid() = (SELECT split_part(name, '/', 1)::uuid)
+);
+```
 
 ## API Endpoints
 
