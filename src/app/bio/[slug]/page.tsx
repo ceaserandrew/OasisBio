@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
 import ModelViewer from '@/components/ModelViewer';
+import type { Metadata } from 'next';
 
 // Mock data for the public OasisBio page
 const oasisBioData = {
@@ -119,7 +120,7 @@ const oasisBioData = {
       previewImage: 'https://via.placeholder.com/800x600?text=Oasis+Prime+Model',
       era: 'Archive Era',
       world: 'Archive City',
-      fileType: 'OBJ',
+      fileType: 'GLB',
     },
   ],
   relationships: [
@@ -174,6 +175,34 @@ const oasisBioData = {
       abilities: ['Advanced JavaScript', 'English', 'Digital Art', 'Worldbuilding'],
     },
   ],
+};
+
+export const metadata: Metadata = {
+  title: `${oasisBioData.title} – Fictional Character Profile | OasisBio`,
+  description: oasisBioData.tagline + ' - ' + oasisBioData.description,
+  keywords: [
+    'character profile',
+    'character identity',
+    'fictional character biography',
+    'digital identity',
+    'fictional character',
+    oasisBioData.title.toLowerCase().replace(' ', '-')
+  ],
+  openGraph: {
+    title: `${oasisBioData.title} – Fictional Character Profile`,
+    description: oasisBioData.tagline,
+    type: 'profile',
+    profile: {
+      firstName: oasisBioData.title,
+      gender: oasisBioData.gender.toLowerCase(),
+    },
+    siteName: 'OasisBio',
+  },
+  twitter: {
+    title: `${oasisBioData.title} – Fictional Character Profile`,
+    description: oasisBioData.tagline,
+    card: 'summary_large_image',
+  },
 };
 
 export default function PublicOasisBioPage() {

@@ -1,6 +1,31 @@
 import React from 'react';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'OasisBio - Digital Identity Builder & Character Creator Platform',
+  description: 'Build expandable digital identities and fictional characters across eras with our comprehensive character creator platform and digital identity builder.',
+  keywords: [
+    'digital identity builder',
+    'character creator platform',
+    'fictional character builder',
+    'character archive',
+    'identity archive',
+    'character identity system'
+  ],
+  openGraph: {
+    title: 'OasisBio - Digital Identity Builder',
+    description: 'Build and manage expandable digital identities across eras',
+    type: 'website',
+    siteName: 'OasisBio',
+  },
+  twitter: {
+    title: 'OasisBio - Digital Identity Builder',
+    description: 'Build and manage expandable digital identities across eras',
+    card: 'summary_large_image',
+  },
+};
 
 export default function Home() {
   return (
@@ -32,10 +57,11 @@ export default function Home() {
           <div className="max-w-6xl mx-auto">
             {/* System Tags */}
             <div className="flex flex-wrap gap-4 mb-12">
-              <span className="px-3 py-1 border border-white/20 text-white/70 text-sm font-mono">CROSS-ERA IDENTITY</span>
+              <span className="px-3 py-1 border border-white/20 text-white/70 text-sm font-mono">DIGITAL IDENTITY</span>
+              <span className="px-3 py-1 border border-white/20 text-white/70 text-sm font-mono">CHARACTER CREATOR</span>
               <span className="px-3 py-1 border border-white/20 text-white/70 text-sm font-mono">WORLD REPOSITORY</span>
               <span className="px-3 py-1 border border-white/20 text-white/70 text-sm font-mono">DYNAMIC CORE SCRIPT</span>
-              <span className="px-3 py-1 border border-white/20 text-white/70 text-sm font-mono">OBJ MODEL SYSTEM</span>
+              <span className="px-3 py-1 border border-white/20 text-white/70 text-sm font-mono">GLB MODEL SYSTEM</span>
             </div>
             
             {/* Main Title */}
@@ -164,12 +190,12 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-4">
-                    Visual representation of identities with OBJ file support.
+                    Visual representation of identities with GLB file support for better 3D model performance and compatibility.
                   </p>
                   <ul className="space-y-2 text-foreground">
                     <li className="flex items-start gap-2">
                       <span className="text-xs font-mono text-muted-foreground mt-1">01</span>
-                      <span>OBJ File Uploads</span>
+                      <span>GLB File Uploads</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-xs font-mono text-muted-foreground mt-1">02</span>
@@ -447,8 +473,8 @@ export default function Home() {
                 3D Character Models
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl">
-                Visual representation of your identities with OBJ file support.
-              </p>
+                  Visual representation of your identities with GLB file support for enhanced 3D model performance.
+                </p>
             </div>
             
             {/* Model Display */}
@@ -477,7 +503,7 @@ export default function Home() {
                       </div>
                       <div>
                         <div className="text-xs font-mono text-muted-foreground mb-1">FILE TYPE</div>
-                        <p className="font-medium">OBJ + MTL</p>
+                        <p className="font-medium">GLB</p>
                       </div>
                       <div>
                         <div className="text-xs font-mono text-muted-foreground mb-1">STATUS</div>
