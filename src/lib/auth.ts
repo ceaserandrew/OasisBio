@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from './prisma';
 import bcrypt from 'bcryptjs';
