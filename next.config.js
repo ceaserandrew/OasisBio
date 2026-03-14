@@ -28,53 +28,22 @@ const nextConfig = {
         },
       });
       
-      // 重定向所有 Prisma 相关的导入到空模块
+      // 重定向所有 Prisma 和 Auth 相关的导入到客户端版本
       config.resolve.alias = {
         ...config.resolve.alias,
         '@prisma/client': false,
         '@/generated/prisma/client': false,
         '@/generated/prisma/internal/class': false,
         '@/generated/prisma/internal/prismaNamespace': false,
+        '@/lib/prisma': '@/lib/prisma.client',
+        '@/lib/auth': '@/lib/auth.client',
+        // 重定向 node: 前缀的模块导入到空模块
+        'node:child_process': false,
+        'node:fs': false,
+        'node:fs/promises': false,
+        'node:module': false,
+        'node:os': false,
       };
-      
-      // 处理 node: 前缀的模块导入
-      config.resolve.plugins = [
-        ...(config.resolve.plugins || []),
-        {
-          apply: (resolver) => {
-            resolver
-              .getHook('resolve')
-              .tapAsync('NodeSchemeResolver', (request, resolveContext, callback) => {
-                if (request.request && request.request.startsWith('node:')) {
-                  const mod = request.request.replace(/^node:/, '');
-                  switch (mod) {
-                    case 'child_process':
-                    case 'fs':
-                    case 'fs/promises':
-                    case 'module':
-                    case 'os':
-                      callback(null, {
-                        path: false,
-                        external: true,
-                      });
-                      return;
-                    default:
-                      request.request = mod;
-                      resolver.doResolve(
-                        resolver.getHook('resolve'),
-                        request,
-                        null,
-                        resolveContext,
-                        callback
-                      );
-                      return;
-                  }
-                }
-                callback();
-              });
-          },
-        },
-      ];
     }
     return config;
   },
