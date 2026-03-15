@@ -163,3 +163,16 @@ Fields:
 
 governance
 
+Example:
+
+- Council of Archivists
+- Corporate rule
+- AI governance
+
+economy
+
+Example:
+
+- memory trade
+- energy credits
+- data economy
