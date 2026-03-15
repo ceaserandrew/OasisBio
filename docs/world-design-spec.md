@@ -261,4 +261,15 @@ Example:
 - AI rebellion
 - Archive corruption
 
-t
+themes
+
+Example:
+
+- identity
+- memory
+- power
+- control
+
+story_hooks
+
+Potential stories in
