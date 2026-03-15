@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "powershell -Command \"Remove-Item -Recurse -Force .next/cache -ErrorAction SilentlyContinue\"",
     "start": "next start",
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true next build"
@@ -32,7 +33,7 @@
     "@typescript-eslint/eslint-plugin": "7.3.1",
     "@typescript-eslint/parser": "7.3.1",
     "autoprefixer": "10.4.19",
-    "cross-env": "^10.1.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^17.3.1",
     "eslint": "8.57.0",
     "eslint-config-next": "14.1.4",
