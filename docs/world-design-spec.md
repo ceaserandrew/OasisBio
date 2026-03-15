@@ -47,3 +47,27 @@ One-sentence description
 
 Example:
 
+A civilization where memories are stored as physical artifacts.
+
+genre
+- sci-fi
+- fantasy
+- cyberpunk
+- alternate history
+- post-human
+- mythic
+
+tone
+- dark
+- hopeful
+- mysterious
+- utopian
+- dystopian
+- epic
+
+summary
+
+Brief world introduction.
+
+2. Time Structure
+
