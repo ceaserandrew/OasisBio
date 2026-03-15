@@ -149,3 +149,17 @@ Example:
 
 Memories decay after 100 years.
 
+4. Civilization
+
+Describes social structure.
+
+Fields:
+
+- governance
+- economy
+- factions
+- social_structure
+- culture
+
+governance
+
