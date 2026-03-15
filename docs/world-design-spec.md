@@ -334,4 +334,71 @@ worlds table:
 - owner_id
 - created_at
 
-Complex
+Complex fields can be stored as JSON.
+
+10. World Page Structure (Within Character Page)
+
+World module in character page:
+
+World
+│
+├── Summary
+├── Rules
+├── Civilization
+├── Environment
+└── Conflict
+
+Only display key content.
+
+11. Example World
+Archive City
+Name
+Archive City
+
+Genre
+Cyberpunk
+
+Summary
+A city where memories are stored and traded.
+
+Physics Rules
+Memories can be materialized.
+
+Technology
+Advanced
+
+Governance
+Council of Archivists
+
+Conflict
+Memory ownership wars
+
+12. Design Principles
+
+This standard follows three principles:
+
+1. Clear Structure
+
+All world settings have the same framework.
+
+2. Extensible
+
+Future additions could include:
+
+- maps
+- organizations
+- species
+
+3. Character Priority
+
+The world is just a character background and should not overshadow the character's central role.
+
+13. Final World Structure
+World
+│
+├── Core Identity
+├── Time Structure
+├── World Rules
+├── Civilization
+├── Environment
+└── Narrative Context
