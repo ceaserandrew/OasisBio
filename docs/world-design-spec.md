@@ -204,4 +204,19 @@ Example:
 
 5. Environment
 
-Describes world space
+Describes world space.
+
+Fields:
+
+- geography
+- cities
+- landmarks
+- environmental_features
+
+geography
+
+Example:
+
+- Floating islands
+- Endless ocean
+-
