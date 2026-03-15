@@ -310,3 +310,16 @@ World
   └── Characters
 
 Character field:
+
+character.world_id
+
+A world can have multiple characters.
+
+9. Database Structure Suggestion
+
+worlds table:
+
+- id
+- name
+- tagline
+-
