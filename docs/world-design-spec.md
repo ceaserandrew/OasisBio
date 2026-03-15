@@ -244,4 +244,21 @@ Example:
 
 6. Narrative Context
 
-Explains how characters exist
+Explains how characters exist in the world.
+
+Fields:
+
+- conflict
+- themes
+- story_hooks
+- character_roles
+
+conflict
+
+Example:
+
+- Memory ownership wars
+- AI rebellion
+- Archive corruption
+
+t
