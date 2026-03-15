@@ -51,7 +51,8 @@ async function createBuckets() {
       });
       
       if (error) {
-        if (error.code === '409') {
+        // Check if error is a StorageError and has a code property
+        if ('code' in error && error.code === '409') {
           console.log(`   ⚠️  Bucket ${bucketConfig.name} already exists`);
         } else {
           console.error(`   ❌ Failed to create bucket ${bucketConfig.name}:`, error);

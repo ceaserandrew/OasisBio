@@ -2,7 +2,10 @@
 
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+
+// @ts-ignore - three.js examples don't have type declarations
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// @ts-ignore - three.js examples don't have type declarations
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 interface ModelViewerProps {
@@ -57,25 +60,27 @@ export default function ModelViewer({ modelUrl, width = 800, height = 600 }: Mod
 
     loader.load(
       modelUrl,
-      (gltf) => {
+      (gltf: any) => {
         model = gltf.scene;
-        scene.add(model);
-        
-        // Center the model
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        model.position.sub(center);
-        
-        // Scale the model to fit in the view
-        const size = box.getSize(new THREE.Vector3());
-        const maxSize = Math.max(size.x, size.y, size.z);
-        const scale = 4 / maxSize;
-        model.scale.set(scale, scale, scale);
+        if (model) {
+          scene.add(model);
+          
+          // Center the model
+          const box = new THREE.Box3().setFromObject(model);
+          const center = box.getCenter(new THREE.Vector3());
+          model.position.sub(center);
+          
+          // Scale the model to fit in the view
+          const size = box.getSize(new THREE.Vector3());
+          const maxSize = Math.max(size.x, size.y, size.z);
+          const scale = 4 / maxSize;
+          model.scale.set(scale, scale, scale);
+        }
       },
-      (xhr) => {
+      (xhr: any) => {
         console.log((xhr.loaded / xhr.total * 100) + '% loaded');
       },
-      (error) => {
+      (error: any) => {
         console.error('Error loading model:', error);
         // Fallback to cube if model fails to load
         const geometry = new THREE.BoxGeometry(2, 2, 2);
