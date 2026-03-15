@@ -280,4 +280,10 @@ A lost archive threatens the city's history.
 
 character_roles
 
-Typical character identities in
+Typical character identities in the world.
+
+Example:
+
+- Archivist
+- Memory Hunter
+- Data Merchant
