@@ -219,4 +219,23 @@ Example:
 
 - Floating islands
 - Endless ocean
--
+- Desert megacity
+
+cities
+
+Example:
+
+- Archive City
+- Neon Harbor
+
+landmarks
+
+Example:
+
+- The Great Archive
+- Memory Vault
+
+environmental_features
+
+Example:
+
