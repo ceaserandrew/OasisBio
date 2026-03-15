@@ -126,3 +126,13 @@ Memory can be materialized.
 
 technology_level
 - primitive
+- industrial
+- modern
+- advanced
+- post-human
+
+power_system
+
+If a power system exists:
+
+Example:
