@@ -113,3 +113,16 @@ Fields:
 
 - physics_rules
 - technology_level
+- power_system
+- limitations
+
+physics_rules
+
+Describes whether physical laws are altered.
+
+Example:
+
+Memory can be materialized.
+
+technology_level
+- primitive
