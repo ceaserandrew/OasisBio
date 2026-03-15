@@ -176,3 +176,17 @@ Example:
 - memory trade
 - energy credits
 - data economy
+
+factions
+
+Major factions in the world.
+
+Example:
+
+- The Archivists
+- Memory Traders
+- Data Erasers
+
+social_structure
+
+Example
