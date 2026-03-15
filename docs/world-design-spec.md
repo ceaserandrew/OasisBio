@@ -322,4 +322,16 @@ worlds table:
 - id
 - name
 - tagline
--
+- genre
+- tone
+- summary
+- time_structure
+- world_rules
+- civilization
+- environment
+- narrative_context
+- visibility
+- owner_id
+- created_at
+
+Complex
