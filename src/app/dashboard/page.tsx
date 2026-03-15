@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useSession } from '@/lib/auth.client';
+import { useSession, signOut } from '@/lib/auth.client';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
 import { useRouter } from 'next/navigation';
@@ -9,6 +9,11 @@ import { useRouter } from 'next/navigation';
 export default function DashboardPage() {
   const { data: session } = useSession();
   const router = useRouter();
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.push('/auth/login');
+  };
 
   useEffect(() => {
     if (!session) {
@@ -127,6 +132,19 @@ export default function DashboardPage() {
               </a>
             </Button>
           </nav>
+          
+          <div className="mt-auto pt-6 border-t border-border">
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start"
+              onClick={handleLogout}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Logout
+            </Button>
+          </div>
         </div>
 
         {/* Main Content */}

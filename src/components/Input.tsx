@@ -2,6 +2,7 @@ import React from 'react';
 
 export interface InputProps {
   id?: string;
+  name?: string;
   type?: string;
   placeholder?: string;
   value?: string;
@@ -18,6 +19,7 @@ export interface InputProps {
 
 export function Input({
   id,
+  name,
   type = 'text',
   placeholder,
   value,
@@ -35,6 +37,7 @@ export function Input({
     <div className="w-full">
       <input
         id={id}
+        name={name}
         type={type}
         placeholder={placeholder}
         value={value}
