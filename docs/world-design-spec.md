@@ -189,4 +189,19 @@ Example:
 
 social_structure
 
-Example
+Example:
+
+- Archivists
+- Citizens
+- Nomads
+
+culture
+
+Example:
+
+- Memory rituals
+- Archive festivals
+
+5. Environment
+
+Describes world space
