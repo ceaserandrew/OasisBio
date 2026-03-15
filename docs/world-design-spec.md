@@ -287,3 +287,14 @@ Example:
 - Archivist
 - Memory Hunter
 - Data Merchant
+
+7. World Creation Process
+
+In the Builder, it is recommended to create in this order:
+
+1. World Name
+2. Summary
+3. Time Structure
+4. World Rules
+5. Civilization
+6.
