@@ -82,3 +82,19 @@ Fields:
 
 era_name
 - Founding Era
+- Archive Era
+- Collapse Era
+
+time_period
+- past
+- present
+- future
+- timeless
+
+timeline
+
+Key historical nodes.
+
+Example:
+
+2030 – Archive technology invented
