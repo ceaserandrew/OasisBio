@@ -297,4 +297,16 @@ In the Builder, it is recommended to create in this order:
 3. Time Structure
 4. World Rules
 5. Civilization
-6.
+6. Environment
+7. Narrative Context
+
+Each step corresponds to an editing module.
+
+8. Relationship between World and Characters
+
+The relationship structure in your system is:
+
+World
+  └── Characters
+
+Character field:
