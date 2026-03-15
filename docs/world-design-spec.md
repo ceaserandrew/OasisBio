@@ -71,3 +71,14 @@ Brief world introduction.
 
 2. Time Structure
 
+Defines the time state of the world.
+
+Fields:
+
+- era_name
+- time_period
+- timeline
+- major_events
+
+era_name
+- Founding Era
