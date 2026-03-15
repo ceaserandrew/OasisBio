@@ -136,3 +136,16 @@ power_system
 If a power system exists:
 
 Example:
+
+- Memory manipulation
+- Energy channels
+- Arcane magic
+
+limitations
+
+World limitations.
+
+Example:
+
+Memories decay after 100 years.
+
