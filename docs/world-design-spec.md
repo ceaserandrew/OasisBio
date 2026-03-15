@@ -272,4 +272,12 @@ Example:
 
 story_hooks
 
-Potential stories in
+Potential stories in the world.
+
+Example:
+
+A lost archive threatens the city's history.
+
+character_roles
+
+Typical character identities in
