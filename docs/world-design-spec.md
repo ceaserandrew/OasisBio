@@ -98,3 +98,18 @@ Key historical nodes.
 Example:
 
 2030 – Archive technology invented
+2050 – Memory trade legalized
+2090 – Archive City established
+
+major_events
+
+Major events.
+
+3. World Rules
+
+This is the most important part of the world setting.
+
+Fields:
+
+- physics_rules
+- technology_level
