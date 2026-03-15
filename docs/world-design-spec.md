@@ -239,3 +239,9 @@ environmental_features
 
 Example:
 
+- Neon storms
+- Data fog
+
+6. Narrative Context
+
+Explains how characters exist
