@@ -197,7 +197,7 @@ describe('validateRegisterForm', () => {
     };
     const result = validateRegisterForm(data);
     expect(result.isValid).toBe(false);
-    expect(result.errors).toHaveLength(3);
+    expect(result.errors).toHaveLength(4);
   });
 });
 
@@ -224,7 +224,7 @@ describe('validateSettingsForm', () => {
       };
       const result = validateSettingsForm(data, 'account');
       expect(result.isValid).toBe(false);
-      expect(result.errors).toHaveLength(4);
+      expect(result.errors).toHaveLength(5);
     });
   });
 

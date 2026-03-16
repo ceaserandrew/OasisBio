@@ -40,29 +40,22 @@ export function Input({
   debounce = 300,
 }: InputProps) {
   const [internalError, setInternalError] = useState<string | null>(null);
-  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
 
   const error = externalError || !!internalError;
   const errorMessage = externalErrorMessage || internalError;
 
   useEffect(() => {
     if (validate && value !== undefined) {
-      if (debounceTimer) {
-        clearTimeout(debounceTimer);
-      }
       const timer = setTimeout(() => {
         const validationError = validate(value);
         setInternalError(validationError);
       }, debounce);
-      setDebounceTimer(timer);
+      
+      return () => {
+        clearTimeout(timer);
+      };
     }
-
-    return () => {
-      if (debounceTimer) {
-        clearTimeout(debounceTimer);
-      }
-    };
-  }, [value, validate, debounce, debounceTimer]);
+  }, [value, validate, debounce]);
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (validate && value !== undefined) {

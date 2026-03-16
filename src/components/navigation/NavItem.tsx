@@ -18,10 +18,10 @@ export function NavItem({ href, label, icon, active = false, onClick, category }
       asChild
       variant={active ? "primary" : "ghost"}
       className={`w-full justify-start ${active ? 'bg-primary/10 text-primary' : ''}`}
+      onClick={onClick}
     >
       <a 
         href={href} 
-        onClick={onClick}
         className="flex items-center"
       >
         <span className={`mr-2 ${getCategoryColor(category)}`}>

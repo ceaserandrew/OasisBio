@@ -397,3 +397,70 @@ The `Input` component has been enhanced with:
 - Shared worlds
 - Advanced 3D model editing
 - Mobile app development
+
+## Testing
+
+### Test Plan
+
+The application includes a comprehensive testing plan with three levels of testing:
+
+1. **Unit Tests** - Test individual components and utilities in isolation
+2. **Integration Tests** - Test interactions between multiple components and systems
+3. **End-to-End Tests** - Test complete user journeys through the application
+
+### Test Files
+
+#### Unit Tests
+
+- `src/lib/validation.test.ts` - Tests for validation utilities
+- `src/components/navigation/NavItem.test.tsx` - Tests for NavItem component
+- `src/components/navigation/MobileMenuToggle.test.tsx` - Tests for MobileMenuToggle component
+- `src/components/navigation/NavigationBar.test.tsx` - Tests for NavigationBar component
+- `src/components/Input.test.tsx` - Tests for Input component
+
+#### Integration Tests
+
+- `src/app/auth/__tests__/authentication.test.ts` - Tests for authentication flow
+- `src/components/navigation/__tests__/navigation-integration.test.tsx` - Tests for navigation system
+- `src/app/dashboard/settings/__tests__/settings.test.tsx` - Tests for settings page
+
+#### End-to-End Tests
+
+- `e2e/onboarding.test.ts` - Tests for user onboarding flow
+- `e2e/dashboard-navigation.test.ts` - Tests for dashboard navigation
+- `e2e/settings.test.ts` - Tests for settings management
+- `e2e/responsive.test.ts` - Tests for responsive design
+
+### Test Dependencies
+
+The following test dependencies are used:
+
+- **Jest** - JavaScript testing framework
+- **React Testing Library** - Testing utilities for React components
+- **Playwright** - End-to-end testing framework
+- **MSW (Mock Service Worker)** - API mocking for tests
+
+### Test Coverage Goals
+
+- **Unit Tests**: ≥ 80% code coverage
+- **Integration Tests**: ≥ 70% code coverage
+- **End-to-End Tests**: Cover all critical user flows
+
+### Test Execution
+
+Tests can be run with the following commands:
+
+- `npm test` - Run unit tests
+- `npm run test:watch` - Run unit tests in watch mode
+- `npm run test:coverage` - Run unit tests with coverage reporting
+- `npm run test:integration` - Run integration tests
+- `npm run test:e2e` - Run end-to-end tests
+- `npm run test:e2e:debug` - Run end-to-end tests in debug mode
+
+### Test Results
+
+All unit tests for the validation utilities and navigation components have been implemented and passed. The Input component tests have been implemented but could not be run due to environment limitations. The integration and end-to-end tests are planned but not yet implemented.
+
+### Test Maintenance
+
+Tests should be updated when components change, and new tests should be added for new features. Regularly running tests ensures application stability and prevents regressions.
