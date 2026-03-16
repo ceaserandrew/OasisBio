@@ -210,4 +210,6 @@ All repository endpoints implement:
 
 1. **Organization**: Use clear and descriptive titles for all repository items
 2. **Documentation**: Provide detailed descriptions for references and worlds
-3
+3. **Cross-Referencing**: Link related content across repositories using eraId and worldId fields
+4. **Version Control**: Take advantage of automatic versioning for DCOS files
+5. **
