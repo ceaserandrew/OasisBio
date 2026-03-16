@@ -65,6 +65,7 @@ OasisBio/
 - **DCOS (Dynamic Core Operating Script)**: Core identity narrative files
 - **References**: External links and resources
 - **Worlds**: Fictional world creation and management
+- **World Documents**: Detailed content for specific worlds
 
 ### 4. 3D Model Support
 - GLB file uploads (single binary format)
@@ -101,6 +102,7 @@ OasisBio/
 - title: String
 - slug: String (unique)
 - tagline: String (optional)
+- summary: String (optional)
 - identityMode: String (default: "real")
 - birthDate: DateTime (optional)
 - gender: String (optional)
@@ -108,9 +110,13 @@ OasisBio/
 - placeOfOrigin: String (optional)
 - currentEra: String (optional)
 - species: String (optional)
-- status: String (optional)
+- status: String (default: "draft")
 - description: String (optional)
+- coverImageUrl: String (optional)
+- defaultLanguage: String (default: "en")
 - visibility: String (default: "private")
+- featured: Boolean (default: false)
+- publishedAt: DateTime (optional)
 - createdAt: DateTime
 - updatedAt: DateTime
 - abilities: Array of Ability
@@ -119,22 +125,27 @@ OasisBio/
 - worlds: Array of WorldItem
 - models: Array of ModelItem
 - eras: Array of EraIdentity
+- publication: OasisBioPublication
+- relationshipsA: Array of CharacterRelationship
+- relationshipsB: Array of CharacterRelationship
 
 ### EraIdentity
 - id: String (primary key)
 - oasisBioId: String (foreign key to OasisBio)
 - name: String
 - eraType: String
-- startDate: DateTime (optional)
-- endDate: DateTime (optional)
+- startYear: Int (optional)
+- endYear: Int (optional)
 - description: String (optional)
+- sortOrder: Int (default: 0)
+- abilities: Array of Ability
 
 ### Ability
 - id: String (primary key)
 - oasisBioId: String (foreign key to OasisBio)
 - name: String
 - category: String
-- type: String (default: "custom")
+- sourceType: String (default: "custom")
 - level: Int (default: 1)
 - description: String (optional)
 - relatedWorldId: String (optional)
@@ -144,8 +155,12 @@ OasisBio/
 - id: String (primary key)
 - oasisBioId: String (foreign key to OasisBio)
 - title: String
+- slug: String (unique)
 - content: String
-- folder: String
+- folderPath: String
+- status: String (default: "draft")
+- version: Int (default: 1)
+- eraId: String (optional)
 - createdAt: DateTime
 - updatedAt: DateTime
 
@@ -154,8 +169,13 @@ OasisBio/
 - oasisBioId: String (foreign key to OasisBio)
 - url: String
 - title: String
-- type: String
 - description: String (optional)
+- sourceType: String
+- provider: String (optional)
+- coverImage: String (optional)
+- metadata: String (optional)
+- eraId: String (optional)
+- worldId: String (optional)
 - tags: String
 
 ### WorldItem
@@ -163,15 +183,36 @@ OasisBio/
 - oasisBioId: String (foreign key to OasisBio)
 - name: String
 - summary: String
+- timeSetting: String (optional)
+- geography: String (optional)
+- physicsRules: String (optional)
+- socialStructure: String (optional)
+- aestheticKeywords: String (optional)
+- majorConflict: String (optional)
+- visibility: String (default: "private")
 - timeline: String (optional)
 - rules: String (optional)
 - factions: String (optional)
+- documents: Array of WorldDocument
+- abilities: Array of Ability
+
+### WorldDocument
+- id: String (primary key)
+- worldId: String (foreign key to WorldItem)
+- title: String
+- docType: String
+- slug: String
+- content: String
+- folderPath: String (default: "/")
+- sortOrder: Int (default: 0)
+- createdAt: DateTime
+- updatedAt: DateTime
 
 ### ModelItem
 - id: String (primary key)
 - oasisBioId: String (foreign key to OasisBio)
 - name: String
-- filePath: String (GLB file path)
+- filePath: String
 - modelFormat: String (default: "glb")
 - previewImage: String (optional)
 - relatedWorldId: String (optional)
@@ -285,10 +326,29 @@ USING (
 - `PUT /api/abilities/[id]` - Update ability
 - `DELETE /api/abilities/[id]` - Delete ability
 
-### Repository Management
-- **DCOS**: `GET|POST|PUT|DELETE /api/oasisbios/[id]/dcos`
-- **References**: `GET|POST|PUT|DELETE /api/oasisbios/[id]/references`
-- **Worlds**: `GET|POST|PUT|DELETE /api/oasisbios/[id]/worlds`
+### DCOS Repository
+- `GET /api/oasisbios/[id]/dcos` - Get DCOS files for OasisBio
+- `POST /api/oasisbios/[id]/dcos` - Create DCOS file
+- `PUT /api/dcos/[id]` - Update DCOS file
+- `DELETE /api/dcos/[id]` - Delete DCOS file
+
+### References Repository
+- `GET /api/oasisbios/[id]/references` - Get references for OasisBio
+- `POST /api/oasisbios/[id]/references` - Create reference
+- `PUT /api/references/[id]` - Update reference
+- `DELETE /api/references/[id]` - Delete reference
+
+### Worlds Repository
+- `GET /api/oasisbios/[id]/worlds` - Get worlds for OasisBio
+- `POST /api/oasisbios/[id]/worlds` - Create world
+- `PUT /api/worlds/[id]` - Update world
+- `DELETE /api/worlds/[id]` - Delete world
+
+### World Documents
+- `GET /api/worlds/[id]/documents` - Get documents for world
+- `POST /api/worlds/[id]/documents` - Create world document
+- `PUT /api/worlddocuments/[id]` - Update world document
+- `DELETE /api/worlddocuments/[id]` - Delete world document
 
 ### Model Management
 - `GET /api/oasisbios/[id]/models` - Get models for OasisBio
