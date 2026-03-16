@@ -190,4 +190,15 @@ interface WorldDocument {
   worldId: string;
   title: string;
   docType: string;
-  slug:
+  slug: string;
+  content: string;
+  folderPath: string;
+  sortOrder: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+## Authentication and Authorization
+
+All repository
