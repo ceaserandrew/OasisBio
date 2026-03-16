@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export interface InputProps {
   id?: string;
@@ -7,6 +7,7 @@ export interface InputProps {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   className?: string;
   disabled?: boolean;
   required?: boolean;
@@ -15,6 +16,8 @@ export interface InputProps {
   step?: string;
   error?: boolean;
   errorMessage?: string;
+  validate?: (value: string) => string | null;
+  debounce?: number;
 }
 
 export function Input({
@@ -24,15 +27,53 @@ export function Input({
   placeholder,
   value,
   onChange,
+  onBlur,
   className = '',
   disabled = false,
   required = false,
   min,
   max,
   step,
-  error = false,
-  errorMessage,
+  error: externalError = false,
+  errorMessage: externalErrorMessage,
+  validate,
+  debounce = 300,
 }: InputProps) {
+  const [internalError, setInternalError] = useState<string | null>(null);
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+
+  const error = externalError || !!internalError;
+  const errorMessage = externalErrorMessage || internalError;
+
+  useEffect(() => {
+    if (validate && value !== undefined) {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+      const timer = setTimeout(() => {
+        const validationError = validate(value);
+        setInternalError(validationError);
+      }, debounce);
+      setDebounceTimer(timer);
+    }
+
+    return () => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+    };
+  }, [value, validate, debounce, debounceTimer]);
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (validate && value !== undefined) {
+      const validationError = validate(value);
+      setInternalError(validationError);
+    }
+    if (onBlur) {
+      onBlur(e);
+    }
+  };
+
   return (
     <div className="w-full">
       <input
@@ -42,6 +83,7 @@ export function Input({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onBlur={handleBlur}
         className={`
           w-full px-3 py-2 border rounded-md bg-background text-foreground
           focus:outline-none focus:ring-2 focus:ring-offset-2

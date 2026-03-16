@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
 import { useRouter } from 'next/navigation';
+import { validateSettingsForm } from '@/lib/validation';
 
 interface Profile {
   id: string;
@@ -72,6 +73,7 @@ export default function SettingsPage() {
     newPassword: '',
     confirmPassword: '',
   });
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -118,9 +120,21 @@ export default function SettingsPage() {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setFieldErrors({});
     setSaving(true);
 
     try {
+      // Client-side validation
+      const validationResult = validateSettingsForm(formData, activeSection);
+      if (!validationResult.isValid) {
+        const errors: { [key: string]: string } = {};
+        validationResult.errors.forEach((error) => {
+          errors[error.field.toLowerCase()] = error.message;
+        });
+        setFieldErrors(errors);
+        return;
+      }
+
       let submitData: any = {};
 
       if (activeSection === 'account' || activeSection === 'profile') {
@@ -137,9 +151,6 @@ export default function SettingsPage() {
           },
         };
       } else if (activeSection === 'security') {
-        if (formData.newPassword !== formData.confirmPassword) {
-          throw new Error('Passwords do not match');
-        }
         submitData = {
           section: 'security',
           data: {
@@ -344,6 +355,8 @@ export default function SettingsPage() {
                             value={formData.username}
                             onChange={handleChange}
                             placeholder="your-username"
+                            error={!!fieldErrors.username}
+                            errorMessage={fieldErrors.username}
                           />
                         </div>
                         <div>
@@ -357,6 +370,8 @@ export default function SettingsPage() {
                             value={formData.displayName}
                             onChange={handleChange}
                             placeholder="Your display name"
+                            error={!!fieldErrors['display name']}
+                            errorMessage={fieldErrors['display name']}
                           />
                         </div>
                         <div>
@@ -401,6 +416,8 @@ export default function SettingsPage() {
                             value={formData.avatarUrl}
                             onChange={handleChange}
                             placeholder="https://example.com/avatar.jpg"
+                            error={!!fieldErrors['avatar url']}
+                            errorMessage={fieldErrors['avatar url']}
                           />
                         </div>
                         <div>
@@ -428,6 +445,8 @@ export default function SettingsPage() {
                             value={formData.website}
                             onChange={handleChange}
                             placeholder="https://your-website.com"
+                            error={!!fieldErrors.website}
+                            errorMessage={fieldErrors.website}
                           />
                         </div>
                       </CardContent>
@@ -547,6 +566,8 @@ export default function SettingsPage() {
                                 value={formData.currentPassword}
                                 onChange={handleChange}
                                 placeholder="Enter your current password"
+                                error={!!fieldErrors['current password']}
+                                errorMessage={fieldErrors['current password']}
                               />
                             </div>
                             <div>
@@ -560,6 +581,8 @@ export default function SettingsPage() {
                                 value={formData.newPassword}
                                 onChange={handleChange}
                                 placeholder="Enter your new password"
+                                error={!!fieldErrors['new password']}
+                                errorMessage={fieldErrors['new password']}
                               />
                             </div>
                             <div>
@@ -573,6 +596,8 @@ export default function SettingsPage() {
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                                 placeholder="Confirm your new password"
+                                error={!!fieldErrors['confirm password']}
+                                errorMessage={fieldErrors['confirm password']}
                               />
                             </div>
                           </div>

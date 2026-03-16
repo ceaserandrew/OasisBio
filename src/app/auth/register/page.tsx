@@ -6,6 +6,7 @@ import { Input } from '@/components/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { signIn } from '@/lib/auth.client';
 import { useRouter } from 'next/navigation';
+import { validateRegisterForm, ValidationError } from '@/lib/validation';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -13,14 +14,29 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setFieldErrors({});
+    setIsSubmitting(true);
 
     try {
+      // Client-side validation
+      const validationResult = validateRegisterForm({ name, email, password });
+      if (!validationResult.isValid) {
+        const errors: { [key: string]: string } = {};
+        validationResult.errors.forEach((error) => {
+          errors[error.field.toLowerCase()] = error.message;
+        });
+        setFieldErrors(errors);
+        return;
+      }
+
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -41,6 +57,8 @@ export default function RegisterPage() {
       }
     } catch (err) {
       setError('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -77,6 +95,8 @@ export default function RegisterPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                error={!!fieldErrors.name}
+                errorMessage={fieldErrors.name}
               />
             </div>
             <div>
@@ -90,6 +110,8 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                error={!!fieldErrors.email}
+                errorMessage={fieldErrors.email}
               />
             </div>
             <div>
@@ -103,10 +125,12 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                error={!!fieldErrors.password}
+                errorMessage={fieldErrors.password}
               />
             </div>
-            <Button type="submit" className="w-full">
-              Sign Up
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? 'Signing up...' : 'Sign Up'}
             </Button>
           </form>
           
