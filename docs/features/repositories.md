@@ -163,4 +163,18 @@ interface WorldItem {
 
 - **World List**: Displays all worlds with basic information
 - **World Editor**: Comprehensive form for creating and editing worlds
-- **Detailed Fields**: Supports all world-building fields including geography, physics rules, social
+- **Detailed Fields**: Supports all world-building fields including geography, physics rules, social structure, etc.
+- **Loading States**: Visual feedback during API requests
+- **Error Handling**: Clear error messages for user actions
+
+## World Documents
+
+### Overview
+
+World Documents are individual documents associated with a specific world. They allow users to create detailed content about different aspects of a world.
+
+### Implementation
+
+#### API Endpoints
+
+- **GET /api
