@@ -201,4 +201,6 @@ interface WorldDocument {
 
 ## Authentication and Authorization
 
-All repository
+All repository endpoints implement:
+- **Authentication**: Uses NextAuth.js to verify user is logged in
+- **Authorization**: Verifies that the requested resource belongs
