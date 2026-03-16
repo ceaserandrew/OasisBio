@@ -203,4 +203,11 @@ interface WorldDocument {
 
 All repository endpoints implement:
 - **Authentication**: Uses NextAuth.js to verify user is logged in
-- **Authorization**: Verifies that the requested resource belongs
+- **Authorization**: Verifies that the requested resource belongs to the authenticated user
+- **Error Handling**: Proper error responses for unauthorized access, not found resources, and server errors
+
+## Best Practices
+
+1. **Organization**: Use clear and descriptive titles for all repository items
+2. **Documentation**: Provide detailed descriptions for references and worlds
+3
