@@ -8,7 +8,13 @@
     "postbuild": "powershell -Command \"Remove-Item -Recurse -Force .next/cache -ErrorAction SilentlyContinue\"",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "cross-env ANALYZE=true next build"
+    "analyze": "cross-env ANALYZE=true next build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:e2e": "playwright test",
+    "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -41,6 +47,13 @@
     "postcss": "8.4.38",
     "tailwindcss": "3.4.3",
     "typescript": "5.4.3",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "jest": "^29.7.0",
+    "@testing-library/react": "^14.3.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/user-event": "^14.5.2",
+    "playwright": "^1.44.1",
+    "msw": "^2.3.0",
+    "@types/jest": "^29.5.12"
   }
 }
