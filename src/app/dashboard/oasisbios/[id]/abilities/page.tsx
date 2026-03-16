@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
 import { Input } from '@/components/Input';
+import { useParams } from 'next/navigation';
 
 // Mock data for ability categories and presets
 const abilityCategories = [
@@ -30,36 +31,13 @@ const presetAbilities = {
   combat: ['Telepathy', 'Alchemy', 'World Mapping', 'Beast Taming', 'Portal Hacking'],
 };
 
-// Mock data for user abilities
-const initialAbilities = [
-  {
-    id: 1,
-    name: 'JavaScript',
-    category: 'technology',
-    type: 'custom',
-    level: 4,
-    description: 'Proficient in modern JavaScript and ES6+ features',
-  },
-  {
-    id: 2,
-    name: 'English',
-    category: 'languages',
-    type: 'official',
-    level: 5,
-    description: 'Native speaker',
-  },
-  {
-    id: 3,
-    name: 'Drawing',
-    category: 'arts',
-    type: 'official',
-    level: 3,
-    description: 'Hobbyist drawer with basic skills',
-  },
-];
-
 export default function AbilitiesPage() {
-  const [abilities, setAbilities] = useState(initialAbilities);
+  const params = useParams();
+  const oasisBioId = params.id as string;
+  
+  const [abilities, setAbilities] = useState<any[]>([]);
+  const [worlds, setWorlds] = useState<any[]>([]);
+  const [eras, setEras] = useState<any[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newAbility, setNewAbility] = useState({
     name: '',
@@ -67,55 +45,189 @@ export default function AbilitiesPage() {
     type: 'custom' as 'custom' | 'official',
     level: 1,
     description: '',
+    relatedWorldId: '',
+    relatedEraId: '',
   });
   const [filterCategory, setFilterCategory] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleAddAbility = () => {
+  // Fetch abilities, worlds, and eras from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Fetch abilities
+        const abilitiesResponse = await fetch(`/api/oasisbios/${oasisBioId}/abilities`);
+        if (!abilitiesResponse.ok) {
+          throw new Error('Failed to fetch abilities');
+        }
+        const abilitiesData = await abilitiesResponse.json();
+        setAbilities(abilitiesData);
+        
+        // Fetch worlds
+        const worldsResponse = await fetch(`/api/oasisbios/${oasisBioId}/worlds`);
+        if (worldsResponse.ok) {
+          const worldsData = await worldsResponse.json();
+          setWorlds(worldsData);
+        }
+        
+        // Fetch eras
+        const erasResponse = await fetch(`/api/oasisbios/${oasisBioId}/eras`);
+        if (erasResponse.ok) {
+          const erasData = await erasResponse.json();
+          setEras(erasData);
+        }
+      } catch (err) {
+        setError('Failed to load data');
+        console.error('Error fetching data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [oasisBioId]);
+
+  const handleAddAbility = async () => {
     if (newAbility.name.trim()) {
-      const ability = {
-        id: abilities.length + 1,
-        ...newAbility,
-      };
-      setAbilities([...abilities, ability]);
-      setNewAbility({
-        name: '',
-        category: 'technology',
-        type: 'custom',
-        level: 1,
-        description: '',
-      });
-      setShowAddForm(false);
+      try {
+        const response = await fetch(`/api/oasisbios/${oasisBioId}/abilities`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newAbility),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to add ability');
+        }
+        
+        const addedAbility = await response.json();
+        setAbilities([...abilities, addedAbility]);
+        setNewAbility({
+          name: '',
+          category: 'technology',
+          type: 'custom',
+          level: 1,
+          description: '',
+          relatedWorldId: '',
+          relatedEraId: '',
+        });
+        setShowAddForm(false);
+      } catch (err) {
+        setError('Failed to add ability');
+        console.error('Error adding ability:', err);
+      }
     }
   };
 
-  const handleAddPresetAbility = (category: string, abilityName: string) => {
+  const handleAddPresetAbility = async (category: string, abilityName: string) => {
     const existingAbility = abilities.find(a => a.name === abilityName);
     if (!existingAbility) {
-      const ability = {
-        id: abilities.length + 1,
-        name: abilityName,
-        category,
-        type: 'official',
-        level: 1,
-        description: '',
-      };
-      setAbilities([...abilities, ability]);
+      try {
+        const response = await fetch(`/api/oasisbios/${oasisBioId}/abilities`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: abilityName,
+            category,
+            type: 'official',
+            level: 1,
+            description: '',
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to add preset ability');
+        }
+        
+        const addedAbility = await response.json();
+        setAbilities([...abilities, addedAbility]);
+      } catch (err) {
+        setError('Failed to add preset ability');
+        console.error('Error adding preset ability:', err);
+      }
     }
   };
 
-  const handleUpdateLevel = (id: number, level: number) => {
-    setAbilities(abilities.map(ability => 
-      ability.id === id ? { ...ability, level } : ability
-    ));
+  const handleUpdateLevel = async (id: string, level: number) => {
+    try {
+      const ability = abilities.find(a => a.id === id);
+      if (!ability) return;
+      
+      const response = await fetch(`/api/abilities/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...ability,
+          level,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update ability level');
+      }
+      
+      const updatedAbility = await response.json();
+      setAbilities(abilities.map(ability => 
+        ability.id === id ? updatedAbility : ability
+      ));
+    } catch (err) {
+      setError('Failed to update ability level');
+      console.error('Error updating ability level:', err);
+    }
   };
 
-  const handleDeleteAbility = (id: number) => {
-    setAbilities(abilities.filter(ability => ability.id !== id));
+  const handleDeleteAbility = async (id: string) => {
+    try {
+      const response = await fetch(`/api/abilities/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete ability');
+      }
+      
+      setAbilities(abilities.filter(ability => ability.id !== id));
+    } catch (err) {
+      setError('Failed to delete ability');
+      console.error('Error deleting ability:', err);
+    }
   };
 
   const filteredAbilities = filterCategory === 'all' 
     ? abilities 
     : abilities.filter(ability => ability.category === filterCategory);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black mx-auto mb-4"></div>
+          <p>Loading abilities...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -182,6 +294,36 @@ export default function AbilitiesPage() {
                     {[1, 2, 3, 4, 5].map(level => (
                       <option key={level} value={level}>
                         {level} - {level === 1 ? 'Beginner' : level === 2 ? 'Novice' : level === 3 ? 'Intermediate' : level === 4 ? 'Advanced' : 'Expert'}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Related World</label>
+                  <select 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    value={newAbility.relatedWorldId}
+                    onChange={(e) => setNewAbility({ ...newAbility, relatedWorldId: e.target.value })}
+                  >
+                    <option value="">Select a world</option>
+                    {worlds.map(world => (
+                      <option key={world.id} value={world.id}>
+                        {world.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Related Era</label>
+                  <select 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    value={newAbility.relatedEraId}
+                    onChange={(e) => setNewAbility({ ...newAbility, relatedEraId: e.target.value })}
+                  >
+                    <option value="">Select an era</option>
+                    {eras.map(era => (
+                      <option key={era.id} value={era.id}>
+                        {era.name}
                       </option>
                     ))}
                   </select>
@@ -260,9 +402,19 @@ export default function AbilitiesPage() {
                   </div>
                 </div>
                 <div className="mb-4">
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-xs font-medium rounded">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-xs font-medium rounded mr-2">
                     {ability.type === 'official' ? 'Official' : 'Custom'}
                   </span>
+                  {ability.relatedWorldId && worlds.find(w => w.id === ability.relatedWorldId) && (
+                    <span className="inline-block px-2 py-1 bg-blue-100 text-xs font-medium rounded mr-2">
+                      World: {worlds.find(w => w.id === ability.relatedWorldId)?.name}
+                    </span>
+                  )}
+                  {ability.relatedEraId && eras.find(e => e.id === ability.relatedEraId) && (
+                    <span className="inline-block px-2 py-1 bg-green-100 text-xs font-medium rounded">
+                      Era: {eras.find(e => e.id === ability.relatedEraId)?.name}
+                    </span>
+                  )}
                 </div>
                 {ability.description && (
                   <p className="text-sm text-gray-600 mb-4">
