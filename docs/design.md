@@ -165,7 +165,30 @@ OasisBio follows a minimalist, modern design approach inspired by Swiss design p
     border-color: #000000;
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
   }
+  
+  .input-error {
+    border-color: #EF4444;
+  }
+  
+  .input-error:focus {
+    border-color: #EF4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+  
+  .error-message {
+    color: #EF4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
   ```
+
+### Error Handling and User Feedback
+- **Error States**: Clear visual indicators for form errors
+- **Success Messages**: Green background with checkmark icon
+- **Loading States**: Subtle loading indicators during form submission
+- **Toast Notifications**: Non-intrusive feedback for user actions
+- **Animation**: Smooth transitions for error/success states
+- **Accessibility**: ARIA attributes for screen reader support
 
 ### Navbar
 - **Structure**: logo, navigation links, user menu
