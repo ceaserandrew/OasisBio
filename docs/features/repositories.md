@@ -217,4 +217,8 @@ All repository endpoints implement:
 ## Future Enhancements
 
 - **Collaborative Editing**: Allow multiple users to edit repository content
-- **AI-Ass
+- **AI-Assisted Content Generation**: Generate content suggestions based on existing material
+- **Content Import/Export**: Import and export repository content between OasisBios
+- **Interactive World Maps**: Create interactive maps for world visualization
+- **Repository Templates**: Pre-built templates for common repository structures
+- **Advanced Search**:
