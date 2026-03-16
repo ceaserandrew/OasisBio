@@ -161,4 +161,6 @@ interface WorldItem {
 
 #### Frontend Features
 
-- **World
+- **World List**: Displays all worlds with basic information
+- **World Editor**: Comprehensive form for creating and editing worlds
+- **Detailed Fields**: Supports all world-building fields including geography, physics rules, social
