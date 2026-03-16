@@ -1,98 +1,178 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
 import { Input } from '@/components/Input';
-
-// Mock data for worlds
-const initialWorlds = [
-  {
-    id: 1,
-    name: 'Neon Desert',
-    summary: 'A post-apocalyptic world where civilization survives in neon-lit oases amid vast desert wastelands',
-    timeSetting: '2150 AD',
-    geography: 'Endless deserts with scattered oases and neon cities',
-    rules: 'Water is the most valuable resource, and solar power is the primary energy source',
-    factions: 'Desert Nomads, Neon City Dwellers, Water Barons',
-    aesthetic: 'Neon lights, sand dunes, cyberpunk architecture',
-    createdAt: '2024-01-15T10:00:00Z',
-    updatedAt: '2024-01-15T10:30:00Z',
-  },
-  {
-    id: 2,
-    name: 'Archive City',
-    summary: 'A massive underground city built to preserve knowledge after a global cataclysm',
-    timeSetting: '2200 AD',
-    geography: 'Underground tunnels and caverns, with artificial daylight systems',
-    rules: 'Knowledge is power, and archivists are the most respected class',
-    factions: 'Archivists, Technicians, Security Forces',
-    aesthetic: 'Clean, minimalist design with extensive libraries and data centers',
-    createdAt: '2024-01-16T14:00:00Z',
-    updatedAt: '2024-01-16T14:30:00Z',
-  },
-];
+import { useParams } from 'next/navigation';
 
 export default function WorldsPage() {
-  const [worlds, setWorlds] = useState(initialWorlds);
-  const [selectedWorld, setSelectedWorld] = useState(initialWorlds[0]);
+  const params = useParams();
+  const oasisBioId = params.id as string;
+  
+  const [worlds, setWorlds] = useState<any[]>([]);
+  const [selectedWorld, setSelectedWorld] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editWorld, setEditWorld] = useState(initialWorlds[0]);
+  const [editWorld, setEditWorld] = useState<any>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newWorld, setNewWorld] = useState({
     name: '',
     summary: '',
     timeSetting: '',
     geography: '',
+    physicsRules: '',
+    socialStructure: '',
+    aestheticKeywords: '',
+    majorConflict: '',
+    visibility: 'private',
+    timeline: '',
     rules: '',
     factions: '',
-    aesthetic: '',
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSaveWorld = () => {
+  // Fetch worlds from API
+  useEffect(() => {
+    const fetchWorlds = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch(`/api/oasisbios/${oasisBioId}/worlds`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch worlds');
+        }
+        const data = await response.json();
+        setWorlds(data);
+        if (data.length > 0) {
+          setSelectedWorld(data[0]);
+          setEditWorld(data[0]);
+        }
+      } catch (err) {
+        setError('Failed to load worlds');
+        console.error('Error fetching worlds:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWorlds();
+  }, [oasisBioId]);
+
+  const handleSaveWorld = async () => {
     if (selectedWorld) {
-      const updatedWorlds = worlds.map(world => 
-        world.id === selectedWorld.id ? { ...editWorld, updatedAt: new Date().toISOString() } : world
-      );
-      setWorlds(updatedWorlds);
-      setSelectedWorld({ ...editWorld, updatedAt: new Date().toISOString() });
-      setIsEditing(false);
+      try {
+        const response = await fetch(`/api/worlds/${selectedWorld.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editWorld),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to update world');
+        }
+        
+        const updatedWorld = await response.json();
+        const updatedWorlds = worlds.map(world => 
+          world.id === selectedWorld.id ? updatedWorld : world
+        );
+        setWorlds(updatedWorlds);
+        setSelectedWorld(updatedWorld);
+        setIsEditing(false);
+      } catch (err) {
+        setError('Failed to update world');
+        console.error('Error updating world:', err);
+      }
     }
   };
 
-  const handleAddWorld = () => {
+  const handleAddWorld = async () => {
     if (newWorld.name.trim()) {
-      const world = {
-        id: worlds.length + 1,
-        ...newWorld,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      const updatedWorlds = [...worlds, world];
-      setWorlds(updatedWorlds);
-      setSelectedWorld(world);
-      setEditWorld(world);
-      setNewWorld({
-        name: '',
-        summary: '',
-        timeSetting: '',
-        geography: '',
-        rules: '',
-        factions: '',
-        aesthetic: '',
-      });
-      setShowAddForm(false);
+      try {
+        const response = await fetch(`/api/oasisbios/${oasisBioId}/worlds`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newWorld),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to add world');
+        }
+        
+        const addedWorld = await response.json();
+        const updatedWorlds = [...worlds, addedWorld];
+        setWorlds(updatedWorlds);
+        setSelectedWorld(addedWorld);
+        setEditWorld(addedWorld);
+        setNewWorld({
+          name: '',
+          summary: '',
+          timeSetting: '',
+          geography: '',
+          physicsRules: '',
+          socialStructure: '',
+          aestheticKeywords: '',
+          majorConflict: '',
+          visibility: 'private',
+          timeline: '',
+          rules: '',
+          factions: '',
+        });
+        setShowAddForm(false);
+      } catch (err) {
+        setError('Failed to add world');
+        console.error('Error adding world:', err);
+      }
     }
   };
 
-  const handleDeleteWorld = (id: number) => {
-    const updatedWorlds = worlds.filter(world => world.id !== id);
-    setWorlds(updatedWorlds);
-    if (selectedWorld && selectedWorld.id === id) {
-      setSelectedWorld(updatedWorlds[0]);
-      setEditWorld(updatedWorlds[0]);
+  const handleDeleteWorld = async (id: string) => {
+    try {
+      const response = await fetch(`/api/worlds/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete world');
+      }
+      
+      const updatedWorlds = worlds.filter(world => world.id !== id);
+      setWorlds(updatedWorlds);
+      if (selectedWorld && selectedWorld.id === id) {
+        setSelectedWorld(updatedWorlds[0] || null);
+        setEditWorld(updatedWorlds[0] || null);
+      }
+    } catch (err) {
+      setError('Failed to delete world');
+      console.error('Error deleting world:', err);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black mx-auto mb-4"></div>
+          <p>Loading worlds...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -158,9 +238,39 @@ export default function WorldsPage() {
                   <label className="block text-sm font-medium mb-1">Rules of Physics</label>
                   <textarea 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                    value={newWorld.rules}
-                    onChange={(e) => setNewWorld({ ...newWorld, rules: e.target.value })}
+                    value={newWorld.physicsRules}
+                    onChange={(e) => setNewWorld({ ...newWorld, physicsRules: e.target.value })}
                     placeholder="Describe the world's rules and systems"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Social Structure</label>
+                  <textarea 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    value={newWorld.socialStructure}
+                    onChange={(e) => setNewWorld({ ...newWorld, socialStructure: e.target.value })}
+                    placeholder="Describe the social organization"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Aesthetic Keywords</label>
+                  <textarea 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    value={newWorld.aestheticKeywords}
+                    onChange={(e) => setNewWorld({ ...newWorld, aestheticKeywords: e.target.value })}
+                    placeholder="Describe the visual style"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Major Conflict</label>
+                  <textarea 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    value={newWorld.majorConflict}
+                    onChange={(e) => setNewWorld({ ...newWorld, majorConflict: e.target.value })}
+                    placeholder="Describe major conflicts"
                     rows={3}
                   />
                 </div>
@@ -171,16 +281,6 @@ export default function WorldsPage() {
                     value={newWorld.factions}
                     onChange={(e) => setNewWorld({ ...newWorld, factions: e.target.value })}
                     placeholder="List major factions or groups"
-                    rows={3}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Aesthetic Keywords</label>
-                  <textarea 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                    value={newWorld.aesthetic}
-                    onChange={(e) => setNewWorld({ ...newWorld, aesthetic: e.target.value })}
-                    placeholder="Describe the visual style"
                     rows={3}
                   />
                 </div>
@@ -202,34 +302,40 @@ export default function WorldsPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {worlds.map(world => (
-                    <div 
-                      key={world.id}
-                      className={`p-3 rounded-md cursor-pointer transition-colors ${selectedWorld?.id === world.id ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
-                      onClick={() => {
-                        setSelectedWorld(world);
-                        setEditWorld(world);
-                        setIsEditing(false);
-                      }}
-                    >
-                      <div className="flex justify-between items-start">
-                        <h3 className="font-medium">{world.name}</h3>
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
-                          onClick={() => handleDeleteWorld(world.id)}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </Button>
-                      </div>
-                      <p className="text-xs text-gray-500">{world.timeSetting}</p>
-                      <p className="text-xs text-gray-400 mt-1">
-                        Updated: {new Date(world.updatedAt).toLocaleDateString()}
-                      </p>
+                  {worlds.length === 0 ? (
+                    <div className="p-4 text-center">
+                      <p className="text-gray-500">No worlds yet</p>
                     </div>
-                  ))}
+                  ) : (
+                    worlds.map(world => (
+                      <div 
+                        key={world.id}
+                        className={`p-3 rounded-md cursor-pointer transition-colors ${selectedWorld?.id === world.id ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+                        onClick={() => {
+                          setSelectedWorld(world);
+                          setEditWorld(world);
+                          setIsEditing(false);
+                        }}
+                      >
+                        <div className="flex justify-between items-start">
+                          <h3 className="font-medium">{world.name}</h3>
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            onClick={() => handleDeleteWorld(world.id)}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </Button>
+                        </div>
+                        <p className="text-xs text-gray-500">{world.timeSetting}</p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          Updated: {new Date(world.updatedAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -237,113 +343,157 @@ export default function WorldsPage() {
 
           {/* World Details */}
           <div className="lg:col-span-3">
-            <Card className="border-0 shadow-sm h-full">
-              <CardHeader className="flex justify-between items-center">
-                <div>
-                  <CardTitle>{selectedWorld?.name}</CardTitle>
-                  <CardDescription>{selectedWorld?.timeSetting} • Last updated: {selectedWorld ? new Date(selectedWorld.updatedAt).toLocaleDateString() : ''}</CardDescription>
-                </div>
-                <div className="flex gap-2">
-                  {isEditing ? (
-                    <>
-                      <Button size="sm" onClick={handleSaveWorld}>
-                        Save
-                      </Button>
-                      <Button size="sm" variant="secondary" onClick={() => {
-                        setIsEditing(false);
-                        setEditWorld(selectedWorld);
-                      }}>
-                        Cancel
-                      </Button>
-                    </>
-                  ) : (
-                    <Button size="sm" onClick={() => setIsEditing(true)}>
-                      Edit
-                    </Button>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
+            {selectedWorld ? (
+              <Card className="border-0 shadow-sm h-full">
+                <CardHeader className="flex justify-between items-center">
                   <div>
-                    <h3 className="text-lg font-medium mb-2">Summary</h3>
+                    <CardTitle>{selectedWorld.name}</CardTitle>
+                    <CardDescription>{selectedWorld.timeSetting} • Last updated: {new Date(selectedWorld.updatedAt).toLocaleDateString()}</CardDescription>
+                  </div>
+                  <div className="flex gap-2">
                     {isEditing ? (
-                      <textarea 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                        value={editWorld.summary}
-                        onChange={(e) => setEditWorld({ ...editWorld, summary: e.target.value })}
-                        placeholder="Brief description of your world"
-                        rows={3}
-                      />
+                      <>
+                        <Button size="sm" onClick={handleSaveWorld}>
+                          Save
+                        </Button>
+                        <Button size="sm" variant="secondary" onClick={() => {
+                          setIsEditing(false);
+                          setEditWorld(selectedWorld);
+                        }}>
+                          Cancel
+                        </Button>
+                      </>
                     ) : (
-                      <p className="text-gray-700">{selectedWorld?.summary}</p>
+                      <Button size="sm" onClick={() => setIsEditing(true)}>
+                        Edit
+                      </Button>
                     )}
                   </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
                     <div>
-                      <h3 className="text-lg font-medium mb-2">Geography</h3>
+                      <h3 className="text-lg font-medium mb-2">Summary</h3>
                       {isEditing ? (
                         <textarea 
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          value={editWorld.geography}
-                          onChange={(e) => setEditWorld({ ...editWorld, geography: e.target.value })}
-                          placeholder="Describe the physical landscape"
+                          value={editWorld.summary}
+                          onChange={(e) => setEditWorld({ ...editWorld, summary: e.target.value })}
+                          placeholder="Brief description of your world"
                           rows={3}
                         />
                       ) : (
-                        <p className="text-gray-700">{selectedWorld?.geography}</p>
+                        <p className="text-gray-700">{selectedWorld.summary}</p>
                       )}
                     </div>
                     
-                    <div>
-                      <h3 className="text-lg font-medium mb-2">Rules of Physics</h3>
-                      {isEditing ? (
-                        <textarea 
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          value={editWorld.rules}
-                          onChange={(e) => setEditWorld({ ...editWorld, rules: e.target.value })}
-                          placeholder="Describe the world's rules and systems"
-                          rows={3}
-                        />
-                      ) : (
-                        <p className="text-gray-700">{selectedWorld?.rules}</p>
-                      )}
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-medium mb-2">Factions</h3>
-                      {isEditing ? (
-                        <textarea 
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          value={editWorld.factions}
-                          onChange={(e) => setEditWorld({ ...editWorld, factions: e.target.value })}
-                          placeholder="List major factions or groups"
-                          rows={3}
-                        />
-                      ) : (
-                        <p className="text-gray-700">{selectedWorld?.factions}</p>
-                      )}
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-medium mb-2">Aesthetic</h3>
-                      {isEditing ? (
-                        <textarea 
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                          value={editWorld.aesthetic}
-                          onChange={(e) => setEditWorld({ ...editWorld, aesthetic: e.target.value })}
-                          placeholder="Describe the visual style"
-                          rows={3}
-                        />
-                      ) : (
-                        <p className="text-gray-700">{selectedWorld?.aesthetic}</p>
-                      )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h3 className="text-lg font-medium mb-2">Geography</h3>
+                        {isEditing ? (
+                          <textarea 
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                            value={editWorld.geography}
+                            onChange={(e) => setEditWorld({ ...editWorld, geography: e.target.value })}
+                            placeholder="Describe the physical landscape"
+                            rows={3}
+                          />
+                        ) : (
+                          <p className="text-gray-700">{selectedWorld.geography}</p>
+                        )}
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-medium mb-2">Rules of Physics</h3>
+                        {isEditing ? (
+                          <textarea 
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                            value={editWorld.physicsRules}
+                            onChange={(e) => setEditWorld({ ...editWorld, physicsRules: e.target.value })}
+                            placeholder="Describe the world's rules and systems"
+                            rows={3}
+                          />
+                        ) : (
+                          <p className="text-gray-700">{selectedWorld.physicsRules}</p>
+                        )}
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-medium mb-2">Social Structure</h3>
+                        {isEditing ? (
+                          <textarea 
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                            value={editWorld.socialStructure}
+                            onChange={(e) => setEditWorld({ ...editWorld, socialStructure: e.target.value })}
+                            placeholder="Describe the social organization"
+                            rows={3}
+                          />
+                        ) : (
+                          <p className="text-gray-700">{selectedWorld.socialStructure}</p>
+                        )}
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-medium mb-2">Aesthetic Keywords</h3>
+                        {isEditing ? (
+                          <textarea 
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                            value={editWorld.aestheticKeywords}
+                            onChange={(e) => setEditWorld({ ...editWorld, aestheticKeywords: e.target.value })}
+                            placeholder="Describe the visual style"
+                            rows={3}
+                          />
+                        ) : (
+                          <p className="text-gray-700">{selectedWorld.aestheticKeywords}</p>
+                        )}
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-medium mb-2">Major Conflict</h3>
+                        {isEditing ? (
+                          <textarea 
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                            value={editWorld.majorConflict}
+                            onChange={(e) => setEditWorld({ ...editWorld, majorConflict: e.target.value })}
+                            placeholder="Describe major conflicts"
+                            rows={3}
+                          />
+                        ) : (
+                          <p className="text-gray-700">{selectedWorld.majorConflict}</p>
+                        )}
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-medium mb-2">Factions</h3>
+                        {isEditing ? (
+                          <textarea 
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                            value={editWorld.factions}
+                            onChange={(e) => setEditWorld({ ...editWorld, factions: e.target.value })}
+                            placeholder="List major factions or groups"
+                            rows={3}
+                          />
+                        ) : (
+                          <p className="text-gray-700">{selectedWorld.factions}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border-0 shadow-sm h-full">
+                <CardHeader>
+                  <CardTitle>Select a World</CardTitle>
+                  <CardDescription>Choose a world from the list or create a new one</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-12">
+                    <p className="text-gray-500">No world selected</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>

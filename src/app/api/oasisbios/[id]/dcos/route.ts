@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/oasisbios/[id]/worlds
+// GET /api/oasisbios/[id]/dcos
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -30,20 +30,20 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get worlds for the OasisBio
-    const worlds = await prisma.worldItem.findMany({
+    // Get DCOS files for the OasisBio
+    const dcosFiles = await prisma.dcosFile.findMany({
       where: { oasisBioId },
-      orderBy: { name: 'asc' },
+      orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json(worlds);
+    return NextResponse.json(dcosFiles);
   } catch (error) {
-    console.error('Error getting worlds:', error);
+    console.error('Error getting DCOS files:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-// POST /api/oasisbios/[id]/worlds
+// POST /api/oasisbios/[id]/dcos
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -58,8 +58,8 @@ export async function POST(
     const body = await request.json();
 
     // Validate request body
-    if (!body.name || !body.summary) {
-      return NextResponse.json({ error: 'Name and summary are required' }, { status: 400 });
+    if (!body.title || !body.content) {
+      return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
     }
 
     // Check if the OasisBio belongs to the user
@@ -76,28 +76,22 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Create world
-    const world = await prisma.worldItem.create({
+    // Create DCOS file
+    const dcosFile = await prisma.dcosFile.create({
       data: {
-        name: body.name,
-        summary: body.summary,
-        timeSetting: body.timeSetting,
-        geography: body.geography,
-        physicsRules: body.physicsRules,
-        socialStructure: body.socialStructure,
-        aestheticKeywords: body.aestheticKeywords,
-        majorConflict: body.majorConflict,
-        visibility: body.visibility || 'private',
-        timeline: body.timeline,
-        rules: body.rules,
-        factions: body.factions,
+        title: body.title,
+        slug: body.slug || body.title.toLowerCase().replace(/\s+/g, '-'),
+        content: body.content,
+        folderPath: body.folderPath || '/',
+        status: body.status || 'draft',
+        eraId: body.eraId,
         oasisBioId,
       },
     });
 
-    return NextResponse.json(world, { status: 201 });
+    return NextResponse.json(dcosFile, { status: 201 });
   } catch (error) {
-    console.error('Error creating world:', error);
+    console.error('Error creating DCOS file:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/oasisbios/[id]/worlds
+// GET /api/oasisbios/[id]/references
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -30,20 +30,20 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get worlds for the OasisBio
-    const worlds = await prisma.worldItem.findMany({
+    // Get reference items for the OasisBio
+    const references = await prisma.referenceItem.findMany({
       where: { oasisBioId },
-      orderBy: { name: 'asc' },
+      orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json(worlds);
+    return NextResponse.json(references);
   } catch (error) {
-    console.error('Error getting worlds:', error);
+    console.error('Error getting reference items:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-// POST /api/oasisbios/[id]/worlds
+// POST /api/oasisbios/[id]/references
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -58,8 +58,8 @@ export async function POST(
     const body = await request.json();
 
     // Validate request body
-    if (!body.name || !body.summary) {
-      return NextResponse.json({ error: 'Name and summary are required' }, { status: 400 });
+    if (!body.url || !body.title) {
+      return NextResponse.json({ error: 'URL and title are required' }, { status: 400 });
     }
 
     // Check if the OasisBio belongs to the user
@@ -76,28 +76,26 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Create world
-    const world = await prisma.worldItem.create({
+    // Create reference item
+    const reference = await prisma.referenceItem.create({
       data: {
-        name: body.name,
-        summary: body.summary,
-        timeSetting: body.timeSetting,
-        geography: body.geography,
-        physicsRules: body.physicsRules,
-        socialStructure: body.socialStructure,
-        aestheticKeywords: body.aestheticKeywords,
-        majorConflict: body.majorConflict,
-        visibility: body.visibility || 'private',
-        timeline: body.timeline,
-        rules: body.rules,
-        factions: body.factions,
+        url: body.url,
+        title: body.title,
+        description: body.description,
+        sourceType: body.sourceType || 'article',
+        provider: body.provider,
+        coverImage: body.coverImage,
+        metadata: body.metadata,
+        eraId: body.eraId,
+        worldId: body.worldId,
+        tags: body.tags || '',
         oasisBioId,
       },
     });
 
-    return NextResponse.json(world, { status: 201 });
+    return NextResponse.json(reference, { status: 201 });
   } catch (error) {
-    console.error('Error creating world:', error);
+    console.error('Error creating reference item:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
