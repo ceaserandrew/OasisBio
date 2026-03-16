@@ -221,4 +221,6 @@ All repository endpoints implement:
 - **Content Import/Export**: Import and export repository content between OasisBios
 - **Interactive World Maps**: Create interactive maps for world visualization
 - **Repository Templates**: Pre-built templates for common repository structures
-- **Advanced Search**:
+- **Advanced Search**: More powerful search capabilities across all repositories
+- **Content Tagging**: Enhanced tagging system for better organization
+- **Media Integration**: Direct integration with media platforms for references
