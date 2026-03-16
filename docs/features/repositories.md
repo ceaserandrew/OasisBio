@@ -180,4 +180,14 @@ World Documents are individual documents associated with a specific world. They 
 - **GET /api/worlds/[id]/documents**: Retrieves all documents for a specific world
 - **POST /api/worlds/[id]/documents**: Creates a new world document
 - **PUT /api/worlddocuments/[id]**: Updates an existing world document
-- **DELETE
+- **DELETE /api/worlddocuments/[id]**: Deletes a world document
+
+#### Data Model
+
+```typescript
+interface WorldDocument {
+  id: string;
+  worldId: string;
+  title: string;
+  docType: string;
+  slug:
