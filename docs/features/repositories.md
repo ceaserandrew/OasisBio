@@ -138,4 +138,27 @@ The Worlds repository allows users to create and manage fictional or conceptual 
 - **PUT /api/worlds/[id]**: Updates an existing world
 - **DELETE /api/worlds/[id]**: Deletes a world
 
-#### Data
+#### Data Model
+
+```typescript
+interface WorldItem {
+  id: string;
+  oasisBioId: string;
+  name: string;
+  summary: string;
+  timeSetting: string | null;
+  geography: string | null;
+  physicsRules: string | null;
+  socialStructure: string | null;
+  aestheticKeywords: string | null;
+  majorConflict: string | null;
+  visibility: string; // private, public
+  timeline: string | null;
+  rules: string | null;
+  factions: string | null;
+}
+```
+
+#### Frontend Features
+
+- **World
