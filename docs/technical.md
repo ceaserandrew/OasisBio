@@ -75,9 +75,11 @@ OasisBio/
 
 ### 5. User Authentication
 - Secure registration and login
-- Password hashing
-- Session management
-- Protected routes
+- Password hashing (bcryptjs)
+- Session management with JWT
+- User profile information included in session
+- Protected routes with middleware
+- OAuth support (Google, GitHub)
 
 ## Database Models
 
@@ -91,6 +93,7 @@ OasisBio/
 - createdAt: DateTime
 - updatedAt: DateTime
 - oasisBios: Array of OasisBio
+- profiles: Array of Profile
 
 ### OasisBio
 - id: String (primary key)
@@ -178,6 +181,19 @@ OasisBio/
 - createdAt: DateTime
 - updatedAt: DateTime
 
+### Profile
+- id: String (primary key)
+- userId: String (foreign key to User)
+- username: String (unique)
+- displayName: String
+- avatarUrl: String (optional)
+- bio: String (optional)
+- website: String (optional)
+- locale: String (default: "en")
+- defaultLanguage: String (default: "en")
+- createdAt: DateTime
+- updatedAt: DateTime
+
 ## Supabase Storage Configuration
 
 ### Storage Buckets
@@ -249,6 +265,12 @@ USING (
 ### Authentication
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/[...nextauth]` - NextAuth.js authentication endpoints
+
+### User Management
+- `GET /api/profile` - Get user profile
+- `PUT /api/profile` - Update user profile
+- `GET /api/settings` - Get user settings
+- `PUT /api/settings` - Update user settings
 
 ### OasisBio Management
 - `GET /api/oasisbios` - Get user's OasisBios

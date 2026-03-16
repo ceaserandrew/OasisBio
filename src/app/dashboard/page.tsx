@@ -18,6 +18,11 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!session) {
       router.push('/auth/login');
+    } else {
+      // Test session data
+      console.log('Session data:', session);
+      console.log('User ID:', session.user?.id);
+      console.log('User profile:', session.user?.profile);
     }
   }, [session, router]);
 

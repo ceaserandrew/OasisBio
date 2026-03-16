@@ -34,6 +34,9 @@ export const authOptions: NextAuthOptions = {
           where: {
             email: credentials.email,
           },
+          include: {
+            profiles: true,
+          },
         });
 
         if (!user) {
@@ -49,7 +52,12 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        return user;
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          profile: user.profiles[0],
+        };
       },
     }),
     GoogleProvider({
@@ -63,6 +71,28 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+  },
+  callbacks: {
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        if ('profile' in user) {
+          token.profile = user.profile;
+        }
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        if (token.profile) {
+          session.user.profile = token.profile;
+        }
+      }
+      return session;
+    },
   },
   secret: process.env.NEXTAUTH_SECRET || 'your-secret-key',
 };
