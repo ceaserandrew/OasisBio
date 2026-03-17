@@ -239,6 +239,8 @@ export type ReferenceItemWhereInput = {
   worldId?: Prisma.StringNullableFilter<"ReferenceItem"> | string | null
   tags?: Prisma.StringFilter<"ReferenceItem"> | string
   oasisBio?: Prisma.XOR<Prisma.OasisBioScalarRelationFilter, Prisma.OasisBioWhereInput>
+  era?: Prisma.XOR<Prisma.EraIdentityNullableScalarRelationFilter, Prisma.EraIdentityWhereInput> | null
+  world?: Prisma.XOR<Prisma.WorldItemNullableScalarRelationFilter, Prisma.WorldItemWhereInput> | null
 }
 
 export type ReferenceItemOrderByWithRelationInput = {
@@ -255,6 +257,8 @@ export type ReferenceItemOrderByWithRelationInput = {
   worldId?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
   oasisBio?: Prisma.OasisBioOrderByWithRelationInput
+  era?: Prisma.EraIdentityOrderByWithRelationInput
+  world?: Prisma.WorldItemOrderByWithRelationInput
 }
 
 export type ReferenceItemWhereUniqueInput = Prisma.AtLeast<{
@@ -274,6 +278,8 @@ export type ReferenceItemWhereUniqueInput = Prisma.AtLeast<{
   worldId?: Prisma.StringNullableFilter<"ReferenceItem"> | string | null
   tags?: Prisma.StringFilter<"ReferenceItem"> | string
   oasisBio?: Prisma.XOR<Prisma.OasisBioScalarRelationFilter, Prisma.OasisBioWhereInput>
+  era?: Prisma.XOR<Prisma.EraIdentityNullableScalarRelationFilter, Prisma.EraIdentityWhereInput> | null
+  world?: Prisma.XOR<Prisma.WorldItemNullableScalarRelationFilter, Prisma.WorldItemWhereInput> | null
 }, "id">
 
 export type ReferenceItemOrderByWithAggregationInput = {
@@ -321,10 +327,10 @@ export type ReferenceItemCreateInput = {
   provider?: string | null
   coverImage?: string | null
   metadata?: string | null
-  eraId?: string | null
-  worldId?: string | null
   tags: string
   oasisBio: Prisma.OasisBioCreateNestedOneWithoutReferencesInput
+  era?: Prisma.EraIdentityCreateNestedOneWithoutReferencesInput
+  world?: Prisma.WorldItemCreateNestedOneWithoutReferencesInput
 }
 
 export type ReferenceItemUncheckedCreateInput = {
@@ -351,10 +357,10 @@ export type ReferenceItemUpdateInput = {
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  eraId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  worldId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.StringFieldUpdateOperationsInput | string
   oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutReferencesNestedInput
+  era?: Prisma.EraIdentityUpdateOneWithoutReferencesNestedInput
+  world?: Prisma.WorldItemUpdateOneWithoutReferencesNestedInput
 }
 
 export type ReferenceItemUncheckedUpdateInput = {
@@ -396,8 +402,6 @@ export type ReferenceItemUpdateManyMutationInput = {
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  eraId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  worldId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -513,6 +517,90 @@ export type ReferenceItemUncheckedUpdateManyWithoutOasisBioNestedInput = {
   deleteMany?: Prisma.ReferenceItemScalarWhereInput | Prisma.ReferenceItemScalarWhereInput[]
 }
 
+export type ReferenceItemCreateNestedManyWithoutEraInput = {
+  create?: Prisma.XOR<Prisma.ReferenceItemCreateWithoutEraInput, Prisma.ReferenceItemUncheckedCreateWithoutEraInput> | Prisma.ReferenceItemCreateWithoutEraInput[] | Prisma.ReferenceItemUncheckedCreateWithoutEraInput[]
+  connectOrCreate?: Prisma.ReferenceItemCreateOrConnectWithoutEraInput | Prisma.ReferenceItemCreateOrConnectWithoutEraInput[]
+  createMany?: Prisma.ReferenceItemCreateManyEraInputEnvelope
+  connect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+}
+
+export type ReferenceItemUncheckedCreateNestedManyWithoutEraInput = {
+  create?: Prisma.XOR<Prisma.ReferenceItemCreateWithoutEraInput, Prisma.ReferenceItemUncheckedCreateWithoutEraInput> | Prisma.ReferenceItemCreateWithoutEraInput[] | Prisma.ReferenceItemUncheckedCreateWithoutEraInput[]
+  connectOrCreate?: Prisma.ReferenceItemCreateOrConnectWithoutEraInput | Prisma.ReferenceItemCreateOrConnectWithoutEraInput[]
+  createMany?: Prisma.ReferenceItemCreateManyEraInputEnvelope
+  connect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+}
+
+export type ReferenceItemUpdateManyWithoutEraNestedInput = {
+  create?: Prisma.XOR<Prisma.ReferenceItemCreateWithoutEraInput, Prisma.ReferenceItemUncheckedCreateWithoutEraInput> | Prisma.ReferenceItemCreateWithoutEraInput[] | Prisma.ReferenceItemUncheckedCreateWithoutEraInput[]
+  connectOrCreate?: Prisma.ReferenceItemCreateOrConnectWithoutEraInput | Prisma.ReferenceItemCreateOrConnectWithoutEraInput[]
+  upsert?: Prisma.ReferenceItemUpsertWithWhereUniqueWithoutEraInput | Prisma.ReferenceItemUpsertWithWhereUniqueWithoutEraInput[]
+  createMany?: Prisma.ReferenceItemCreateManyEraInputEnvelope
+  set?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  disconnect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  delete?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  connect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  update?: Prisma.ReferenceItemUpdateWithWhereUniqueWithoutEraInput | Prisma.ReferenceItemUpdateWithWhereUniqueWithoutEraInput[]
+  updateMany?: Prisma.ReferenceItemUpdateManyWithWhereWithoutEraInput | Prisma.ReferenceItemUpdateManyWithWhereWithoutEraInput[]
+  deleteMany?: Prisma.ReferenceItemScalarWhereInput | Prisma.ReferenceItemScalarWhereInput[]
+}
+
+export type ReferenceItemUncheckedUpdateManyWithoutEraNestedInput = {
+  create?: Prisma.XOR<Prisma.ReferenceItemCreateWithoutEraInput, Prisma.ReferenceItemUncheckedCreateWithoutEraInput> | Prisma.ReferenceItemCreateWithoutEraInput[] | Prisma.ReferenceItemUncheckedCreateWithoutEraInput[]
+  connectOrCreate?: Prisma.ReferenceItemCreateOrConnectWithoutEraInput | Prisma.ReferenceItemCreateOrConnectWithoutEraInput[]
+  upsert?: Prisma.ReferenceItemUpsertWithWhereUniqueWithoutEraInput | Prisma.ReferenceItemUpsertWithWhereUniqueWithoutEraInput[]
+  createMany?: Prisma.ReferenceItemCreateManyEraInputEnvelope
+  set?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  disconnect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  delete?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  connect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  update?: Prisma.ReferenceItemUpdateWithWhereUniqueWithoutEraInput | Prisma.ReferenceItemUpdateWithWhereUniqueWithoutEraInput[]
+  updateMany?: Prisma.ReferenceItemUpdateManyWithWhereWithoutEraInput | Prisma.ReferenceItemUpdateManyWithWhereWithoutEraInput[]
+  deleteMany?: Prisma.ReferenceItemScalarWhereInput | Prisma.ReferenceItemScalarWhereInput[]
+}
+
+export type ReferenceItemCreateNestedManyWithoutWorldInput = {
+  create?: Prisma.XOR<Prisma.ReferenceItemCreateWithoutWorldInput, Prisma.ReferenceItemUncheckedCreateWithoutWorldInput> | Prisma.ReferenceItemCreateWithoutWorldInput[] | Prisma.ReferenceItemUncheckedCreateWithoutWorldInput[]
+  connectOrCreate?: Prisma.ReferenceItemCreateOrConnectWithoutWorldInput | Prisma.ReferenceItemCreateOrConnectWithoutWorldInput[]
+  createMany?: Prisma.ReferenceItemCreateManyWorldInputEnvelope
+  connect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+}
+
+export type ReferenceItemUncheckedCreateNestedManyWithoutWorldInput = {
+  create?: Prisma.XOR<Prisma.ReferenceItemCreateWithoutWorldInput, Prisma.ReferenceItemUncheckedCreateWithoutWorldInput> | Prisma.ReferenceItemCreateWithoutWorldInput[] | Prisma.ReferenceItemUncheckedCreateWithoutWorldInput[]
+  connectOrCreate?: Prisma.ReferenceItemCreateOrConnectWithoutWorldInput | Prisma.ReferenceItemCreateOrConnectWithoutWorldInput[]
+  createMany?: Prisma.ReferenceItemCreateManyWorldInputEnvelope
+  connect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+}
+
+export type ReferenceItemUpdateManyWithoutWorldNestedInput = {
+  create?: Prisma.XOR<Prisma.ReferenceItemCreateWithoutWorldInput, Prisma.ReferenceItemUncheckedCreateWithoutWorldInput> | Prisma.ReferenceItemCreateWithoutWorldInput[] | Prisma.ReferenceItemUncheckedCreateWithoutWorldInput[]
+  connectOrCreate?: Prisma.ReferenceItemCreateOrConnectWithoutWorldInput | Prisma.ReferenceItemCreateOrConnectWithoutWorldInput[]
+  upsert?: Prisma.ReferenceItemUpsertWithWhereUniqueWithoutWorldInput | Prisma.ReferenceItemUpsertWithWhereUniqueWithoutWorldInput[]
+  createMany?: Prisma.ReferenceItemCreateManyWorldInputEnvelope
+  set?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  disconnect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  delete?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  connect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  update?: Prisma.ReferenceItemUpdateWithWhereUniqueWithoutWorldInput | Prisma.ReferenceItemUpdateWithWhereUniqueWithoutWorldInput[]
+  updateMany?: Prisma.ReferenceItemUpdateManyWithWhereWithoutWorldInput | Prisma.ReferenceItemUpdateManyWithWhereWithoutWorldInput[]
+  deleteMany?: Prisma.ReferenceItemScalarWhereInput | Prisma.ReferenceItemScalarWhereInput[]
+}
+
+export type ReferenceItemUncheckedUpdateManyWithoutWorldNestedInput = {
+  create?: Prisma.XOR<Prisma.ReferenceItemCreateWithoutWorldInput, Prisma.ReferenceItemUncheckedCreateWithoutWorldInput> | Prisma.ReferenceItemCreateWithoutWorldInput[] | Prisma.ReferenceItemUncheckedCreateWithoutWorldInput[]
+  connectOrCreate?: Prisma.ReferenceItemCreateOrConnectWithoutWorldInput | Prisma.ReferenceItemCreateOrConnectWithoutWorldInput[]
+  upsert?: Prisma.ReferenceItemUpsertWithWhereUniqueWithoutWorldInput | Prisma.ReferenceItemUpsertWithWhereUniqueWithoutWorldInput[]
+  createMany?: Prisma.ReferenceItemCreateManyWorldInputEnvelope
+  set?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  disconnect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  delete?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  connect?: Prisma.ReferenceItemWhereUniqueInput | Prisma.ReferenceItemWhereUniqueInput[]
+  update?: Prisma.ReferenceItemUpdateWithWhereUniqueWithoutWorldInput | Prisma.ReferenceItemUpdateWithWhereUniqueWithoutWorldInput[]
+  updateMany?: Prisma.ReferenceItemUpdateManyWithWhereWithoutWorldInput | Prisma.ReferenceItemUpdateManyWithWhereWithoutWorldInput[]
+  deleteMany?: Prisma.ReferenceItemScalarWhereInput | Prisma.ReferenceItemScalarWhereInput[]
+}
+
 export type ReferenceItemCreateWithoutOasisBioInput = {
   id?: string
   url: string
@@ -522,9 +610,9 @@ export type ReferenceItemCreateWithoutOasisBioInput = {
   provider?: string | null
   coverImage?: string | null
   metadata?: string | null
-  eraId?: string | null
-  worldId?: string | null
   tags: string
+  era?: Prisma.EraIdentityCreateNestedOneWithoutReferencesInput
+  world?: Prisma.WorldItemCreateNestedOneWithoutReferencesInput
 }
 
 export type ReferenceItemUncheckedCreateWithoutOasisBioInput = {
@@ -585,6 +673,114 @@ export type ReferenceItemScalarWhereInput = {
   tags?: Prisma.StringFilter<"ReferenceItem"> | string
 }
 
+export type ReferenceItemCreateWithoutEraInput = {
+  id?: string
+  url: string
+  title: string
+  description?: string | null
+  sourceType: string
+  provider?: string | null
+  coverImage?: string | null
+  metadata?: string | null
+  tags: string
+  oasisBio: Prisma.OasisBioCreateNestedOneWithoutReferencesInput
+  world?: Prisma.WorldItemCreateNestedOneWithoutReferencesInput
+}
+
+export type ReferenceItemUncheckedCreateWithoutEraInput = {
+  id?: string
+  oasisBioId: string
+  url: string
+  title: string
+  description?: string | null
+  sourceType: string
+  provider?: string | null
+  coverImage?: string | null
+  metadata?: string | null
+  worldId?: string | null
+  tags: string
+}
+
+export type ReferenceItemCreateOrConnectWithoutEraInput = {
+  where: Prisma.ReferenceItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ReferenceItemCreateWithoutEraInput, Prisma.ReferenceItemUncheckedCreateWithoutEraInput>
+}
+
+export type ReferenceItemCreateManyEraInputEnvelope = {
+  data: Prisma.ReferenceItemCreateManyEraInput | Prisma.ReferenceItemCreateManyEraInput[]
+  skipDuplicates?: boolean
+}
+
+export type ReferenceItemUpsertWithWhereUniqueWithoutEraInput = {
+  where: Prisma.ReferenceItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.ReferenceItemUpdateWithoutEraInput, Prisma.ReferenceItemUncheckedUpdateWithoutEraInput>
+  create: Prisma.XOR<Prisma.ReferenceItemCreateWithoutEraInput, Prisma.ReferenceItemUncheckedCreateWithoutEraInput>
+}
+
+export type ReferenceItemUpdateWithWhereUniqueWithoutEraInput = {
+  where: Prisma.ReferenceItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.ReferenceItemUpdateWithoutEraInput, Prisma.ReferenceItemUncheckedUpdateWithoutEraInput>
+}
+
+export type ReferenceItemUpdateManyWithWhereWithoutEraInput = {
+  where: Prisma.ReferenceItemScalarWhereInput
+  data: Prisma.XOR<Prisma.ReferenceItemUpdateManyMutationInput, Prisma.ReferenceItemUncheckedUpdateManyWithoutEraInput>
+}
+
+export type ReferenceItemCreateWithoutWorldInput = {
+  id?: string
+  url: string
+  title: string
+  description?: string | null
+  sourceType: string
+  provider?: string | null
+  coverImage?: string | null
+  metadata?: string | null
+  tags: string
+  oasisBio: Prisma.OasisBioCreateNestedOneWithoutReferencesInput
+  era?: Prisma.EraIdentityCreateNestedOneWithoutReferencesInput
+}
+
+export type ReferenceItemUncheckedCreateWithoutWorldInput = {
+  id?: string
+  oasisBioId: string
+  url: string
+  title: string
+  description?: string | null
+  sourceType: string
+  provider?: string | null
+  coverImage?: string | null
+  metadata?: string | null
+  eraId?: string | null
+  tags: string
+}
+
+export type ReferenceItemCreateOrConnectWithoutWorldInput = {
+  where: Prisma.ReferenceItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ReferenceItemCreateWithoutWorldInput, Prisma.ReferenceItemUncheckedCreateWithoutWorldInput>
+}
+
+export type ReferenceItemCreateManyWorldInputEnvelope = {
+  data: Prisma.ReferenceItemCreateManyWorldInput | Prisma.ReferenceItemCreateManyWorldInput[]
+  skipDuplicates?: boolean
+}
+
+export type ReferenceItemUpsertWithWhereUniqueWithoutWorldInput = {
+  where: Prisma.ReferenceItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.ReferenceItemUpdateWithoutWorldInput, Prisma.ReferenceItemUncheckedUpdateWithoutWorldInput>
+  create: Prisma.XOR<Prisma.ReferenceItemCreateWithoutWorldInput, Prisma.ReferenceItemUncheckedCreateWithoutWorldInput>
+}
+
+export type ReferenceItemUpdateWithWhereUniqueWithoutWorldInput = {
+  where: Prisma.ReferenceItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.ReferenceItemUpdateWithoutWorldInput, Prisma.ReferenceItemUncheckedUpdateWithoutWorldInput>
+}
+
+export type ReferenceItemUpdateManyWithWhereWithoutWorldInput = {
+  where: Prisma.ReferenceItemScalarWhereInput
+  data: Prisma.XOR<Prisma.ReferenceItemUpdateManyMutationInput, Prisma.ReferenceItemUncheckedUpdateManyWithoutWorldInput>
+}
+
 export type ReferenceItemCreateManyOasisBioInput = {
   id?: string
   url: string
@@ -608,9 +804,9 @@ export type ReferenceItemUpdateWithoutOasisBioInput = {
   provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  eraId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  worldId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.StringFieldUpdateOperationsInput | string
+  era?: Prisma.EraIdentityUpdateOneWithoutReferencesNestedInput
+  world?: Prisma.WorldItemUpdateOneWithoutReferencesNestedInput
 }
 
 export type ReferenceItemUncheckedUpdateWithoutOasisBioInput = {
@@ -641,6 +837,118 @@ export type ReferenceItemUncheckedUpdateManyWithoutOasisBioInput = {
   tags?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
+export type ReferenceItemCreateManyEraInput = {
+  id?: string
+  oasisBioId: string
+  url: string
+  title: string
+  description?: string | null
+  sourceType: string
+  provider?: string | null
+  coverImage?: string | null
+  metadata?: string | null
+  worldId?: string | null
+  tags: string
+}
+
+export type ReferenceItemUpdateWithoutEraInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutReferencesNestedInput
+  world?: Prisma.WorldItemUpdateOneWithoutReferencesNestedInput
+}
+
+export type ReferenceItemUncheckedUpdateWithoutEraInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBioId?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  worldId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type ReferenceItemUncheckedUpdateManyWithoutEraInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBioId?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  worldId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type ReferenceItemCreateManyWorldInput = {
+  id?: string
+  oasisBioId: string
+  url: string
+  title: string
+  description?: string | null
+  sourceType: string
+  provider?: string | null
+  coverImage?: string | null
+  metadata?: string | null
+  eraId?: string | null
+  tags: string
+}
+
+export type ReferenceItemUpdateWithoutWorldInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutReferencesNestedInput
+  era?: Prisma.EraIdentityUpdateOneWithoutReferencesNestedInput
+}
+
+export type ReferenceItemUncheckedUpdateWithoutWorldInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBioId?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eraId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type ReferenceItemUncheckedUpdateManyWithoutWorldInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBioId?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eraId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
 
 
 export type ReferenceItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -657,6 +965,8 @@ export type ReferenceItemSelect<ExtArgs extends runtime.Types.Extensions.Interna
   worldId?: boolean
   tags?: boolean
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.ReferenceItem$eraArgs<ExtArgs>
+  world?: boolean | Prisma.ReferenceItem$worldArgs<ExtArgs>
 }, ExtArgs["result"]["referenceItem"]>
 
 export type ReferenceItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -673,6 +983,8 @@ export type ReferenceItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   worldId?: boolean
   tags?: boolean
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.ReferenceItem$eraArgs<ExtArgs>
+  world?: boolean | Prisma.ReferenceItem$worldArgs<ExtArgs>
 }, ExtArgs["result"]["referenceItem"]>
 
 export type ReferenceItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -689,6 +1001,8 @@ export type ReferenceItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   worldId?: boolean
   tags?: boolean
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.ReferenceItem$eraArgs<ExtArgs>
+  world?: boolean | Prisma.ReferenceItem$worldArgs<ExtArgs>
 }, ExtArgs["result"]["referenceItem"]>
 
 export type ReferenceItemSelectScalar = {
@@ -709,18 +1023,26 @@ export type ReferenceItemSelectScalar = {
 export type ReferenceItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "oasisBioId" | "url" | "title" | "description" | "sourceType" | "provider" | "coverImage" | "metadata" | "eraId" | "worldId" | "tags", ExtArgs["result"]["referenceItem"]>
 export type ReferenceItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.ReferenceItem$eraArgs<ExtArgs>
+  world?: boolean | Prisma.ReferenceItem$worldArgs<ExtArgs>
 }
 export type ReferenceItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.ReferenceItem$eraArgs<ExtArgs>
+  world?: boolean | Prisma.ReferenceItem$worldArgs<ExtArgs>
 }
 export type ReferenceItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.ReferenceItem$eraArgs<ExtArgs>
+  world?: boolean | Prisma.ReferenceItem$worldArgs<ExtArgs>
 }
 
 export type $ReferenceItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ReferenceItem"
   objects: {
     oasisBio: Prisma.$OasisBioPayload<ExtArgs>
+    era: Prisma.$EraIdentityPayload<ExtArgs> | null
+    world: Prisma.$WorldItemPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1130,6 +1452,8 @@ readonly fields: ReferenceItemFieldRefs;
 export interface Prisma__ReferenceItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   oasisBio<T extends Prisma.OasisBioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OasisBioDefaultArgs<ExtArgs>>): Prisma.Prisma__OasisBioClient<runtime.Types.Result.GetResult<Prisma.$OasisBioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  era<T extends Prisma.ReferenceItem$eraArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ReferenceItem$eraArgs<ExtArgs>>): Prisma.Prisma__EraIdentityClient<runtime.Types.Result.GetResult<Prisma.$EraIdentityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  world<T extends Prisma.ReferenceItem$worldArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ReferenceItem$worldArgs<ExtArgs>>): Prisma.Prisma__WorldItemClient<runtime.Types.Result.GetResult<Prisma.$WorldItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1564,6 +1888,44 @@ export type ReferenceItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many ReferenceItems to delete.
    */
   limit?: number
+}
+
+/**
+ * ReferenceItem.era
+ */
+export type ReferenceItem$eraArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EraIdentity
+   */
+  select?: Prisma.EraIdentitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EraIdentity
+   */
+  omit?: Prisma.EraIdentityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EraIdentityInclude<ExtArgs> | null
+  where?: Prisma.EraIdentityWhereInput
+}
+
+/**
+ * ReferenceItem.world
+ */
+export type ReferenceItem$worldArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorldItem
+   */
+  select?: Prisma.WorldItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorldItem
+   */
+  omit?: Prisma.WorldItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorldItemInclude<ExtArgs> | null
+  where?: Prisma.WorldItemWhereInput
 }
 
 /**

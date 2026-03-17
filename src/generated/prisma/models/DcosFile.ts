@@ -265,6 +265,7 @@ export type DcosFileWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"DcosFile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DcosFile"> | Date | string
   oasisBio?: Prisma.XOR<Prisma.OasisBioScalarRelationFilter, Prisma.OasisBioWhereInput>
+  era?: Prisma.XOR<Prisma.EraIdentityNullableScalarRelationFilter, Prisma.EraIdentityWhereInput> | null
 }
 
 export type DcosFileOrderByWithRelationInput = {
@@ -280,6 +281,7 @@ export type DcosFileOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   oasisBio?: Prisma.OasisBioOrderByWithRelationInput
+  era?: Prisma.EraIdentityOrderByWithRelationInput
 }
 
 export type DcosFileWhereUniqueInput = Prisma.AtLeast<{
@@ -298,6 +300,7 @@ export type DcosFileWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"DcosFile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DcosFile"> | Date | string
   oasisBio?: Prisma.XOR<Prisma.OasisBioScalarRelationFilter, Prisma.OasisBioWhereInput>
+  era?: Prisma.XOR<Prisma.EraIdentityNullableScalarRelationFilter, Prisma.EraIdentityWhereInput> | null
 }, "id" | "slug">
 
 export type DcosFileOrderByWithAggregationInput = {
@@ -344,10 +347,10 @@ export type DcosFileCreateInput = {
   folderPath: string
   status?: string
   version?: number
-  eraId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   oasisBio: Prisma.OasisBioCreateNestedOneWithoutDcosFilesInput
+  era?: Prisma.EraIdentityCreateNestedOneWithoutDcosFilesInput
 }
 
 export type DcosFileUncheckedCreateInput = {
@@ -372,10 +375,10 @@ export type DcosFileUpdateInput = {
   folderPath?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  eraId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutDcosFilesNestedInput
+  era?: Prisma.EraIdentityUpdateOneWithoutDcosFilesNestedInput
 }
 
 export type DcosFileUncheckedUpdateInput = {
@@ -414,7 +417,6 @@ export type DcosFileUpdateManyMutationInput = {
   folderPath?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  eraId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -535,6 +537,48 @@ export type DcosFileUncheckedUpdateManyWithoutOasisBioNestedInput = {
   deleteMany?: Prisma.DcosFileScalarWhereInput | Prisma.DcosFileScalarWhereInput[]
 }
 
+export type DcosFileCreateNestedManyWithoutEraInput = {
+  create?: Prisma.XOR<Prisma.DcosFileCreateWithoutEraInput, Prisma.DcosFileUncheckedCreateWithoutEraInput> | Prisma.DcosFileCreateWithoutEraInput[] | Prisma.DcosFileUncheckedCreateWithoutEraInput[]
+  connectOrCreate?: Prisma.DcosFileCreateOrConnectWithoutEraInput | Prisma.DcosFileCreateOrConnectWithoutEraInput[]
+  createMany?: Prisma.DcosFileCreateManyEraInputEnvelope
+  connect?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+}
+
+export type DcosFileUncheckedCreateNestedManyWithoutEraInput = {
+  create?: Prisma.XOR<Prisma.DcosFileCreateWithoutEraInput, Prisma.DcosFileUncheckedCreateWithoutEraInput> | Prisma.DcosFileCreateWithoutEraInput[] | Prisma.DcosFileUncheckedCreateWithoutEraInput[]
+  connectOrCreate?: Prisma.DcosFileCreateOrConnectWithoutEraInput | Prisma.DcosFileCreateOrConnectWithoutEraInput[]
+  createMany?: Prisma.DcosFileCreateManyEraInputEnvelope
+  connect?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+}
+
+export type DcosFileUpdateManyWithoutEraNestedInput = {
+  create?: Prisma.XOR<Prisma.DcosFileCreateWithoutEraInput, Prisma.DcosFileUncheckedCreateWithoutEraInput> | Prisma.DcosFileCreateWithoutEraInput[] | Prisma.DcosFileUncheckedCreateWithoutEraInput[]
+  connectOrCreate?: Prisma.DcosFileCreateOrConnectWithoutEraInput | Prisma.DcosFileCreateOrConnectWithoutEraInput[]
+  upsert?: Prisma.DcosFileUpsertWithWhereUniqueWithoutEraInput | Prisma.DcosFileUpsertWithWhereUniqueWithoutEraInput[]
+  createMany?: Prisma.DcosFileCreateManyEraInputEnvelope
+  set?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+  disconnect?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+  delete?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+  connect?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+  update?: Prisma.DcosFileUpdateWithWhereUniqueWithoutEraInput | Prisma.DcosFileUpdateWithWhereUniqueWithoutEraInput[]
+  updateMany?: Prisma.DcosFileUpdateManyWithWhereWithoutEraInput | Prisma.DcosFileUpdateManyWithWhereWithoutEraInput[]
+  deleteMany?: Prisma.DcosFileScalarWhereInput | Prisma.DcosFileScalarWhereInput[]
+}
+
+export type DcosFileUncheckedUpdateManyWithoutEraNestedInput = {
+  create?: Prisma.XOR<Prisma.DcosFileCreateWithoutEraInput, Prisma.DcosFileUncheckedCreateWithoutEraInput> | Prisma.DcosFileCreateWithoutEraInput[] | Prisma.DcosFileUncheckedCreateWithoutEraInput[]
+  connectOrCreate?: Prisma.DcosFileCreateOrConnectWithoutEraInput | Prisma.DcosFileCreateOrConnectWithoutEraInput[]
+  upsert?: Prisma.DcosFileUpsertWithWhereUniqueWithoutEraInput | Prisma.DcosFileUpsertWithWhereUniqueWithoutEraInput[]
+  createMany?: Prisma.DcosFileCreateManyEraInputEnvelope
+  set?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+  disconnect?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+  delete?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+  connect?: Prisma.DcosFileWhereUniqueInput | Prisma.DcosFileWhereUniqueInput[]
+  update?: Prisma.DcosFileUpdateWithWhereUniqueWithoutEraInput | Prisma.DcosFileUpdateWithWhereUniqueWithoutEraInput[]
+  updateMany?: Prisma.DcosFileUpdateManyWithWhereWithoutEraInput | Prisma.DcosFileUpdateManyWithWhereWithoutEraInput[]
+  deleteMany?: Prisma.DcosFileScalarWhereInput | Prisma.DcosFileScalarWhereInput[]
+}
+
 export type DcosFileCreateWithoutOasisBioInput = {
   id?: string
   title: string
@@ -543,9 +587,9 @@ export type DcosFileCreateWithoutOasisBioInput = {
   folderPath: string
   status?: string
   version?: number
-  eraId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  era?: Prisma.EraIdentityCreateNestedOneWithoutDcosFilesInput
 }
 
 export type DcosFileUncheckedCreateWithoutOasisBioInput = {
@@ -604,6 +648,58 @@ export type DcosFileScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"DcosFile"> | Date | string
 }
 
+export type DcosFileCreateWithoutEraInput = {
+  id?: string
+  title: string
+  slug: string
+  content: string
+  folderPath: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  oasisBio: Prisma.OasisBioCreateNestedOneWithoutDcosFilesInput
+}
+
+export type DcosFileUncheckedCreateWithoutEraInput = {
+  id?: string
+  oasisBioId: string
+  title: string
+  slug: string
+  content: string
+  folderPath: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DcosFileCreateOrConnectWithoutEraInput = {
+  where: Prisma.DcosFileWhereUniqueInput
+  create: Prisma.XOR<Prisma.DcosFileCreateWithoutEraInput, Prisma.DcosFileUncheckedCreateWithoutEraInput>
+}
+
+export type DcosFileCreateManyEraInputEnvelope = {
+  data: Prisma.DcosFileCreateManyEraInput | Prisma.DcosFileCreateManyEraInput[]
+  skipDuplicates?: boolean
+}
+
+export type DcosFileUpsertWithWhereUniqueWithoutEraInput = {
+  where: Prisma.DcosFileWhereUniqueInput
+  update: Prisma.XOR<Prisma.DcosFileUpdateWithoutEraInput, Prisma.DcosFileUncheckedUpdateWithoutEraInput>
+  create: Prisma.XOR<Prisma.DcosFileCreateWithoutEraInput, Prisma.DcosFileUncheckedCreateWithoutEraInput>
+}
+
+export type DcosFileUpdateWithWhereUniqueWithoutEraInput = {
+  where: Prisma.DcosFileWhereUniqueInput
+  data: Prisma.XOR<Prisma.DcosFileUpdateWithoutEraInput, Prisma.DcosFileUncheckedUpdateWithoutEraInput>
+}
+
+export type DcosFileUpdateManyWithWhereWithoutEraInput = {
+  where: Prisma.DcosFileScalarWhereInput
+  data: Prisma.XOR<Prisma.DcosFileUpdateManyMutationInput, Prisma.DcosFileUncheckedUpdateManyWithoutEraInput>
+}
+
 export type DcosFileCreateManyOasisBioInput = {
   id?: string
   title: string
@@ -625,9 +721,9 @@ export type DcosFileUpdateWithoutOasisBioInput = {
   folderPath?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  eraId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  era?: Prisma.EraIdentityUpdateOneWithoutDcosFilesNestedInput
 }
 
 export type DcosFileUncheckedUpdateWithoutOasisBioInput = {
@@ -656,6 +752,58 @@ export type DcosFileUncheckedUpdateManyWithoutOasisBioInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type DcosFileCreateManyEraInput = {
+  id?: string
+  oasisBioId: string
+  title: string
+  slug: string
+  content: string
+  folderPath: string
+  status?: string
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DcosFileUpdateWithoutEraInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  folderPath?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutDcosFilesNestedInput
+}
+
+export type DcosFileUncheckedUpdateWithoutEraInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBioId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  folderPath?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DcosFileUncheckedUpdateManyWithoutEraInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBioId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  folderPath?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type DcosFileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -671,6 +819,7 @@ export type DcosFileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.DcosFile$eraArgs<ExtArgs>
 }, ExtArgs["result"]["dcosFile"]>
 
 export type DcosFileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -686,6 +835,7 @@ export type DcosFileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.DcosFile$eraArgs<ExtArgs>
 }, ExtArgs["result"]["dcosFile"]>
 
 export type DcosFileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -701,6 +851,7 @@ export type DcosFileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.DcosFile$eraArgs<ExtArgs>
 }, ExtArgs["result"]["dcosFile"]>
 
 export type DcosFileSelectScalar = {
@@ -720,18 +871,22 @@ export type DcosFileSelectScalar = {
 export type DcosFileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "oasisBioId" | "title" | "slug" | "content" | "folderPath" | "status" | "version" | "eraId" | "createdAt" | "updatedAt", ExtArgs["result"]["dcosFile"]>
 export type DcosFileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.DcosFile$eraArgs<ExtArgs>
 }
 export type DcosFileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.DcosFile$eraArgs<ExtArgs>
 }
 export type DcosFileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
+  era?: boolean | Prisma.DcosFile$eraArgs<ExtArgs>
 }
 
 export type $DcosFilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "DcosFile"
   objects: {
     oasisBio: Prisma.$OasisBioPayload<ExtArgs>
+    era: Prisma.$EraIdentityPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1140,6 +1295,7 @@ readonly fields: DcosFileFieldRefs;
 export interface Prisma__DcosFileClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   oasisBio<T extends Prisma.OasisBioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OasisBioDefaultArgs<ExtArgs>>): Prisma.Prisma__OasisBioClient<runtime.Types.Result.GetResult<Prisma.$OasisBioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  era<T extends Prisma.DcosFile$eraArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DcosFile$eraArgs<ExtArgs>>): Prisma.Prisma__EraIdentityClient<runtime.Types.Result.GetResult<Prisma.$EraIdentityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1573,6 +1729,25 @@ export type DcosFileDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many DcosFiles to delete.
    */
   limit?: number
+}
+
+/**
+ * DcosFile.era
+ */
+export type DcosFile$eraArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EraIdentity
+   */
+  select?: Prisma.EraIdentitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EraIdentity
+   */
+  omit?: Prisma.EraIdentityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EraIdentityInclude<ExtArgs> | null
+  where?: Prisma.EraIdentityWhereInput
 }
 
 /**

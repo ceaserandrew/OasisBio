@@ -147,6 +147,8 @@ model EraIdentity {
   sortOrder   Int       @default(0) @map("sort_order")
   oasisBio    OasisBio  @relation(fields: [oasisBioId], references: [id], onDelete: Cascade)
   abilities   Ability[]
+  dcosFiles   DcosFile[]
+  references  ReferenceItem[]
 
   @@index([oasisBioId])
   @@index([sortOrder])
@@ -188,6 +190,7 @@ model DcosFile {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   oasisBio   OasisBio @relation(fields: [oasisBioId], references: [id], onDelete: Cascade)
+  era        EraIdentity? @relation(fields: [eraId], references: [id], onDelete: SetNull)
 
   @@index([oasisBioId])
   @@index([slug])
@@ -212,11 +215,14 @@ model ReferenceItem {
   worldId     String?  @map("world_id")
   tags        String
   oasisBio    OasisBio @relation(fields: [oasisBioId], references: [id], onDelete: Cascade)
+  era         EraIdentity? @relation(fields: [eraId], references: [id], onDelete: SetNull)
+  world       WorldItem? @relation(fields: [worldId], references: [id], onDelete: SetNull)
 
   @@index([oasisBioId])
   @@index([sourceType])
   @@index([eraId])
   @@index([worldId])
+  @@index([tags])
   @@map("reference_items")
 }
 
@@ -238,6 +244,7 @@ model WorldItem {
   oasisBio          OasisBio        @relation(fields: [oasisBioId], references: [id], onDelete: Cascade)
   documents         WorldDocument[]
   abilities         Ability[]
+  references        ReferenceItem[]
 
   @@index([oasisBioId])
   @@index([visibility])
@@ -304,6 +311,11 @@ model WorldDocument {
   updatedAt  DateTime  @updatedAt @map("updated_at")
   world      WorldItem @relation(fields: [worldId], references: [id], onDelete: Cascade)
 
+  @@index([worldId])
+  @@index([docType])
+  @@index([slug])
+  @@index([folderPath])
+  @@index([sortOrder])
   @@map("world_documents")
 }
 

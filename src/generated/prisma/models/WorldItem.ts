@@ -257,6 +257,7 @@ export type WorldItemWhereInput = {
   oasisBio?: Prisma.XOR<Prisma.OasisBioScalarRelationFilter, Prisma.OasisBioWhereInput>
   documents?: Prisma.WorldDocumentListRelationFilter
   abilities?: Prisma.AbilityListRelationFilter
+  references?: Prisma.ReferenceItemListRelationFilter
 }
 
 export type WorldItemOrderByWithRelationInput = {
@@ -277,6 +278,7 @@ export type WorldItemOrderByWithRelationInput = {
   oasisBio?: Prisma.OasisBioOrderByWithRelationInput
   documents?: Prisma.WorldDocumentOrderByRelationAggregateInput
   abilities?: Prisma.AbilityOrderByRelationAggregateInput
+  references?: Prisma.ReferenceItemOrderByRelationAggregateInput
 }
 
 export type WorldItemWhereUniqueInput = Prisma.AtLeast<{
@@ -300,6 +302,7 @@ export type WorldItemWhereUniqueInput = Prisma.AtLeast<{
   oasisBio?: Prisma.XOR<Prisma.OasisBioScalarRelationFilter, Prisma.OasisBioWhereInput>
   documents?: Prisma.WorldDocumentListRelationFilter
   abilities?: Prisma.AbilityListRelationFilter
+  references?: Prisma.ReferenceItemListRelationFilter
 }, "id">
 
 export type WorldItemOrderByWithAggregationInput = {
@@ -359,6 +362,7 @@ export type WorldItemCreateInput = {
   oasisBio: Prisma.OasisBioCreateNestedOneWithoutWorldsInput
   documents?: Prisma.WorldDocumentCreateNestedManyWithoutWorldInput
   abilities?: Prisma.AbilityCreateNestedManyWithoutRelatedWorldInput
+  references?: Prisma.ReferenceItemCreateNestedManyWithoutWorldInput
 }
 
 export type WorldItemUncheckedCreateInput = {
@@ -378,6 +382,7 @@ export type WorldItemUncheckedCreateInput = {
   factions?: string | null
   documents?: Prisma.WorldDocumentUncheckedCreateNestedManyWithoutWorldInput
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRelatedWorldInput
+  references?: Prisma.ReferenceItemUncheckedCreateNestedManyWithoutWorldInput
 }
 
 export type WorldItemUpdateInput = {
@@ -397,6 +402,7 @@ export type WorldItemUpdateInput = {
   oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutWorldsNestedInput
   documents?: Prisma.WorldDocumentUpdateManyWithoutWorldNestedInput
   abilities?: Prisma.AbilityUpdateManyWithoutRelatedWorldNestedInput
+  references?: Prisma.ReferenceItemUpdateManyWithoutWorldNestedInput
 }
 
 export type WorldItemUncheckedUpdateInput = {
@@ -416,6 +422,7 @@ export type WorldItemUncheckedUpdateInput = {
   factions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.WorldDocumentUncheckedUpdateManyWithoutWorldNestedInput
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRelatedWorldNestedInput
+  references?: Prisma.ReferenceItemUncheckedUpdateManyWithoutWorldNestedInput
 }
 
 export type WorldItemCreateManyInput = {
@@ -597,6 +604,22 @@ export type WorldItemUpdateOneWithoutAbilitiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorldItemUpdateToOneWithWhereWithoutAbilitiesInput, Prisma.WorldItemUpdateWithoutAbilitiesInput>, Prisma.WorldItemUncheckedUpdateWithoutAbilitiesInput>
 }
 
+export type WorldItemCreateNestedOneWithoutReferencesInput = {
+  create?: Prisma.XOR<Prisma.WorldItemCreateWithoutReferencesInput, Prisma.WorldItemUncheckedCreateWithoutReferencesInput>
+  connectOrCreate?: Prisma.WorldItemCreateOrConnectWithoutReferencesInput
+  connect?: Prisma.WorldItemWhereUniqueInput
+}
+
+export type WorldItemUpdateOneWithoutReferencesNestedInput = {
+  create?: Prisma.XOR<Prisma.WorldItemCreateWithoutReferencesInput, Prisma.WorldItemUncheckedCreateWithoutReferencesInput>
+  connectOrCreate?: Prisma.WorldItemCreateOrConnectWithoutReferencesInput
+  upsert?: Prisma.WorldItemUpsertWithoutReferencesInput
+  disconnect?: Prisma.WorldItemWhereInput | boolean
+  delete?: Prisma.WorldItemWhereInput | boolean
+  connect?: Prisma.WorldItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorldItemUpdateToOneWithWhereWithoutReferencesInput, Prisma.WorldItemUpdateWithoutReferencesInput>, Prisma.WorldItemUncheckedUpdateWithoutReferencesInput>
+}
+
 export type WorldItemCreateNestedOneWithoutDocumentsInput = {
   create?: Prisma.XOR<Prisma.WorldItemCreateWithoutDocumentsInput, Prisma.WorldItemUncheckedCreateWithoutDocumentsInput>
   connectOrCreate?: Prisma.WorldItemCreateOrConnectWithoutDocumentsInput
@@ -627,6 +650,7 @@ export type WorldItemCreateWithoutOasisBioInput = {
   factions?: string | null
   documents?: Prisma.WorldDocumentCreateNestedManyWithoutWorldInput
   abilities?: Prisma.AbilityCreateNestedManyWithoutRelatedWorldInput
+  references?: Prisma.ReferenceItemCreateNestedManyWithoutWorldInput
 }
 
 export type WorldItemUncheckedCreateWithoutOasisBioInput = {
@@ -645,6 +669,7 @@ export type WorldItemUncheckedCreateWithoutOasisBioInput = {
   factions?: string | null
   documents?: Prisma.WorldDocumentUncheckedCreateNestedManyWithoutWorldInput
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRelatedWorldInput
+  references?: Prisma.ReferenceItemUncheckedCreateNestedManyWithoutWorldInput
 }
 
 export type WorldItemCreateOrConnectWithoutOasisBioInput = {
@@ -709,6 +734,7 @@ export type WorldItemCreateWithoutAbilitiesInput = {
   factions?: string | null
   oasisBio: Prisma.OasisBioCreateNestedOneWithoutWorldsInput
   documents?: Prisma.WorldDocumentCreateNestedManyWithoutWorldInput
+  references?: Prisma.ReferenceItemCreateNestedManyWithoutWorldInput
 }
 
 export type WorldItemUncheckedCreateWithoutAbilitiesInput = {
@@ -727,6 +753,7 @@ export type WorldItemUncheckedCreateWithoutAbilitiesInput = {
   rules?: string | null
   factions?: string | null
   documents?: Prisma.WorldDocumentUncheckedCreateNestedManyWithoutWorldInput
+  references?: Prisma.ReferenceItemUncheckedCreateNestedManyWithoutWorldInput
 }
 
 export type WorldItemCreateOrConnectWithoutAbilitiesInput = {
@@ -761,6 +788,7 @@ export type WorldItemUpdateWithoutAbilitiesInput = {
   factions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutWorldsNestedInput
   documents?: Prisma.WorldDocumentUpdateManyWithoutWorldNestedInput
+  references?: Prisma.ReferenceItemUpdateManyWithoutWorldNestedInput
 }
 
 export type WorldItemUncheckedUpdateWithoutAbilitiesInput = {
@@ -779,6 +807,99 @@ export type WorldItemUncheckedUpdateWithoutAbilitiesInput = {
   rules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.WorldDocumentUncheckedUpdateManyWithoutWorldNestedInput
+  references?: Prisma.ReferenceItemUncheckedUpdateManyWithoutWorldNestedInput
+}
+
+export type WorldItemCreateWithoutReferencesInput = {
+  id?: string
+  name: string
+  summary: string
+  timeSetting?: string | null
+  geography?: string | null
+  physicsRules?: string | null
+  socialStructure?: string | null
+  aestheticKeywords?: string | null
+  majorConflict?: string | null
+  visibility?: string
+  timeline?: string | null
+  rules?: string | null
+  factions?: string | null
+  oasisBio: Prisma.OasisBioCreateNestedOneWithoutWorldsInput
+  documents?: Prisma.WorldDocumentCreateNestedManyWithoutWorldInput
+  abilities?: Prisma.AbilityCreateNestedManyWithoutRelatedWorldInput
+}
+
+export type WorldItemUncheckedCreateWithoutReferencesInput = {
+  id?: string
+  oasisBioId: string
+  name: string
+  summary: string
+  timeSetting?: string | null
+  geography?: string | null
+  physicsRules?: string | null
+  socialStructure?: string | null
+  aestheticKeywords?: string | null
+  majorConflict?: string | null
+  visibility?: string
+  timeline?: string | null
+  rules?: string | null
+  factions?: string | null
+  documents?: Prisma.WorldDocumentUncheckedCreateNestedManyWithoutWorldInput
+  abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRelatedWorldInput
+}
+
+export type WorldItemCreateOrConnectWithoutReferencesInput = {
+  where: Prisma.WorldItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorldItemCreateWithoutReferencesInput, Prisma.WorldItemUncheckedCreateWithoutReferencesInput>
+}
+
+export type WorldItemUpsertWithoutReferencesInput = {
+  update: Prisma.XOR<Prisma.WorldItemUpdateWithoutReferencesInput, Prisma.WorldItemUncheckedUpdateWithoutReferencesInput>
+  create: Prisma.XOR<Prisma.WorldItemCreateWithoutReferencesInput, Prisma.WorldItemUncheckedCreateWithoutReferencesInput>
+  where?: Prisma.WorldItemWhereInput
+}
+
+export type WorldItemUpdateToOneWithWhereWithoutReferencesInput = {
+  where?: Prisma.WorldItemWhereInput
+  data: Prisma.XOR<Prisma.WorldItemUpdateWithoutReferencesInput, Prisma.WorldItemUncheckedUpdateWithoutReferencesInput>
+}
+
+export type WorldItemUpdateWithoutReferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  timeSetting?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  geography?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  physicsRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialStructure?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aestheticKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  majorConflict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  timeline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  factions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutWorldsNestedInput
+  documents?: Prisma.WorldDocumentUpdateManyWithoutWorldNestedInput
+  abilities?: Prisma.AbilityUpdateManyWithoutRelatedWorldNestedInput
+}
+
+export type WorldItemUncheckedUpdateWithoutReferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBioId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  timeSetting?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  geography?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  physicsRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialStructure?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aestheticKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  majorConflict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  timeline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  factions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.WorldDocumentUncheckedUpdateManyWithoutWorldNestedInput
+  abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRelatedWorldNestedInput
 }
 
 export type WorldItemCreateWithoutDocumentsInput = {
@@ -797,6 +918,7 @@ export type WorldItemCreateWithoutDocumentsInput = {
   factions?: string | null
   oasisBio: Prisma.OasisBioCreateNestedOneWithoutWorldsInput
   abilities?: Prisma.AbilityCreateNestedManyWithoutRelatedWorldInput
+  references?: Prisma.ReferenceItemCreateNestedManyWithoutWorldInput
 }
 
 export type WorldItemUncheckedCreateWithoutDocumentsInput = {
@@ -815,6 +937,7 @@ export type WorldItemUncheckedCreateWithoutDocumentsInput = {
   rules?: string | null
   factions?: string | null
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRelatedWorldInput
+  references?: Prisma.ReferenceItemUncheckedCreateNestedManyWithoutWorldInput
 }
 
 export type WorldItemCreateOrConnectWithoutDocumentsInput = {
@@ -849,6 +972,7 @@ export type WorldItemUpdateWithoutDocumentsInput = {
   factions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutWorldsNestedInput
   abilities?: Prisma.AbilityUpdateManyWithoutRelatedWorldNestedInput
+  references?: Prisma.ReferenceItemUpdateManyWithoutWorldNestedInput
 }
 
 export type WorldItemUncheckedUpdateWithoutDocumentsInput = {
@@ -867,6 +991,7 @@ export type WorldItemUncheckedUpdateWithoutDocumentsInput = {
   rules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRelatedWorldNestedInput
+  references?: Prisma.ReferenceItemUncheckedUpdateManyWithoutWorldNestedInput
 }
 
 export type WorldItemCreateManyOasisBioInput = {
@@ -901,6 +1026,7 @@ export type WorldItemUpdateWithoutOasisBioInput = {
   factions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.WorldDocumentUpdateManyWithoutWorldNestedInput
   abilities?: Prisma.AbilityUpdateManyWithoutRelatedWorldNestedInput
+  references?: Prisma.ReferenceItemUpdateManyWithoutWorldNestedInput
 }
 
 export type WorldItemUncheckedUpdateWithoutOasisBioInput = {
@@ -919,6 +1045,7 @@ export type WorldItemUncheckedUpdateWithoutOasisBioInput = {
   factions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   documents?: Prisma.WorldDocumentUncheckedUpdateManyWithoutWorldNestedInput
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRelatedWorldNestedInput
+  references?: Prisma.ReferenceItemUncheckedUpdateManyWithoutWorldNestedInput
 }
 
 export type WorldItemUncheckedUpdateManyWithoutOasisBioInput = {
@@ -945,11 +1072,13 @@ export type WorldItemUncheckedUpdateManyWithoutOasisBioInput = {
 export type WorldItemCountOutputType = {
   documents: number
   abilities: number
+  references: number
 }
 
 export type WorldItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | WorldItemCountOutputTypeCountDocumentsArgs
   abilities?: boolean | WorldItemCountOutputTypeCountAbilitiesArgs
+  references?: boolean | WorldItemCountOutputTypeCountReferencesArgs
 }
 
 /**
@@ -976,6 +1105,13 @@ export type WorldItemCountOutputTypeCountAbilitiesArgs<ExtArgs extends runtime.T
   where?: Prisma.AbilityWhereInput
 }
 
+/**
+ * WorldItemCountOutputType without action
+ */
+export type WorldItemCountOutputTypeCountReferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReferenceItemWhereInput
+}
+
 
 export type WorldItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -995,6 +1131,7 @@ export type WorldItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.WorldItem$documentsArgs<ExtArgs>
   abilities?: boolean | Prisma.WorldItem$abilitiesArgs<ExtArgs>
+  references?: boolean | Prisma.WorldItem$referencesArgs<ExtArgs>
   _count?: boolean | Prisma.WorldItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["worldItem"]>
 
@@ -1056,6 +1193,7 @@ export type WorldItemInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.WorldItem$documentsArgs<ExtArgs>
   abilities?: boolean | Prisma.WorldItem$abilitiesArgs<ExtArgs>
+  references?: boolean | Prisma.WorldItem$referencesArgs<ExtArgs>
   _count?: boolean | Prisma.WorldItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WorldItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1071,6 +1209,7 @@ export type $WorldItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     oasisBio: Prisma.$OasisBioPayload<ExtArgs>
     documents: Prisma.$WorldDocumentPayload<ExtArgs>[]
     abilities: Prisma.$AbilityPayload<ExtArgs>[]
+    references: Prisma.$ReferenceItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1484,6 +1623,7 @@ export interface Prisma__WorldItemClient<T, Null = never, ExtArgs extends runtim
   oasisBio<T extends Prisma.OasisBioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OasisBioDefaultArgs<ExtArgs>>): Prisma.Prisma__OasisBioClient<runtime.Types.Result.GetResult<Prisma.$OasisBioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   documents<T extends Prisma.WorldItem$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorldItem$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorldDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   abilities<T extends Prisma.WorldItem$abilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorldItem$abilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AbilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  references<T extends Prisma.WorldItem$referencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorldItem$referencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReferenceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1968,6 +2108,30 @@ export type WorldItem$abilitiesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.AbilityScalarFieldEnum | Prisma.AbilityScalarFieldEnum[]
+}
+
+/**
+ * WorldItem.references
+ */
+export type WorldItem$referencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReferenceItem
+   */
+  select?: Prisma.ReferenceItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReferenceItem
+   */
+  omit?: Prisma.ReferenceItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReferenceItemInclude<ExtArgs> | null
+  where?: Prisma.ReferenceItemWhereInput
+  orderBy?: Prisma.ReferenceItemOrderByWithRelationInput | Prisma.ReferenceItemOrderByWithRelationInput[]
+  cursor?: Prisma.ReferenceItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReferenceItemScalarFieldEnum | Prisma.ReferenceItemScalarFieldEnum[]
 }
 
 /**

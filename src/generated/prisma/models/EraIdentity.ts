@@ -250,6 +250,8 @@ export type EraIdentityWhereInput = {
   sortOrder?: Prisma.IntFilter<"EraIdentity"> | number
   oasisBio?: Prisma.XOR<Prisma.OasisBioScalarRelationFilter, Prisma.OasisBioWhereInput>
   abilities?: Prisma.AbilityListRelationFilter
+  dcosFiles?: Prisma.DcosFileListRelationFilter
+  references?: Prisma.ReferenceItemListRelationFilter
 }
 
 export type EraIdentityOrderByWithRelationInput = {
@@ -263,6 +265,8 @@ export type EraIdentityOrderByWithRelationInput = {
   sortOrder?: Prisma.SortOrder
   oasisBio?: Prisma.OasisBioOrderByWithRelationInput
   abilities?: Prisma.AbilityOrderByRelationAggregateInput
+  dcosFiles?: Prisma.DcosFileOrderByRelationAggregateInput
+  references?: Prisma.ReferenceItemOrderByRelationAggregateInput
 }
 
 export type EraIdentityWhereUniqueInput = Prisma.AtLeast<{
@@ -279,6 +283,8 @@ export type EraIdentityWhereUniqueInput = Prisma.AtLeast<{
   sortOrder?: Prisma.IntFilter<"EraIdentity"> | number
   oasisBio?: Prisma.XOR<Prisma.OasisBioScalarRelationFilter, Prisma.OasisBioWhereInput>
   abilities?: Prisma.AbilityListRelationFilter
+  dcosFiles?: Prisma.DcosFileListRelationFilter
+  references?: Prisma.ReferenceItemListRelationFilter
 }, "id">
 
 export type EraIdentityOrderByWithAggregationInput = {
@@ -321,6 +327,8 @@ export type EraIdentityCreateInput = {
   sortOrder?: number
   oasisBio: Prisma.OasisBioCreateNestedOneWithoutErasInput
   abilities?: Prisma.AbilityCreateNestedManyWithoutRelatedEraInput
+  dcosFiles?: Prisma.DcosFileCreateNestedManyWithoutEraInput
+  references?: Prisma.ReferenceItemCreateNestedManyWithoutEraInput
 }
 
 export type EraIdentityUncheckedCreateInput = {
@@ -333,6 +341,8 @@ export type EraIdentityUncheckedCreateInput = {
   description?: string | null
   sortOrder?: number
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRelatedEraInput
+  dcosFiles?: Prisma.DcosFileUncheckedCreateNestedManyWithoutEraInput
+  references?: Prisma.ReferenceItemUncheckedCreateNestedManyWithoutEraInput
 }
 
 export type EraIdentityUpdateInput = {
@@ -345,6 +355,8 @@ export type EraIdentityUpdateInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutErasNestedInput
   abilities?: Prisma.AbilityUpdateManyWithoutRelatedEraNestedInput
+  dcosFiles?: Prisma.DcosFileUpdateManyWithoutEraNestedInput
+  references?: Prisma.ReferenceItemUpdateManyWithoutEraNestedInput
 }
 
 export type EraIdentityUncheckedUpdateInput = {
@@ -357,6 +369,8 @@ export type EraIdentityUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRelatedEraNestedInput
+  dcosFiles?: Prisma.DcosFileUncheckedUpdateManyWithoutEraNestedInput
+  references?: Prisma.ReferenceItemUncheckedUpdateManyWithoutEraNestedInput
 }
 
 export type EraIdentityCreateManyInput = {
@@ -517,6 +531,38 @@ export type EraIdentityUpdateOneWithoutAbilitiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EraIdentityUpdateToOneWithWhereWithoutAbilitiesInput, Prisma.EraIdentityUpdateWithoutAbilitiesInput>, Prisma.EraIdentityUncheckedUpdateWithoutAbilitiesInput>
 }
 
+export type EraIdentityCreateNestedOneWithoutDcosFilesInput = {
+  create?: Prisma.XOR<Prisma.EraIdentityCreateWithoutDcosFilesInput, Prisma.EraIdentityUncheckedCreateWithoutDcosFilesInput>
+  connectOrCreate?: Prisma.EraIdentityCreateOrConnectWithoutDcosFilesInput
+  connect?: Prisma.EraIdentityWhereUniqueInput
+}
+
+export type EraIdentityUpdateOneWithoutDcosFilesNestedInput = {
+  create?: Prisma.XOR<Prisma.EraIdentityCreateWithoutDcosFilesInput, Prisma.EraIdentityUncheckedCreateWithoutDcosFilesInput>
+  connectOrCreate?: Prisma.EraIdentityCreateOrConnectWithoutDcosFilesInput
+  upsert?: Prisma.EraIdentityUpsertWithoutDcosFilesInput
+  disconnect?: Prisma.EraIdentityWhereInput | boolean
+  delete?: Prisma.EraIdentityWhereInput | boolean
+  connect?: Prisma.EraIdentityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EraIdentityUpdateToOneWithWhereWithoutDcosFilesInput, Prisma.EraIdentityUpdateWithoutDcosFilesInput>, Prisma.EraIdentityUncheckedUpdateWithoutDcosFilesInput>
+}
+
+export type EraIdentityCreateNestedOneWithoutReferencesInput = {
+  create?: Prisma.XOR<Prisma.EraIdentityCreateWithoutReferencesInput, Prisma.EraIdentityUncheckedCreateWithoutReferencesInput>
+  connectOrCreate?: Prisma.EraIdentityCreateOrConnectWithoutReferencesInput
+  connect?: Prisma.EraIdentityWhereUniqueInput
+}
+
+export type EraIdentityUpdateOneWithoutReferencesNestedInput = {
+  create?: Prisma.XOR<Prisma.EraIdentityCreateWithoutReferencesInput, Prisma.EraIdentityUncheckedCreateWithoutReferencesInput>
+  connectOrCreate?: Prisma.EraIdentityCreateOrConnectWithoutReferencesInput
+  upsert?: Prisma.EraIdentityUpsertWithoutReferencesInput
+  disconnect?: Prisma.EraIdentityWhereInput | boolean
+  delete?: Prisma.EraIdentityWhereInput | boolean
+  connect?: Prisma.EraIdentityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EraIdentityUpdateToOneWithWhereWithoutReferencesInput, Prisma.EraIdentityUpdateWithoutReferencesInput>, Prisma.EraIdentityUncheckedUpdateWithoutReferencesInput>
+}
+
 export type EraIdentityCreateWithoutOasisBioInput = {
   id?: string
   name: string
@@ -526,6 +572,8 @@ export type EraIdentityCreateWithoutOasisBioInput = {
   description?: string | null
   sortOrder?: number
   abilities?: Prisma.AbilityCreateNestedManyWithoutRelatedEraInput
+  dcosFiles?: Prisma.DcosFileCreateNestedManyWithoutEraInput
+  references?: Prisma.ReferenceItemCreateNestedManyWithoutEraInput
 }
 
 export type EraIdentityUncheckedCreateWithoutOasisBioInput = {
@@ -537,6 +585,8 @@ export type EraIdentityUncheckedCreateWithoutOasisBioInput = {
   description?: string | null
   sortOrder?: number
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRelatedEraInput
+  dcosFiles?: Prisma.DcosFileUncheckedCreateNestedManyWithoutEraInput
+  references?: Prisma.ReferenceItemUncheckedCreateNestedManyWithoutEraInput
 }
 
 export type EraIdentityCreateOrConnectWithoutOasisBioInput = {
@@ -588,6 +638,8 @@ export type EraIdentityCreateWithoutAbilitiesInput = {
   description?: string | null
   sortOrder?: number
   oasisBio: Prisma.OasisBioCreateNestedOneWithoutErasInput
+  dcosFiles?: Prisma.DcosFileCreateNestedManyWithoutEraInput
+  references?: Prisma.ReferenceItemCreateNestedManyWithoutEraInput
 }
 
 export type EraIdentityUncheckedCreateWithoutAbilitiesInput = {
@@ -599,6 +651,8 @@ export type EraIdentityUncheckedCreateWithoutAbilitiesInput = {
   endYear?: number | null
   description?: string | null
   sortOrder?: number
+  dcosFiles?: Prisma.DcosFileUncheckedCreateNestedManyWithoutEraInput
+  references?: Prisma.ReferenceItemUncheckedCreateNestedManyWithoutEraInput
 }
 
 export type EraIdentityCreateOrConnectWithoutAbilitiesInput = {
@@ -626,6 +680,8 @@ export type EraIdentityUpdateWithoutAbilitiesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutErasNestedInput
+  dcosFiles?: Prisma.DcosFileUpdateManyWithoutEraNestedInput
+  references?: Prisma.ReferenceItemUpdateManyWithoutEraNestedInput
 }
 
 export type EraIdentityUncheckedUpdateWithoutAbilitiesInput = {
@@ -637,6 +693,144 @@ export type EraIdentityUncheckedUpdateWithoutAbilitiesInput = {
   endYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  dcosFiles?: Prisma.DcosFileUncheckedUpdateManyWithoutEraNestedInput
+  references?: Prisma.ReferenceItemUncheckedUpdateManyWithoutEraNestedInput
+}
+
+export type EraIdentityCreateWithoutDcosFilesInput = {
+  id?: string
+  name: string
+  eraType: string
+  startYear?: number | null
+  endYear?: number | null
+  description?: string | null
+  sortOrder?: number
+  oasisBio: Prisma.OasisBioCreateNestedOneWithoutErasInput
+  abilities?: Prisma.AbilityCreateNestedManyWithoutRelatedEraInput
+  references?: Prisma.ReferenceItemCreateNestedManyWithoutEraInput
+}
+
+export type EraIdentityUncheckedCreateWithoutDcosFilesInput = {
+  id?: string
+  oasisBioId: string
+  name: string
+  eraType: string
+  startYear?: number | null
+  endYear?: number | null
+  description?: string | null
+  sortOrder?: number
+  abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRelatedEraInput
+  references?: Prisma.ReferenceItemUncheckedCreateNestedManyWithoutEraInput
+}
+
+export type EraIdentityCreateOrConnectWithoutDcosFilesInput = {
+  where: Prisma.EraIdentityWhereUniqueInput
+  create: Prisma.XOR<Prisma.EraIdentityCreateWithoutDcosFilesInput, Prisma.EraIdentityUncheckedCreateWithoutDcosFilesInput>
+}
+
+export type EraIdentityUpsertWithoutDcosFilesInput = {
+  update: Prisma.XOR<Prisma.EraIdentityUpdateWithoutDcosFilesInput, Prisma.EraIdentityUncheckedUpdateWithoutDcosFilesInput>
+  create: Prisma.XOR<Prisma.EraIdentityCreateWithoutDcosFilesInput, Prisma.EraIdentityUncheckedCreateWithoutDcosFilesInput>
+  where?: Prisma.EraIdentityWhereInput
+}
+
+export type EraIdentityUpdateToOneWithWhereWithoutDcosFilesInput = {
+  where?: Prisma.EraIdentityWhereInput
+  data: Prisma.XOR<Prisma.EraIdentityUpdateWithoutDcosFilesInput, Prisma.EraIdentityUncheckedUpdateWithoutDcosFilesInput>
+}
+
+export type EraIdentityUpdateWithoutDcosFilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  eraType?: Prisma.StringFieldUpdateOperationsInput | string
+  startYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  endYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutErasNestedInput
+  abilities?: Prisma.AbilityUpdateManyWithoutRelatedEraNestedInput
+  references?: Prisma.ReferenceItemUpdateManyWithoutEraNestedInput
+}
+
+export type EraIdentityUncheckedUpdateWithoutDcosFilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBioId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  eraType?: Prisma.StringFieldUpdateOperationsInput | string
+  startYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  endYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRelatedEraNestedInput
+  references?: Prisma.ReferenceItemUncheckedUpdateManyWithoutEraNestedInput
+}
+
+export type EraIdentityCreateWithoutReferencesInput = {
+  id?: string
+  name: string
+  eraType: string
+  startYear?: number | null
+  endYear?: number | null
+  description?: string | null
+  sortOrder?: number
+  oasisBio: Prisma.OasisBioCreateNestedOneWithoutErasInput
+  abilities?: Prisma.AbilityCreateNestedManyWithoutRelatedEraInput
+  dcosFiles?: Prisma.DcosFileCreateNestedManyWithoutEraInput
+}
+
+export type EraIdentityUncheckedCreateWithoutReferencesInput = {
+  id?: string
+  oasisBioId: string
+  name: string
+  eraType: string
+  startYear?: number | null
+  endYear?: number | null
+  description?: string | null
+  sortOrder?: number
+  abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutRelatedEraInput
+  dcosFiles?: Prisma.DcosFileUncheckedCreateNestedManyWithoutEraInput
+}
+
+export type EraIdentityCreateOrConnectWithoutReferencesInput = {
+  where: Prisma.EraIdentityWhereUniqueInput
+  create: Prisma.XOR<Prisma.EraIdentityCreateWithoutReferencesInput, Prisma.EraIdentityUncheckedCreateWithoutReferencesInput>
+}
+
+export type EraIdentityUpsertWithoutReferencesInput = {
+  update: Prisma.XOR<Prisma.EraIdentityUpdateWithoutReferencesInput, Prisma.EraIdentityUncheckedUpdateWithoutReferencesInput>
+  create: Prisma.XOR<Prisma.EraIdentityCreateWithoutReferencesInput, Prisma.EraIdentityUncheckedCreateWithoutReferencesInput>
+  where?: Prisma.EraIdentityWhereInput
+}
+
+export type EraIdentityUpdateToOneWithWhereWithoutReferencesInput = {
+  where?: Prisma.EraIdentityWhereInput
+  data: Prisma.XOR<Prisma.EraIdentityUpdateWithoutReferencesInput, Prisma.EraIdentityUncheckedUpdateWithoutReferencesInput>
+}
+
+export type EraIdentityUpdateWithoutReferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  eraType?: Prisma.StringFieldUpdateOperationsInput | string
+  startYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  endYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  oasisBio?: Prisma.OasisBioUpdateOneRequiredWithoutErasNestedInput
+  abilities?: Prisma.AbilityUpdateManyWithoutRelatedEraNestedInput
+  dcosFiles?: Prisma.DcosFileUpdateManyWithoutEraNestedInput
+}
+
+export type EraIdentityUncheckedUpdateWithoutReferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oasisBioId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  eraType?: Prisma.StringFieldUpdateOperationsInput | string
+  startYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  endYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRelatedEraNestedInput
+  dcosFiles?: Prisma.DcosFileUncheckedUpdateManyWithoutEraNestedInput
 }
 
 export type EraIdentityCreateManyOasisBioInput = {
@@ -658,6 +852,8 @@ export type EraIdentityUpdateWithoutOasisBioInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   abilities?: Prisma.AbilityUpdateManyWithoutRelatedEraNestedInput
+  dcosFiles?: Prisma.DcosFileUpdateManyWithoutEraNestedInput
+  references?: Prisma.ReferenceItemUpdateManyWithoutEraNestedInput
 }
 
 export type EraIdentityUncheckedUpdateWithoutOasisBioInput = {
@@ -669,6 +865,8 @@ export type EraIdentityUncheckedUpdateWithoutOasisBioInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutRelatedEraNestedInput
+  dcosFiles?: Prisma.DcosFileUncheckedUpdateManyWithoutEraNestedInput
+  references?: Prisma.ReferenceItemUncheckedUpdateManyWithoutEraNestedInput
 }
 
 export type EraIdentityUncheckedUpdateManyWithoutOasisBioInput = {
@@ -688,10 +886,14 @@ export type EraIdentityUncheckedUpdateManyWithoutOasisBioInput = {
 
 export type EraIdentityCountOutputType = {
   abilities: number
+  dcosFiles: number
+  references: number
 }
 
 export type EraIdentityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   abilities?: boolean | EraIdentityCountOutputTypeCountAbilitiesArgs
+  dcosFiles?: boolean | EraIdentityCountOutputTypeCountDcosFilesArgs
+  references?: boolean | EraIdentityCountOutputTypeCountReferencesArgs
 }
 
 /**
@@ -711,6 +913,20 @@ export type EraIdentityCountOutputTypeCountAbilitiesArgs<ExtArgs extends runtime
   where?: Prisma.AbilityWhereInput
 }
 
+/**
+ * EraIdentityCountOutputType without action
+ */
+export type EraIdentityCountOutputTypeCountDcosFilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DcosFileWhereInput
+}
+
+/**
+ * EraIdentityCountOutputType without action
+ */
+export type EraIdentityCountOutputTypeCountReferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReferenceItemWhereInput
+}
+
 
 export type EraIdentitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -723,6 +939,8 @@ export type EraIdentitySelect<ExtArgs extends runtime.Types.Extensions.InternalA
   sortOrder?: boolean
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
   abilities?: boolean | Prisma.EraIdentity$abilitiesArgs<ExtArgs>
+  dcosFiles?: boolean | Prisma.EraIdentity$dcosFilesArgs<ExtArgs>
+  references?: boolean | Prisma.EraIdentity$referencesArgs<ExtArgs>
   _count?: boolean | Prisma.EraIdentityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["eraIdentity"]>
 
@@ -765,6 +983,8 @@ export type EraIdentityOmit<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type EraIdentityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   oasisBio?: boolean | Prisma.OasisBioDefaultArgs<ExtArgs>
   abilities?: boolean | Prisma.EraIdentity$abilitiesArgs<ExtArgs>
+  dcosFiles?: boolean | Prisma.EraIdentity$dcosFilesArgs<ExtArgs>
+  references?: boolean | Prisma.EraIdentity$referencesArgs<ExtArgs>
   _count?: boolean | Prisma.EraIdentityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EraIdentityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -779,6 +999,8 @@ export type $EraIdentityPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     oasisBio: Prisma.$OasisBioPayload<ExtArgs>
     abilities: Prisma.$AbilityPayload<ExtArgs>[]
+    dcosFiles: Prisma.$DcosFilePayload<ExtArgs>[]
+    references: Prisma.$ReferenceItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1185,6 +1407,8 @@ export interface Prisma__EraIdentityClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   oasisBio<T extends Prisma.OasisBioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OasisBioDefaultArgs<ExtArgs>>): Prisma.Prisma__OasisBioClient<runtime.Types.Result.GetResult<Prisma.$OasisBioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   abilities<T extends Prisma.EraIdentity$abilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EraIdentity$abilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AbilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dcosFiles<T extends Prisma.EraIdentity$dcosFilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EraIdentity$dcosFilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DcosFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  references<T extends Prisma.EraIdentity$referencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EraIdentity$referencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReferenceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1639,6 +1863,54 @@ export type EraIdentity$abilitiesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.AbilityScalarFieldEnum | Prisma.AbilityScalarFieldEnum[]
+}
+
+/**
+ * EraIdentity.dcosFiles
+ */
+export type EraIdentity$dcosFilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DcosFile
+   */
+  select?: Prisma.DcosFileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DcosFile
+   */
+  omit?: Prisma.DcosFileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DcosFileInclude<ExtArgs> | null
+  where?: Prisma.DcosFileWhereInput
+  orderBy?: Prisma.DcosFileOrderByWithRelationInput | Prisma.DcosFileOrderByWithRelationInput[]
+  cursor?: Prisma.DcosFileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DcosFileScalarFieldEnum | Prisma.DcosFileScalarFieldEnum[]
+}
+
+/**
+ * EraIdentity.references
+ */
+export type EraIdentity$referencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReferenceItem
+   */
+  select?: Prisma.ReferenceItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReferenceItem
+   */
+  omit?: Prisma.ReferenceItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReferenceItemInclude<ExtArgs> | null
+  where?: Prisma.ReferenceItemWhereInput
+  orderBy?: Prisma.ReferenceItemOrderByWithRelationInput | Prisma.ReferenceItemOrderByWithRelationInput[]
+  cursor?: Prisma.ReferenceItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReferenceItemScalarFieldEnum | Prisma.ReferenceItemScalarFieldEnum[]
 }
 
 /**
