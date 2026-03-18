@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSession } from '@/lib/auth.client';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
@@ -8,17 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { useRouter } from 'next/navigation';
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6;
-
-interface ValidationErrors {
-  [key: string]: string;
-}
-
-// Memoized card components for each step
-const StepCard = React.memo(({ children, className = '' }) => (
-  <Card variant="outlined" className={`transition-all duration-300 ease-in-out transform hover:shadow-md ${className}`}>
-    {children}
-  </Card>
-));
 
 export default function CreateOasisBioPage() {
   const { data: session } = useSession();
@@ -39,153 +28,33 @@ export default function CreateOasisBioPage() {
   const [status, setStatus] = useState('');
   const [description, setDescription] = useState('');
 
-  // Validation errors
-  const [errors, setErrors] = useState<ValidationErrors>({});
-  // API states
-  const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
-
-  // Load form data from localStorage on mount
   useEffect(() => {
     if (!session) {
       router.push('/auth/login');
-      return;
-    }
-
-    const savedData = localStorage.getItem('oasisbio-create-form');
-    if (savedData) {
-      try {
-        const parsedData = JSON.parse(savedData);
-        setIdentityMode(parsedData.identityMode || 'real');
-        setTitle(parsedData.title || '');
-        setSlug(parsedData.slug || '');
-        setTagline(parsedData.tagline || '');
-        setBirthDate(parsedData.birthDate || '');
-        setGender(parsedData.gender || '');
-        setPronouns(parsedData.pronouns || '');
-        setPlaceOfOrigin(parsedData.placeOfOrigin || '');
-        setCurrentEra(parsedData.currentEra || '');
-        setSpecies(parsedData.species || '');
-        setStatus(parsedData.status || '');
-        setDescription(parsedData.description || '');
-      } catch (error) {
-        console.error('Error loading form data:', error);
-      }
     }
   }, [session, router]);
-
-  // Save form data to localStorage when it changes
-  useEffect(() => {
-    const formData = {
-      identityMode,
-      title,
-      slug,
-      tagline,
-      birthDate,
-      gender,
-      pronouns,
-      placeOfOrigin,
-      currentEra,
-      species,
-      status,
-      description
-    };
-
-    localStorage.setItem('oasisbio-create-form', JSON.stringify(formData));
-  }, [identityMode, title, slug, tagline, birthDate, gender, pronouns, placeOfOrigin, currentEra, species, status, description]);
 
   if (!session) {
     return null;
   }
 
-  // Validation functions
-  const validateStep = useCallback((currentStep: Step): boolean => {
-    const newErrors: ValidationErrors = {};
-
-    if (currentStep === 1) {
-      if (!title.trim()) {
-        newErrors.title = 'Character name is required';
-      }
-      if (!species) {
-        newErrors.species = 'Species is required';
-      }
-      if (!status) {
-        newErrors.status = 'Status is required';
-      }
+  const handleNext = () => {
+    if (step < 6) {
+      setStep((prev) => (prev + 1) as Step);
     }
+  };
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [title, species, status]);
-
-  const handleNext = useCallback(() => {
-    if (validateStep(step)) {
-      if (step < 6) {
-        setStep((prev) => (prev + 1) as Step);
-      }
-    }
-  }, [step, validateStep]);
-
-  const handlePrevious = useCallback(() => {
+  const handlePrevious = () => {
     if (step > 1) {
       setStep((prev) => (prev - 1) as Step);
     }
-  }, [step]);
+  };
 
-  const handleSubmit = useCallback(async () => {
-    if (validateStep(step)) {
-      setLoading(true);
-      setApiError(null);
-
-      try {
-        const formData = {
-          identityMode,
-          title,
-          slug,
-          tagline,
-          birthDate,
-          gender,
-          pronouns,
-          placeOfOrigin,
-          currentEra,
-          species,
-          status,
-          description
-        };
-
-        const response = await fetch('/api/oasisbios', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.message || 'Failed to create OasisBio');
-        }
-
-        const result = await response.json();
-        console.log('OasisBio created successfully:', result);
-
-        // Clear form data from localStorage
-        localStorage.removeItem('oasisbio-create-form');
-        router.push('/dashboard');
-      } catch (error) {
-        console.error('Error creating OasisBio:', error);
-        if (error instanceof Error) {
-          setApiError(error.message || 'Failed to create OasisBio. Please try again.');
-        } else if (error === 'NetworkError') {
-          setApiError('Network error. Please check your internet connection and try again.');
-        } else {
-          setApiError('An unexpected error occurred. Please try again.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-  }, [step, validateStep, identityMode, title, slug, tagline, birthDate, gender, pronouns, placeOfOrigin, currentEra, species, status, description, router]);
+  const handleSubmit = () => {
+    // Submit form data to API
+    console.log('Submit form data');
+    router.push('/dashboard');
+  };
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
@@ -197,39 +66,31 @@ export default function CreateOasisBioPage() {
           </Button>
         </div>
 
-        {apiError && (
-          <div className="bg-destructive/10 border border-destructive text-destructive p-4 rounded-md mb-6">
-            {apiError}
-          </div>
-        )}
-
         {/* Progress Bar */}
-        <div className="flex items-center justify-between mb-8 md:mb-12 overflow-x-auto pb-2">
-          <div className="flex items-center min-w-full">
-            {[1, 2, 3, 4, 5, 6].map((stepNum) => (
-              <div key={stepNum} className="flex flex-col items-center flex-1">
-                <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-mono transition-all duration-300 ${stepNum <= step ? 'bg-primary text-primary-foreground scale-110' : 'bg-muted text-muted-foreground'}`}>
-                  {stepNum}
-                </div>
-                <div className="mt-1 md:mt-2 text-xs font-mono text-center">
-                  {stepNum === 1 && 'Identity'}
-                  {stepNum === 2 && 'Era'}
-                  {stepNum === 3 && 'Abilities'}
-                  {stepNum === 4 && 'Repos'}
-                  {stepNum === 5 && 'Model'}
-                  {stepNum === 6 && 'Publish'}
-                </div>
-                {stepNum < 6 && (
-                  <div className={`flex-1 h-1 mx-1 md:mx-2 transition-all duration-300 ${stepNum < step ? 'bg-primary' : 'bg-muted'}`} />
-                )}
+        <div className="flex items-center justify-between mb-12">
+          {[1, 2, 3, 4, 5, 6].map((stepNum) => (
+            <div key={stepNum} className="flex flex-col items-center">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-mono ${stepNum <= step ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+                {stepNum}
               </div>
-            ))}
-          </div>
+              <div className="mt-2 text-xs font-mono text-center">
+                {stepNum === 1 && 'Identity'}
+                {stepNum === 2 && 'Era'}
+                {stepNum === 3 && 'Abilities'}
+                {stepNum === 4 && 'Repositories'}
+                {stepNum === 5 && 'Model'}
+                {stepNum === 6 && 'Publish'}
+              </div>
+              {stepNum < 6 && (
+                <div className={`flex-1 h-1 mx-2 ${stepNum < step ? 'bg-primary' : 'bg-muted'}`} />
+              )}
+            </div>
+          ))}
         </div>
 
         {/* Step 1: Identity */}
         {step === 1 && (
-          <StepCard>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 1: Identity</CardTitle>
             </CardHeader>
@@ -246,9 +107,6 @@ export default function CreateOasisBioPage() {
                     onChange={(e) => setTitle(e.target.value)}
                     required
                   />
-                  {errors.title && (
-                    <p className="text-sm text-destructive mt-1">{errors.title}</p>
-                  )}
                 </div>
                 <div>
                   <label htmlFor="tagline" className="block text-sm font-medium mb-1">
@@ -269,7 +127,7 @@ export default function CreateOasisBioPage() {
                     id="identityMode"
                     value={identityMode}
                     onChange={(e) => setIdentityMode(e.target.value)}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200 ease-in-out"
+                    className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   >
                     <option value="real">Real</option>
                     <option value="fictional">Fictional</option>
@@ -331,7 +189,7 @@ export default function CreateOasisBioPage() {
                       id="species"
                       value={species}
                       onChange={(e) => setSpecies(e.target.value)}
-                      className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200 ease-in-out"
+                      className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                     >
                       <option value="">Select species</option>
                       <option value="human">Human</option>
@@ -340,9 +198,6 @@ export default function CreateOasisBioPage() {
                       <option value="unknown">Unknown</option>
                       <option value="hybrid">Hybrid</option>
                     </select>
-                    {errors.species && (
-                      <p className="text-sm text-destructive mt-1">{errors.species}</p>
-                    )}
                   </div>
                   <div>
                     <label htmlFor="status" className="block text-sm font-medium mb-1">
@@ -352,7 +207,7 @@ export default function CreateOasisBioPage() {
                       id="status"
                       value={status}
                       onChange={(e) => setStatus(e.target.value)}
-                      className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200 ease-in-out"
+                      className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                     >
                       <option value="">Select status</option>
                       <option value="active">Active</option>
@@ -360,9 +215,6 @@ export default function CreateOasisBioPage() {
                       <option value="unknown">Unknown</option>
                       <option value="mythic">Mythic</option>
                     </select>
-                    {errors.status && (
-                      <p className="text-sm text-destructive mt-1">{errors.status}</p>
-                    )}
                   </div>
                 </div>
                 <div>
@@ -374,7 +226,7 @@ export default function CreateOasisBioPage() {
                     placeholder="Enter a description of this identity"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200 ease-in-out resize-none"
+                    className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                     rows={4}
                   />
                 </div>
@@ -385,7 +237,7 @@ export default function CreateOasisBioPage() {
 
         {/* Step 2: Era */}
         {step === 2 && (
-          <StepCard>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 2: Era</CardTitle>
             </CardHeader>
@@ -415,12 +267,12 @@ export default function CreateOasisBioPage() {
                 </div>
               </div>
             </CardContent>
-          </StepCard>
+          </Card>
         )}
 
         {/* Step 3: Abilities */}
         {step === 3 && (
-          <StepCard>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 3: Build Your Ability Pool</CardTitle>
             </CardHeader>
@@ -465,12 +317,12 @@ export default function CreateOasisBioPage() {
                 <p className="text-muted-foreground">No abilities added yet.</p>
               </div>
             </CardContent>
-          </StepCard>
+          </Card>
         )}
 
         {/* Step 4: Repositories */}
         {step === 4 && (
-          <StepCard>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 4: Build Your Repositories</CardTitle>
             </CardHeader>
@@ -499,12 +351,12 @@ export default function CreateOasisBioPage() {
                 </div>
               </div>
             </CardContent>
-          </StepCard>
+          </Card>
         )}
 
         {/* Step 5: Model */}
         {step === 5 && (
-          <StepCard>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 5: Upload 3D Model</CardTitle>
             </CardHeader>
@@ -522,12 +374,12 @@ export default function CreateOasisBioPage() {
                 </p>
               </div>
             </CardContent>
-          </StepCard>
+          </Card>
         )}
 
         {/* Step 6: Publish */}
         {step === 6 && (
-          <StepCard>
+          <Card variant="outlined">
             <CardHeader>
               <CardTitle>Step 6: Preview & Publish</CardTitle>
             </CardHeader>
@@ -544,23 +396,23 @@ export default function CreateOasisBioPage() {
                 <label htmlFor="public">Make this OasisBio public</label>
               </div>
             </CardContent>
-          </StepCard>
+          </Card>
         )}
 
         {/* Navigation Buttons */}
         <div className="flex justify-between mt-8">
           {step > 1 && (
-            <Button variant="outline" onClick={handlePrevious} disabled={loading}>
+            <Button variant="outline" onClick={handlePrevious}>
               Previous
             </Button>
           )}
           {step < 6 ? (
-            <Button onClick={handleNext} disabled={loading}>
+            <Button onClick={handleNext}>
               Next
             </Button>
           ) : (
-            <Button onClick={handleSubmit} disabled={loading}>
-              {loading ? 'Publishing...' : 'Publish'}
+            <Button onClick={handleSubmit}>
+              Publish
             </Button>
           )}
         </div>
