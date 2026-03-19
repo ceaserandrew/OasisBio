@@ -1,22 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { requireAuth, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
-import { authOptions } from '@/lib/auth';
 import bcrypt from 'bcryptjs';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const session = await requireAuth();
 
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: session.user.id },
       include: {
         profiles: true,
         oasisBios: {
@@ -29,10 +21,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const profile = user.profiles[0];
@@ -70,40 +59,25 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error fetching settings:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
+    const session = await requireAuth();
     const body = await request.json();
     const { section, data } = body;
 
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: session.user.id },
       include: {
         profiles: true,
       },
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     let updatedProfile = null;
@@ -111,10 +85,7 @@ export async function PUT(request: NextRequest) {
     if (section === 'account' || section === 'profile') {
       const profile = user.profiles[0];
       if (!profile) {
-        return NextResponse.json(
-          { error: 'Profile not found' },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
       }
 
       const updateData: any = {};
@@ -132,10 +103,7 @@ export async function PUT(request: NextRequest) {
         });
 
         if (existingProfile && existingProfile.id !== profile.id) {
-          return NextResponse.json(
-            { error: 'Username already taken' },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: 'Username already taken' }, { status: 400 });
         }
       }
 
@@ -152,10 +120,7 @@ export async function PUT(request: NextRequest) {
       );
 
       if (!passwordMatch) {
-        return NextResponse.json(
-          { error: 'Current password is incorrect' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 });
       }
 
       const hashedPassword = await bcrypt.hash(data.newPassword, 10);
@@ -181,10 +146,6 @@ export async function PUT(request: NextRequest) {
         : null,
     });
   } catch (error) {
-    console.error('Error updating settings:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
