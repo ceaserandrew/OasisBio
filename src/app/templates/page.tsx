@@ -273,11 +273,14 @@ export default function TemplatesPage() {
 
             {/* Deo Mascots */}
             {activeTab === 'mascot' && (
-              <div className="space-y-8">
-                <h2 className="text-3xl font-bold mb-8">Deo Mascots</h2>
-                <p className="text-lg text-gray-600 mb-8">
-                  Meet our mascots Deo and Dia, the face of OasisBio. They represent the creative spirit of our platform and can be used as templates for your 3D models.
-                </p>
+              <div className="space-y-12 bg-gradient-to-br from-blue-500 to-green-500 text-white p-8 md:p-16 rounded-2xl shadow-2xl transform transition-all duration-500 hover:shadow-3xl">
+                <div className="text-center max-w-3xl mx-auto">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent animate-pulse">Deo Mascots</h2>
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    Meet our mascots Deo and Dia, the face of OasisBio. They represent the creative spirit of our platform and can be used as templates for your 3D models.
+                  </p>
+                </div>
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Deo (Male) */}
                   <MascotCard
@@ -307,25 +310,75 @@ export default function TemplatesPage() {
                 </div>
                 
                 {/* Group Image */}
-                <div className="mt-12">
-                  <Card className="border-0 shadow-sm">
-                    <div className="aspect-video bg-gray-100 rounded-t-md overflow-hidden">
-                      <img 
-                        src="/assets/deo/deo and dia.png" 
-                        alt="Deo and Dia Together" 
-                        className="w-full h-full object-cover"
-                      />
+                <div className="mt-16">
+                  <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                      <div className="aspect-square lg:aspect-auto bg-gray-100">
+                        <img 
+                          src="/assets/deo/deo and dia.png" 
+                          alt="Deo and Dia Together" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="p-8 flex flex-col justify-center">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-xl text-gray-900">Deo & Dia</CardTitle>
+                          <CardDescription className="text-gray-700">Our Mascot Family</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-gray-700 mb-6">
+                            Deo and Dia are the perfect templates for creating your own 3D characters. Their versatile design allows you to customize them to fit any world or identity you create on OasisBio.
+                          </p>
+                          <p className="text-gray-600">
+                            Use these mascots as a starting point for your creative journey. With OasisBio, you can bring your imagination to life and share it with the world.
+                          </p>
+                        </CardContent>
+                      </div>
                     </div>
-                    <CardHeader>
-                      <CardTitle className="text-lg">Deo & Dia</CardTitle>
-                      <CardDescription>Our Mascot Family</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-700">
-                        Deo and Dia are the perfect templates for creating your own 3D characters. Their versatile design allows you to customize them to fit any world or identity you create on OasisBio.
-                      </p>
-                    </CardContent>
                   </Card>
+                </div>
+                
+                {/* Additional Mascot Images */}
+                <div className="mt-12">
+                  <h3 className="text-2xl font-bold mb-6 text-center text-white">More Deo & Dia</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm">
+                      <div className="aspect-square bg-gray-100">
+                        <img 
+                          src="/assets/deo/deo & dia in OasisBio center.png" 
+                          alt="Deo & Dia in OasisBio Center" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <CardHeader>
+                        <CardTitle className="text-md text-gray-900">OasisBio Center</CardTitle>
+                      </CardHeader>
+                    </Card>
+                    <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm">
+                      <div className="aspect-square bg-gray-100">
+                        <img 
+                          src="/assets/deo/deo & dia in PR.png" 
+                          alt="Deo & Dia in PR" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <CardHeader>
+                        <CardTitle className="text-md text-gray-900">PR Event</CardTitle>
+                      </CardHeader>
+                    </Card>
+                    <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm">
+                      <div className="aspect-square bg-gray-100">
+                        <img 
+                          src="/assets/deo/deo & dia wear OITS uniform.png" 
+                          alt="Deo & Dia in OITS Uniform" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <CardHeader>
+                        <CardTitle className="text-md text-gray-900">OITS Uniform</CardTitle>
+                      </CardHeader>
+                    </Card>
+                  </div>
                 </div>
               </div>
             )}
