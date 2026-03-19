@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
+import { MascotCard } from '@/components/mascot';
 
 // Mock data for templates
 const identityTemplates = [
@@ -140,6 +141,13 @@ export default function TemplatesPage() {
             >
               Ability Presets
             </Button>
+            <Button 
+              variant={activeTab === 'mascot' ? 'primary' : 'ghost'}
+              onClick={() => setActiveTab('mascot')}
+              className="px-4 py-4 border-b-2"
+            >
+              Deo Mascots
+            </Button>
           </div>
         </div>
       </section>
@@ -259,6 +267,65 @@ export default function TemplatesPage() {
                       </CardContent>
                     </Card>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* Deo Mascots */}
+            {activeTab === 'mascot' && (
+              <div className="space-y-8">
+                <h2 className="text-3xl font-bold mb-8">Deo Mascots</h2>
+                <p className="text-lg text-gray-600 mb-8">
+                  Meet our mascots Deo and Dia, the face of OasisBio. They represent the creative spirit of our platform and can be used as templates for your 3D models.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Deo (Male) */}
+                  <MascotCard
+                    name="Deo"
+                    gender="Male"
+                    description="Deo is the male mascot of OasisBio, representing creativity and innovation. Use his 3D model as a template for your own characters."
+                    imageSrc="/assets/deo/deo.png"
+                    imageAlt="Deo - Male Mascot"
+                    onViewModel={() => {
+                      // TODO: Implement 3D model viewing
+                      alert('3D model viewing coming soon!');
+                    }}
+                  />
+                  
+                  {/* Dia (Female) */}
+                  <MascotCard
+                    name="Dia"
+                    gender="Female"
+                    description="Dia is the female mascot of OasisBio, representing imagination and artistry. Use her 3D model as a template for your own characters."
+                    imageSrc="/assets/deo/dia.png"
+                    imageAlt="Dia - Female Mascot"
+                    onViewModel={() => {
+                      // TODO: Implement 3D model viewing
+                      alert('3D model viewing coming soon!');
+                    }}
+                  />
+                </div>
+                
+                {/* Group Image */}
+                <div className="mt-12">
+                  <Card className="border-0 shadow-sm">
+                    <div className="aspect-video bg-gray-100 rounded-t-md overflow-hidden">
+                      <img 
+                        src="/assets/deo/deo and dia.png" 
+                        alt="Deo and Dia Together" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Deo & Dia</CardTitle>
+                      <CardDescription>Our Mascot Family</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-700">
+                        Deo and Dia are the perfect templates for creating your own 3D characters. Their versatile design allows you to customize them to fit any world or identity you create on OasisBio.
+                      </p>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
             )}

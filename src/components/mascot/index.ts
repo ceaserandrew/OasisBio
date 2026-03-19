@@ -1,0 +1,1 @@
+export { MascotCard } from './MascotCard';
