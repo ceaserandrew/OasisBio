@@ -12,7 +12,7 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut({ redirect: false });
+    await signOut();
     router.push('/auth/login');
   };
 

@@ -52,7 +52,7 @@ export default function SettingsPage() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut({ redirect: false });
+    await signOut();
     router.push('/auth/login');
   };
   const [loading, setLoading] = useState(true);

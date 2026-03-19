@@ -4,12 +4,21 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import supabase from './supabase';
 
 // Create auth context
-const AuthContext = createContext(undefined);
+interface AuthContextType {
+  user: any;
+  session: any;
+  isLoading: boolean;
+  signInWithEmail: (email: string) => Promise<{ error: any }>;
+  verifyOtp: (email: string, token: string) => Promise<{ error: any }>;
+  signOut: () => Promise<{ error: any }>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Auth provider component
-export const SessionProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [session, setSession] = useState(null);
+export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<any>(null);
+  const [session, setSession] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -33,7 +42,7 @@ export const SessionProvider = ({ children }) => {
   }, []);
 
   // Sign in with email (send OTP)
-  const signInWithEmail = async (email) => {
+  const signInWithEmail = async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
@@ -44,7 +53,7 @@ export const SessionProvider = ({ children }) => {
   };
 
   // Verify OTP
-  const verifyOtp = async (email, token) => {
+  const verifyOtp = async (email: string, token: string) => {
     const { error } = await supabase.auth.verifyOtp({
       email,
       token,
@@ -85,14 +94,14 @@ export const useSession = () => {
 };
 
 // Export signIn function
-export const signIn = (provider, options) => {
+export const signIn = (provider: string, options?: { callbackUrl?: string }) => {
   if (provider === 'credentials') {
     // For email/password (not used in our implementation)
     return Promise.resolve({ error: null });
   } else {
     // For social providers
     return supabase.auth.signInWithOAuth({
-      provider: provider,
+      provider: provider as any,
       options: {
         redirectTo: options?.callbackUrl || window.location.origin
       }
@@ -108,4 +117,10 @@ export const authOptions = {
     strategy: 'jwt'
   },
   secret: 'mock-secret'
+};
+
+// Export signOut function
+export const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  return { error };
 };

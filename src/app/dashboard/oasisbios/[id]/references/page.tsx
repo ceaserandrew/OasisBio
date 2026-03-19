@@ -298,7 +298,7 @@ export default function ReferencesPage() {
                   </div>
                   {reference.tags && (
                     <div className="flex flex-wrap gap-2">
-                      {reference.tags.split(',').map((tag, index) => (
+                      {reference.tags.split(',').map((tag: string, index: number) => (
                         <span key={index} className="inline-block px-2 py-1 bg-gray-100 text-xs font-medium rounded">
                           {tag.trim()}
                         </span>

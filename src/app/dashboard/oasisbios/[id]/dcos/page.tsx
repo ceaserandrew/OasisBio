@@ -322,7 +322,7 @@ export default function DcosPage() {
                     />
                   ) : (
                     <div className="prose max-w-none">
-                      {selectedFile.content.split('\n').map((line, index) => {
+                      {selectedFile.content.split('\n').map((line: string, index: number) => {
                         if (line.startsWith('# ')) {
                           return <h1 key={index} className="font-display font-bold">{line.replace('# ', '')}</h1>;
                         } else if (line.startsWith('## ')) {

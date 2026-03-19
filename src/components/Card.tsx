@@ -1,12 +1,12 @@
 import React from 'react';
 
-export interface CardProps {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   className?: string;
   variant?: 'default' | 'elevated' | 'outlined';
 }
 
-export function Card({ children, className = '', variant = 'default' }: CardProps) {
+export function Card({ children, className = '', variant = 'default', ...props }: CardProps) {
   const variantClasses = {
     default: 'bg-card border border-border shadow-sm',
     elevated: 'bg-card border border-border shadow-md',
@@ -14,7 +14,7 @@ export function Card({ children, className = '', variant = 'default' }: CardProp
   };
   
   return (
-    <div className={`${variantClasses[variant]} rounded-lg p-6 ${className}`}>
+    <div className={`${variantClasses[variant]} rounded-lg p-6 ${className}`} {...props}>
       {children}
     </div>
   );
@@ -33,14 +33,14 @@ export function CardHeader({ children, className = '' }: CardHeaderProps) {
   );
 }
 
-export interface CardTitleProps {
+export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
   className?: string;
 }
 
-export function CardTitle({ children, className = '' }: CardTitleProps) {
+export function CardTitle({ children, className = '', ...props }: CardTitleProps) {
   return (
-    <h3 className={`text-xl font-semibold leading-tight ${className}`}>
+    <h3 className={`text-xl font-semibold leading-tight ${className}`} {...props}>
       {children}
     </h3>
   );
