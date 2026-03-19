@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSession } from '@/lib/auth.client';
+import { useSession, signOut } from '@/lib/auth.client';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { useRouter } from 'next/navigation';
+import NavigationBar from '@/components/navigation/NavigationBar';
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -13,6 +14,11 @@ export default function CreateOasisBioPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
+  
+  const handleLogout = async () => {
+    await signOut();
+    router.push('/auth/login');
+  };
 
   // Form data
   const [identityMode, setIdentityMode] = useState('real');
@@ -57,14 +63,19 @@ export default function CreateOasisBioPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="container mx-auto max-w-3xl">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-display font-bold">Create New OasisBio</h1>
-          <Button asChild>
-            <a href="/dashboard">Cancel</a>
-          </Button>
-        </div>
+    <div className="min-h-screen bg-background">
+      <div className="flex flex-col lg:flex-row">
+        {/* Left Navigation Bar */}
+        <NavigationBar user={session?.user} onLogout={handleLogout} />
+
+        <div className="flex-1 p-6 md:p-8">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-3xl font-display font-bold">Create New OasisBio</h1>
+              <Button asChild>
+                <a href="/dashboard">Cancel</a>
+              </Button>
+            </div>
 
         {/* Progress Bar */}
         <div className="flex items-center justify-between mb-12">
@@ -399,22 +410,24 @@ export default function CreateOasisBioPage() {
           </Card>
         )}
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between mt-8">
-          {step > 1 && (
-            <Button variant="outline" onClick={handlePrevious}>
-              Previous
-            </Button>
-          )}
-          {step < 6 ? (
-            <Button onClick={handleNext}>
-              Next
-            </Button>
-          ) : (
-            <Button onClick={handleSubmit}>
-              Publish
-            </Button>
-          )}
+            {/* Navigation Buttons */}
+            <div className="flex justify-between mt-8">
+              {step > 1 && (
+                <Button variant="outline" onClick={handlePrevious}>
+                  Previous
+                </Button>
+              )}
+              {step < 6 ? (
+                <Button onClick={handleNext}>
+                  Next
+                </Button>
+              ) : (
+                <Button onClick={handleSubmit}>
+                  Publish
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
