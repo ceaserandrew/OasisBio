@@ -19,7 +19,6 @@ export async function PUT(
       data: {
         name: body.name,
         category: body.category,
-        type: body.type,
         level: body.level,
         description: body.description,
         relatedWorldId: body.relatedWorldId,

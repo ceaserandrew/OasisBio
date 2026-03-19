@@ -1,8 +1,7 @@
 import 'server-only';
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { getServerSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 /**
@@ -10,7 +9,7 @@ import { prisma } from '@/lib/prisma';
  * @returns 当前用户的会话，如果未登录则抛出错误
  */
 export async function requireAuth() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
   if (!session || !session.user?.id) {
     throw new AuthError('Unauthorized', 401);
   }

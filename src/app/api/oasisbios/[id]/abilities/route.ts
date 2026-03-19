@@ -15,7 +15,7 @@ export async function GET(
 
     const abilities = await prisma.ability.findMany({
       where: { oasisBioId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { id: 'desc' },
     });
 
     return NextResponse.json(abilities);
@@ -44,7 +44,6 @@ export async function POST(
       data: {
         name: body.name,
         category: body.category,
-        type: body.type || 'custom',
         level: body.level || 1,
         description: body.description || '',
         relatedWorldId: body.relatedWorldId,

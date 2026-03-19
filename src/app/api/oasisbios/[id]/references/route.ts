@@ -15,7 +15,7 @@ export async function GET(
 
     const references = await prisma.referenceItem.findMany({
       where: { oasisBioId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { id: 'desc' },
     });
 
     return NextResponse.json(references);
