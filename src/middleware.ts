@@ -13,10 +13,10 @@ export function middleware(request: NextRequest) {
   );
   
   if (isProtectedRoute) {
-    // 检查是否有会话cookie
-    const sessionCookie = request.cookies.get('next-auth.session-token');
+    // 检查是否有Supabase会话cookie
+    const supabaseSession = request.cookies.get('sb-dhkgfdllgtmbkwcbubqt-auth-token');
     
-    if (!sessionCookie) {
+    if (!supabaseSession) {
       // 未登录用户访问受保护路由，重定向到登录页面
       const loginUrl = new URL('/auth/login', request.url);
       loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname);

@@ -100,12 +100,6 @@ export const signIn = (provider, options) => {
   }
 };
 
-// Export signOut function directly
-export const signOut = async () => {
-  const { error } = await supabase.auth.signOut();
-  return { error };
-};
-
 // Mock authOptions for compatibility
 export const authOptions = {
   adapter: null,
