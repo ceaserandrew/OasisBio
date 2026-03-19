@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { requireAuth, requireReferenceOwnership, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 
 // PUT /api/references/[id]
@@ -9,29 +8,12 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+    const session = await requireAuth();
     const { id: referenceId } = params;
     const body = await request.json();
 
-    // Check if the reference item exists and belongs to the user
-    const reference = await prisma.referenceItem.findUnique({
-      where: { id: referenceId },
-      include: { oasisBio: { include: { user: true } } },
-    });
+    await requireReferenceOwnership(referenceId, session.user.id);
 
-    if (!reference) {
-      return NextResponse.json({ error: 'Reference item not found' }, { status: 404 });
-    }
-
-    if (reference.oasisBio.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Update reference item
     const updatedReference = await prisma.referenceItem.update({
       where: { id: referenceId },
       data: {
@@ -50,8 +32,7 @@ export async function PUT(
 
     return NextResponse.json(updatedReference);
   } catch (error) {
-    console.error('Error updating reference item:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -61,35 +42,17 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+    const session = await requireAuth();
     const { id: referenceId } = params;
 
-    // Check if the reference item exists and belongs to the user
-    const reference = await prisma.referenceItem.findUnique({
-      where: { id: referenceId },
-      include: { oasisBio: { include: { user: true } } },
-    });
+    await requireReferenceOwnership(referenceId, session.user.id);
 
-    if (!reference) {
-      return NextResponse.json({ error: 'Reference item not found' }, { status: 404 });
-    }
-
-    if (reference.oasisBio.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Delete reference item
     await prisma.referenceItem.delete({
       where: { id: referenceId },
     });
 
     return NextResponse.json({ message: 'Reference item deleted successfully' });
   } catch (error) {
-    console.error('Error deleting reference item:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return handleApiError(error);
   }
 }

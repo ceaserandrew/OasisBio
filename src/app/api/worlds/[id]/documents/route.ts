@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { requireAuth, requireWorldOwnership, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 
 // GET /api/worlds/[id]/documents
@@ -9,28 +8,11 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+    const session = await requireAuth();
     const { id: worldId } = params;
 
-    // Check if the world exists and belongs to the user
-    const world = await prisma.worldItem.findUnique({
-      where: { id: worldId },
-      include: { oasisBio: { include: { user: true } } },
-    });
+    await requireWorldOwnership(worldId, session.user.id);
 
-    if (!world) {
-      return NextResponse.json({ error: 'World not found' }, { status: 404 });
-    }
-
-    if (world.oasisBio.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Get world documents
     const documents = await prisma.worldDocument.findMany({
       where: { worldId },
       orderBy: { sortOrder: 'asc' },
@@ -38,8 +20,7 @@ export async function GET(
 
     return NextResponse.json(documents);
   } catch (error) {
-    console.error('Error getting world documents:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -49,34 +30,16 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+    const session = await requireAuth();
     const { id: worldId } = params;
     const body = await request.json();
 
-    // Validate request body
     if (!body.title || !body.content || !body.docType) {
       return NextResponse.json({ error: 'Title, content, and document type are required' }, { status: 400 });
     }
 
-    // Check if the world exists and belongs to the user
-    const world = await prisma.worldItem.findUnique({
-      where: { id: worldId },
-      include: { oasisBio: { include: { user: true } } },
-    });
+    await requireWorldOwnership(worldId, session.user.id);
 
-    if (!world) {
-      return NextResponse.json({ error: 'World not found' }, { status: 404 });
-    }
-
-    if (world.oasisBio.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Create world document
     const document = await prisma.worldDocument.create({
       data: {
         title: body.title,
@@ -91,7 +54,6 @@ export async function POST(
 
     return NextResponse.json(document, { status: 201 });
   } catch (error) {
-    console.error('Error creating world document:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return handleApiError(error);
   }
 }

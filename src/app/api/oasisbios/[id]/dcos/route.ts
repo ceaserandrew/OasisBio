@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { requireAuth, requireOasisBioOwnership, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 
 // GET /api/oasisbios/[id]/dcos
@@ -9,28 +8,11 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+    const session = await requireAuth();
     const { id: oasisBioId } = params;
 
-    // Check if the OasisBio belongs to the user
-    const oasisBio = await prisma.oasisBio.findUnique({
-      where: { id: oasisBioId },
-      include: { user: true },
-    });
+    await requireOasisBioOwnership(oasisBioId, session.user.id);
 
-    if (!oasisBio) {
-      return NextResponse.json({ error: 'OasisBio not found' }, { status: 404 });
-    }
-
-    if (oasisBio.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Get DCOS files for the OasisBio
     const dcosFiles = await prisma.dcosFile.findMany({
       where: { oasisBioId },
       orderBy: { createdAt: 'desc' },
@@ -38,8 +20,7 @@ export async function GET(
 
     return NextResponse.json(dcosFiles);
   } catch (error) {
-    console.error('Error getting DCOS files:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -49,34 +30,16 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+    const session = await requireAuth();
     const { id: oasisBioId } = params;
     const body = await request.json();
 
-    // Validate request body
     if (!body.title || !body.content) {
       return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
     }
 
-    // Check if the OasisBio belongs to the user
-    const oasisBio = await prisma.oasisBio.findUnique({
-      where: { id: oasisBioId },
-      include: { user: true },
-    });
+    await requireOasisBioOwnership(oasisBioId, session.user.id);
 
-    if (!oasisBio) {
-      return NextResponse.json({ error: 'OasisBio not found' }, { status: 404 });
-    }
-
-    if (oasisBio.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Create DCOS file
     const dcosFile = await prisma.dcosFile.create({
       data: {
         title: body.title,
@@ -91,7 +54,6 @@ export async function POST(
 
     return NextResponse.json(dcosFile, { status: 201 });
   } catch (error) {
-    console.error('Error creating DCOS file:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return handleApiError(error);
   }
 }

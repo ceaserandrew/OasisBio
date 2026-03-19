@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { requireAuth, requireOasisBioOwnership, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 
 // GET /api/oasisbios/[id]/eras
@@ -9,28 +8,11 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+    const session = await requireAuth();
     const { id: oasisBioId } = params;
 
-    // Check if the OasisBio belongs to the user
-    const oasisBio = await prisma.oasisBio.findUnique({
-      where: { id: oasisBioId },
-      include: { user: true },
-    });
+    await requireOasisBioOwnership(oasisBioId, session.user.id);
 
-    if (!oasisBio) {
-      return NextResponse.json({ error: 'OasisBio not found' }, { status: 404 });
-    }
-
-    if (oasisBio.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Get eras for the OasisBio
     const eras = await prisma.eraIdentity.findMany({
       where: { oasisBioId },
       orderBy: { sortOrder: 'asc' },
@@ -38,7 +20,6 @@ export async function GET(
 
     return NextResponse.json(eras);
   } catch (error) {
-    console.error('Error getting eras:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return handleApiError(error);
   }
 }
