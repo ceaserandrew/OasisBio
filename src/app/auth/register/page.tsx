@@ -52,7 +52,7 @@ export default function RegisterPage() {
 
   return (
     <AuthForm title="Sign Up" error={error} success={success}>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <AuthInput
           id="email"
           type="email"
@@ -73,10 +73,10 @@ export default function RegisterPage() {
       
       <OAuthButtons />
       
-      <div className="mt-4 text-center">
+      <div className="mt-6 text-center">
         <p className="text-sm text-muted-foreground">
           Already have an account?{' '}
-          <a href="/auth/login" className="text-primary hover:underline">
+          <a href="/auth/login" className="text-primary hover:underline transition-all duration-300 hover:text-primary/80">
             Sign In
           </a>
         </p>

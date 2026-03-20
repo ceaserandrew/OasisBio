@@ -2,9 +2,22 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Navbar } from '@/components/Navbar';
 import { SessionProviderWrapper } from '@/components/SessionProviderWrapper';
+import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google';
 
-// 使用系统字体而不是从 Google Fonts 加载
-const inter = { className: '' };
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'OasisBio - Digital Identity Builder & Character Creator Platform',

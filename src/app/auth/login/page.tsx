@@ -76,7 +76,7 @@ export default function LoginPage() {
   return (
     <AuthForm title="Sign In" error={error} success={success}>
       {!showOtp ? (
-        <form onSubmit={handleSendOtp} className="space-y-4">
+        <form onSubmit={handleSendOtp} className="space-y-6">
           <AuthInput
             id="email"
             type="email"
@@ -95,7 +95,7 @@ export default function LoginPage() {
           </AuthButton>
         </form>
       ) : (
-        <form onSubmit={handleVerifyOtp} className="space-y-4">
+        <form onSubmit={handleVerifyOtp} className="space-y-6">
           <AuthInput
             id="email"
             type="email"
@@ -115,7 +115,7 @@ export default function LoginPage() {
             onChange={(e) => setOtp(e.target.value)}
             required
           />
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <AuthButton 
               type="button" 
               variant="outline" 
@@ -135,10 +135,10 @@ export default function LoginPage() {
       
       <OAuthButtons />
       
-      <div className="mt-4 text-center">
+      <div className="mt-6 text-center">
         <p className="text-sm text-muted-foreground">
           Don't have an account?{' '}
-          <a href="/auth/register" className="text-primary hover:underline">
+          <a href="/auth/register" className="text-primary hover:underline transition-all duration-300 hover:text-primary/80">
             Sign Up
           </a>
         </p>
