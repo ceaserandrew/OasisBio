@@ -1,217 +1,192 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 
 interface ModelViewerProps {
-  modelUrl: string;
+  modelPath: string;
+  mtlPath: string;
+  texturePath: string;
   width?: number;
   height?: number;
 }
 
-export default function ModelViewer({ modelUrl, width = 800, height = 600 }: ModelViewerProps) {
+export function ModelViewer({ 
+  modelPath, 
+  mtlPath, 
+  texturePath, 
+  width = 800, 
+  height = 600 
+}: ModelViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    let animationId: number | null = null;
-    let scene: any = null;
-    let camera: any = null;
-    let renderer: any = null;
-    let controls: any = null;
-    let model: any = null;
+    if (!containerRef.current) return;
 
-    const loadThreeJS = async () => {
+    // 创建场景
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf0f0f0);
+    sceneRef.current = scene;
+
+    // 创建相机
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.z = 5;
+    cameraRef.current = camera;
+
+    // 创建渲染器
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: true,
+      powerPreference: 'high-performance' // 优先使用高性能GPU
+    });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 限制像素比，提高性能
+    containerRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+
+    // 添加灯光
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(1, 1, 1);
+    scene.add(directionalLight);
+
+    // 加载模型
+    const loadModel = async () => {
       try {
         setIsLoading(true);
         setError(null);
 
-        // Dynamically import Three.js and its components
-        const THREE = await import('three');
-        // @ts-ignore - three.js examples don't have type declarations
-        const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls');
-        // @ts-ignore - three.js examples don't have type declarations
-        const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader');
+        // 加载材质
+        const mtlLoader = new MTLLoader();
+        const materials = await mtlLoader.loadAsync(mtlPath);
+        materials.preload();
 
-        if (!containerRef.current) return;
+        // 加载模型
+        const objLoader = new OBJLoader();
+        objLoader.setMaterials(materials);
+        const model = await objLoader.loadAsync(modelPath);
 
-        // Create scene
-        scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x222222);
+        // 调整模型大小和位置
+        model.scale.set(0.01, 0.01, 0.01);
+        model.position.y = -2;
+        scene.add(model);
 
-        // Create camera
-        camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-        camera.position.z = 5;
-
-        // Create renderer
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(width, height);
-
-        // Add controls
-        controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-
-        // Add lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(1, 1, 1);
-        scene.add(directionalLight);
-
-        // Load GLB model
-        const loader = new GLTFLoader();
-
-        loader.load(
-          modelUrl,
-          (gltf: any) => {
-            model = gltf.scene;
-            if (model) {
-              scene.add(model);
-              
-              // Center the model
-              const box = new THREE.Box3().setFromObject(model);
-              const center = box.getCenter(new THREE.Vector3());
-              model.position.sub(center);
-              
-              // Scale the model to fit in the view
-              const size = box.getSize(new THREE.Vector3());
-              const maxSize = Math.max(size.x, size.y, size.z);
-              const scale = 4 / maxSize;
-              model.scale.set(scale, scale, scale);
-            }
-            setIsLoading(false);
-          },
-          (xhr: any) => {
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-          },
-          (error: any) => {
-            console.error('Error loading model:', error);
-            setError('Failed to load model');
-            setIsLoading(false);
-            // Fallback to cube if model fails to load
-            const geometry = new THREE.BoxGeometry(2, 2, 2);
-            const material = new THREE.MeshStandardMaterial({ 
-              color: 0x0070f3,
-              metalness: 0.3,
-              roughness: 0.4
-            });
-            model = new THREE.Mesh(geometry, material);
-            scene.add(model);
-          }
-        );
-
-        // Add renderer to DOM
-        containerRef.current.innerHTML = '';
-        containerRef.current.appendChild(renderer.domElement);
-
-        // Animation loop
-        const animate = () => {
-          animationId = requestAnimationFrame(animate);
-          controls.update();
-          if (model) {
-            model.rotation.y += 0.005;
-          }
-          renderer.render(scene, camera);
-        };
-
-        animate();
-
-        // Handle window resize
-        const handleResize = () => {
-          if (!camera || !renderer) return;
-          const container = containerRef.current;
-          if (!container) return;
-          const newWidth = container.clientWidth;
-          const newHeight = container.clientHeight;
-          camera.aspect = newWidth / newHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(newWidth, newHeight);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        // Cleanup
-        return () => {
-          if (animationId) {
-            cancelAnimationFrame(animationId);
-          }
-          window.removeEventListener('resize', handleResize);
-          if (containerRef.current) {
-            containerRef.current.innerHTML = '';
-          }
-          // Dispose of Three.js resources
-          if (model) {
-            // Dispose of model resources
-            model.traverse((object: any) => {
-              if (object instanceof THREE.Mesh) {
-                if (object.geometry) object.geometry.dispose();
-                if (object.material) {
-                  if (Array.isArray(object.material)) {
-                    object.material.forEach((m: any) => m.dispose());
-                  } else {
-                    object.material.dispose();
-                  }
-                }
-              }
-            });
-          }
-          if (renderer) {
-            renderer.dispose();
-          }
-        };
+        setIsLoading(false);
       } catch (err) {
-        console.error('Error loading Three.js:', err);
-        setError('Failed to load 3D viewer');
+        console.error('Error loading model:', err);
+        setError('Failed to load 3D model');
         setIsLoading(false);
       }
     };
 
-    loadThreeJS();
+    // 延迟加载模型，提高页面初始加载速度
+    const timeoutId = setTimeout(loadModel, 100);
 
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
+    // 动画循环
+    const animate = () => {
+      animationFrameRef.current = requestAnimationFrame(animate);
+      
+      // 旋转模型
+      if (sceneRef.current) {
+        sceneRef.current.traverse((object) => {
+          if (object instanceof THREE.Mesh) {
+            object.rotation.y += 0.005;
+          }
+        });
+      }
+
+      // 渲染场景
+      if (rendererRef.current && cameraRef.current && sceneRef.current) {
+        rendererRef.current.render(sceneRef.current, cameraRef.current);
       }
     };
-  }, [modelUrl, width, height]);
 
-  if (isLoading) {
-    return (
-      <div 
-        ref={containerRef}
-        className="w-full h-full flex items-center justify-center bg-background"
-        style={{ width, height }}
-      >
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Loading 3D model...</p>
-        </div>
-      </div>
-    );
-  }
+    animate();
 
-  if (error) {
-    return (
-      <div 
-        ref={containerRef}
-        className="w-full h-full flex items-center justify-center bg-background"
-        style={{ width, height }}
-      >
-        <div className="text-center">
-          <p className="text-red-500 mb-4">{error}</p>
-          <p>Showing fallback model</p>
-        </div>
-      </div>
-    );
-  }
+    // 处理窗口大小变化
+    const handleResize = () => {
+      if (cameraRef.current && rendererRef.current && containerRef.current) {
+        const width = containerRef.current.clientWidth;
+        const height = containerRef.current.clientHeight;
+        
+        cameraRef.current.aspect = width / height;
+        cameraRef.current.updateProjectionMatrix();
+        rendererRef.current.setSize(width, height);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // 清理
+    return () => {
+      clearTimeout(timeoutId);
+      
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      
+      window.removeEventListener('resize', handleResize);
+      
+      if (containerRef.current && rendererRef.current) {
+        containerRef.current.removeChild(rendererRef.current.domElement);
+        rendererRef.current.dispose(); // 清理渲染器
+      }
+      
+      // 清理Three.js资源
+      if (sceneRef.current) {
+        sceneRef.current.traverse((object) => {
+          if (object instanceof THREE.Mesh) {
+            if (object.geometry) object.geometry.dispose();
+            if (object.material) {
+              if (Array.isArray(object.material)) {
+                object.material.forEach(material => material.dispose());
+              } else {
+                object.material.dispose();
+              }
+            }
+          }
+        });
+      }
+    };
+  }, [modelPath, mtlPath, texturePath, width, height]);
 
   return (
     <div 
-      ref={containerRef}
-      className="w-full h-full"
+      ref={containerRef} 
+      className="relative w-full h-full bg-gray-100 rounded-lg overflow-hidden"
       style={{ width, height }}
-    />
+    >
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+            <p className="text-gray-700">Loading 3D model...</p>
+          </div>
+        </div>
+      )}
+      
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+          <div className="text-center">
+            <p className="text-red-600 mb-4">{error}</p>
+            <button 
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              onClick={() => window.location.reload()}
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

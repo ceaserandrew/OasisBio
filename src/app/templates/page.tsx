@@ -273,9 +273,9 @@ export default function TemplatesPage() {
 
             {/* Deo Mascots */}
             {activeTab === 'mascot' && (
-              <div className="space-y-12 bg-gradient-to-br from-blue-500 to-green-500 text-white p-8 md:p-16 rounded-2xl shadow-2xl transform transition-all duration-500 hover:shadow-3xl">
-                <div className="text-center max-w-3xl mx-auto">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent animate-pulse">Deo Mascots</h2>
+              <div className="space-y-12 bg-gradient-to-br from-blue-500 to-green-500 text-white p-8 md:p-16 rounded-2xl shadow-2xl transform transition-all duration-500 hover:shadow-3xl animate-fade-in">
+                <div className="text-center max-w-3xl mx-auto transform transition-all duration-700 hover:scale-105">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">Deo Mascots</h2>
                   <p className="text-lg text-white/90 leading-relaxed">
                     Meet our mascots Deo and Dia, the face of OasisBio. They represent the creative spirit of our platform and can be used as templates for your 3D models.
                   </p>
@@ -283,53 +283,57 @@ export default function TemplatesPage() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Deo (Male) */}
-                  <MascotCard
-                    name="Deo"
-                    gender="Male"
-                    description="Deo is the male mascot of OasisBio, representing creativity and innovation. Use his 3D model as a template for your own characters."
-                    imageSrc="/assets/deo/deo.png"
-                    imageAlt="Deo - Male Mascot"
-                    onViewModel={() => {
-                      // TODO: Implement 3D model viewing
-                      alert('3D model viewing coming soon!');
-                    }}
-                  />
+                  <div className="transform transition-all duration-700 hover:translate-x-2">
+                    <MascotCard
+                      name="Deo"
+                      gender="Male"
+                      description="Deo is the male mascot of OasisBio, representing creativity and innovation. Use his 3D model as a template for your own characters."
+                      imageSrc="/assets/deo/deo.png"
+                      imageAlt="Deo - Male Mascot"
+                      modelPath="/assets/deo/deo_model/cartoon+dragon+3d+model.obj"
+                      mtlPath="/assets/deo/deo_model/cartoon+dragon+3d+model.mtl"
+                      texturePath="/assets/deo/deo_model/cartoon+dragon+3d+model_basecolor.jpg"
+                      downloadPath="/assets/deo/deo_v_1.0.zip"
+                    />
+                  </div>
                   
                   {/* Dia (Female) */}
-                  <MascotCard
-                    name="Dia"
-                    gender="Female"
-                    description="Dia is the female mascot of OasisBio, representing imagination and artistry. Use her 3D model as a template for your own characters."
-                    imageSrc="/assets/deo/dia.png"
-                    imageAlt="Dia - Female Mascot"
-                    onViewModel={() => {
-                      // TODO: Implement 3D model viewing
-                      alert('3D model viewing coming soon!');
-                    }}
-                  />
+                  <div className="transform transition-all duration-700 hover:translate-x-2">
+                    <MascotCard
+                      name="Dia"
+                      gender="Female"
+                      description="Dia is the female mascot of OasisBio, representing imagination and artistry. Use her 3D model as a template for your own characters."
+                      imageSrc="/assets/deo/dia.png"
+                      imageAlt="Dia - Female Mascot"
+                      modelPath="/assets/deo/dia_model/cute+dragon+3d+model.obj"
+                      mtlPath="/assets/deo/dia_model/cute+dragon+3d+model.mtl"
+                      texturePath="/assets/deo/dia_model/cute+dragon+3d+model_basecolor.jpg"
+                      downloadPath="/assets/deo/dia_v_1.0.zip"
+                    />
+                  </div>
                 </div>
                 
                 {/* Group Image */}
-                <div className="mt-16">
-                  <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm">
+                <div className="mt-16 transform transition-all duration-700 hover:scale-[1.01]">
+                  <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm rounded-xl">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      <div className="aspect-square lg:aspect-auto bg-gray-100">
+                      <div className="aspect-square lg:aspect-auto bg-gray-100 rounded-l-xl overflow-hidden">
                         <img 
                           src="/assets/deo/deo and dia.png" 
                           alt="Deo and Dia Together" 
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110"
                         />
                       </div>
                       <div className="p-8 flex flex-col justify-center">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-xl text-gray-900">Deo & Dia</CardTitle>
+                          <CardTitle className="text-xl text-gray-900 transform transition-all duration-300 hover:scale-105">Deo & Dia</CardTitle>
                           <CardDescription className="text-gray-700">Our Mascot Family</CardDescription>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-gray-700 mb-6">
+                          <p className="text-gray-700 mb-6 leading-relaxed">
                             Deo and Dia are the perfect templates for creating your own 3D characters. Their versatile design allows you to customize them to fit any world or identity you create on OasisBio.
                           </p>
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 leading-relaxed">
                             Use these mascots as a starting point for your creative journey. With OasisBio, you can bring your imagination to life and share it with the world.
                           </p>
                         </CardContent>
@@ -340,45 +344,62 @@ export default function TemplatesPage() {
                 
                 {/* Additional Mascot Images */}
                 <div className="mt-12">
-                  <h3 className="text-2xl font-bold mb-6 text-center text-white">More Deo & Dia</h3>
+                  <h3 className="text-2xl font-bold mb-6 text-center text-white transform transition-all duration-300 hover:scale-105">More Deo & Dia</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm">
-                      <div className="aspect-square bg-gray-100">
-                        <img 
-                          src="/assets/deo/deo & dia in OasisBio center.png" 
-                          alt="Deo & Dia in OasisBio Center" 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <CardHeader>
-                        <CardTitle className="text-md text-gray-900">OasisBio Center</CardTitle>
-                      </CardHeader>
-                    </Card>
-                    <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm">
-                      <div className="aspect-square bg-gray-100">
-                        <img 
-                          src="/assets/deo/deo & dia in PR.png" 
-                          alt="Deo & Dia in PR" 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <CardHeader>
-                        <CardTitle className="text-md text-gray-900">PR Event</CardTitle>
-                      </CardHeader>
-                    </Card>
-                    <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm">
-                      <div className="aspect-square bg-gray-100">
-                        <img 
-                          src="/assets/deo/deo & dia wear OITS uniform.png" 
-                          alt="Deo & Dia in OITS Uniform" 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <CardHeader>
-                        <CardTitle className="text-md text-gray-900">OITS Uniform</CardTitle>
-                      </CardHeader>
-                    </Card>
+                    <div className="transform transition-all duration-500 hover:-translate-y-2">
+                      <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm rounded-xl">
+                        <div className="aspect-square bg-gray-100 rounded-t-xl overflow-hidden">
+                          <img 
+                            src="/assets/deo/deo & dia in OasisBio center.png" 
+                            alt="Deo & Dia in OasisBio Center" 
+                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                          />
+                        </div>
+                        <CardHeader className="p-4">
+                          <CardTitle className="text-md text-gray-900">OasisBio Center</CardTitle>
+                        </CardHeader>
+                      </Card>
+                    </div>
+                    <div className="transform transition-all duration-500 hover:-translate-y-2">
+                      <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm rounded-xl">
+                        <div className="aspect-square bg-gray-100 rounded-t-xl overflow-hidden">
+                          <img 
+                            src="/assets/deo/deo & dia in PR.png" 
+                            alt="Deo & Dia in PR" 
+                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                          />
+                        </div>
+                        <CardHeader className="p-4">
+                          <CardTitle className="text-md text-gray-900">PR Event</CardTitle>
+                        </CardHeader>
+                      </Card>
+                    </div>
+                    <div className="transform transition-all duration-500 hover:-translate-y-2">
+                      <Card className="border-0 shadow-lg overflow-hidden bg-white/90 backdrop-blur-sm rounded-xl">
+                        <div className="aspect-square bg-gray-100 rounded-t-xl overflow-hidden">
+                          <img 
+                            src="/assets/deo/deo & dia wear OITS uniform.png" 
+                            alt="Deo & Dia in OITS Uniform" 
+                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                          />
+                        </div>
+                        <CardHeader className="p-4">
+                          <CardTitle className="text-md text-gray-900">OITS Uniform</CardTitle>
+                        </CardHeader>
+                      </Card>
+                    </div>
                   </div>
+                </div>
+                
+                {/* CTA Section */}
+                <div className="mt-16 text-center">
+                  <h3 className="text-2xl font-bold mb-6 text-white">Ready to Use Deo & Dia?</h3>
+                  <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+                    Download their 3D models and start creating your own characters today. The possibilities are endless!
+                  </p>
+                  <Button size="lg" className="bg-white text-blue-500 hover:bg-blue-50 transition-colors duration-300 transform hover:scale-105">
+                    Explore More Templates
+                  </Button>
                 </div>
               </div>
             )}
