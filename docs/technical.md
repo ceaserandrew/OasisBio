@@ -10,7 +10,7 @@ OasisBio is a cross-era identity system that allows users to create and manage m
 - **Framework**: Next.js 14.1.4 with App Router
 - **Language**: TypeScript 5.4.3
 - **Styling**: Tailwind CSS 3.4.3
-- **Authentication**: NextAuth.js 4.24.13 with email/password and OAuth (Google, GitHub)
+- **Authentication**: Supabase Auth with OTP
 - **Components**: Custom React components
 - **State Management**: React useState and useEffect hooks
 
@@ -78,11 +78,34 @@ OasisBio/
 
 ### 5. User Authentication
 - Secure registration and login
+- Supabase Auth with OTP (One-Time Password) authentication
 - Password hashing (bcryptjs)
-- Session management with JWT
+- Session management with Supabase Auth helpers
 - User profile information included in session
 - Protected routes with middleware
-- OAuth support (Google, GitHub)
+
+### 6. Import/Export Functionality
+- **Export**: Download character data as ZIP files
+  - Support for single character and batch exports
+  - Export content includes character JSON, DCOS, references, world data, 3D models, and images
+  - Files stored in Cloudflare R2 for efficient download
+- **Import**: Upload ZIP files to create or update characters
+  - Automatic parsing and processing of imported data
+  - Support for both new character creation and existing character updates
+  - Error handling and import result reporting
+- **Export History**: Track recent export activities
+  - Stores last 3 export records per user
+  - Includes file name, size, character count, and timestamp
+
+### 7. Layered Storage Architecture
+- **Supabase Storage**: For small files and metadata
+  - Avatars, character covers, model previews
+  - JSON metadata files
+- **Cloudflare R2**: For large files
+  - 3D models (GLB format)
+  - Export ZIP files
+  - High-resolution textures
+- **CDN Integration**: Cloudflare CDN for fast file delivery
 
 ## Database Models
 
@@ -97,6 +120,7 @@ OasisBio/
 - updatedAt: DateTime
 - oasisBios: Array of OasisBio
 - profiles: Array of Profile
+- exportHistory: Array of ExportHistory
 
 ### OasisBio
 - id: String (primary key)
@@ -237,71 +261,79 @@ OasisBio/
 - createdAt: DateTime
 - updatedAt: DateTime
 
-## Supabase Storage Configuration
+### ExportHistory
+- id: String (primary key)
+- userId: String (foreign key to User)
+- fileName: String
+- fileSize: Int
+- characterCount: Int
+- createdAt: DateTime
 
-### Storage Buckets
+## Storage Configuration
 
-#### 1. avatars
+### Layered Storage Architecture
+
+#### 1. Supabase Storage (Small Files)
+
+##### Storage Buckets
+
+###### 1. avatars
 - **Purpose**: User avatars
 - **Access**: Public
 - **Allowed MIME Types**: `image/webp`, `image/png`, `image/jpeg`
 - **Max File Size**: 512 KB
 - **Path Structure**: `{user_id}/avatar.{extension}`
 
-#### 2. character-covers
+###### 2. character-covers
 - **Purpose**: Character cover images
 - **Access**: Public
 - **Allowed MIME Types**: `image/webp`, `image/png`, `image/jpeg`
 - **Max File Size**: 800 KB
 - **Path Structure**: `{user_id}/{character_id}/cover.{extension}`
 
-#### 3. model-previews
+###### 3. model-previews
 - **Purpose**: Character model preview images
 - **Access**: Public
 - **Allowed MIME Types**: `image/webp`, `image/png`, `image/jpeg`
 - **Max File Size**: 600 KB
 - **Path Structure**: `{user_id}/{character_id}/preview.{extension}`
 
-#### 4. models
+#### 2. Cloudflare R2 (Large Files)
+
+##### Storage Buckets
+
+###### 1. models
 - **Purpose**: 3D model files (GLB format)
-- **Access**: Private
+- **Access**: Private (signed URLs)
 - **Allowed MIME Types**: `model/gltf-binary`, `application/octet-stream`
-- **Max File Size**: 10 MB
-- **Path Structure**: `{user_id}/{character_id}/{model_id}.glb`
+- **Max File Size**: 12 MB
+- **Path Structure**: `models/{user_id}/{character_id}/model.glb`
+- **Versioning**: `models/{user_id}/{character_id}/history/{timestamp}/model.glb`
 
-### RLS Policies
+###### 2. exports
+- **Purpose**: Export ZIP files
+- **Access**: Private (signed URLs)
+- **Allowed MIME Types**: `application/zip`
+- **Max File Size**: 20 MB per character
+- **Path Structure**: `exports/{user_id}/{timestamp}/{file_name}.zip`
 
-#### models Bucket RLS Policies
+###### 3. textures
+- **Purpose**: High-resolution textures
+- **Access**: Private (signed URLs)
+- **Allowed MIME Types**: `image/png`, `image/jpeg`
+- **Max File Size**: 5 MB
+- **Path Structure**: `textures/{user_id}/{character_id}/{texture_name}.{extension}`
 
-**Read Policy**:
-```sql
-CREATE POLICY "Users can read their own models" 
-ON storage.objects FOR SELECT 
-USING (
-  bucket_id = 'models' 
-  AND auth.uid() = (SELECT split_part(name, '/', 1)::uuid)
-);
-```
+### Access Control
 
-**Write Policy**:
-```sql
-CREATE POLICY "Users can write their own models" 
-ON storage.objects FOR INSERT 
-WITH CHECK (
-  bucket_id = 'models' 
-  AND auth.uid() = (SELECT split_part(name, '/', 1)::uuid)
-);
-```
+#### Supabase Storage Access Control
+- **Public Buckets**: avatars, character-covers, model-previews
+- **Private Buckets**: None (all large files now stored in Cloudflare R2)
 
-**Delete Policy**:
-```sql
-CREATE POLICY "Users can delete their own models" 
-ON storage.objects FOR DELETE 
-USING (
-  bucket_id = 'models' 
-  AND auth.uid() = (SELECT split_part(name, '/', 1)::uuid)
-);
-```
+#### Cloudflare R2 Access Control
+- **Signed URLs**: Used for secure access to private files
+- **Expiration**: URLs expire after a set time (default: 1 hour)
+- **Path-Based Authorization**: User IDs in file paths ensure users can only access their own files
 
 ## API Endpoints
 
@@ -357,6 +389,11 @@ USING (
 - `POST /api/oasisbios/[id]/models` - Upload model to OasisBio
 - `DELETE /api/models/[id]` - Delete model
 
+### Import/Export
+- `POST /api/export` - Export characters as ZIP file
+- `GET /api/export/history` - Get export history
+- `POST /api/import` - Import characters from ZIP file
+
 ## Deployment
 
 ### Supabase Setup
@@ -376,21 +413,27 @@ USING (
 ```
 # Supabase Database URL
 DATABASE_URL="postgresql://postgres:[YOUR-PASSWORD]@db.dhkgfdllgtmbkwcbubqt.supabase.co:5432/postgres"
-
-# NextAuth.js Secret
-NEXTAUTH_SECRET="[YOUR-NEXTAUTH-SECRET]"
+DIRECT_URL="postgresql://postgres:[YOUR-PASSWORD]@db.dhkgfdllgtmbkwcbubqt.supabase.co:5432/postgres"
 
 # Supabase API Keys
 NEXT_PUBLIC_SUPABASE_URL="https://dhkgfdllgtmbkwcbubqt.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="[YOUR-ANON-KEY]"
+SUPABASE_SERVICE_ROLE_KEY="[YOUR-SERVICE-ROLE-KEY]"
+SUPABASE_WEBHOOK_SECRET="[YOUR-WEBHOOK-SECRET]"
 
-# Google OAuth
-GOOGLE_CLIENT_ID="[YOUR-GOOGLE-CLIENT-ID]"
-GOOGLE_CLIENT_SECRET="[YOUR-GOOGLE-CLIENT-SECRET]"
+# Cloudflare R2
+CLOUDFLARE_R2_ACCESS_KEY_ID="[YOUR-R2-ACCESS-KEY-ID]"
+CLOUDFLARE_R2_SECRET_ACCESS_KEY="[YOUR-R2-SECRET-ACCESS-KEY]"
+CLOUDFLARE_R2_ENDPOINT="https://[YOUR-ACCOUNT-ID].r2.cloudflarestorage.com"
+CLOUDFLARE_R2_BUCKET_NAME="[YOUR-BUCKET-NAME]"
+CLOUDFLARE_R2_ACCOUNT_ID="[YOUR-ACCOUNT-ID]"
 
-# GitHub OAuth
-GITHUB_CLIENT_ID="[YOUR-GITHUB-CLIENT-ID]"
-GITHUB_CLIENT_SECRET="[YOUR-GITHUB-CLIENT-SECRET]"
+# Next.js
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="[YOUR-SECRET-KEY-HERE]"
+
+# Node Environment
+NODE_ENV="development"
 ```
 
 ## Development
@@ -399,6 +442,7 @@ GITHUB_CLIENT_SECRET="[YOUR-GITHUB-CLIENT-SECRET]"
 - Node.js 18+
 - npm or yarn
 - Supabase account
+- Cloudflare account with R2 enabled
 
 ### Getting Started
 1. Clone the repository
