@@ -1,41 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth-utils';
+import { getUserFromSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession();
-    
-    if (!session || !session.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const session = await requireAuth();
+    const user = await getUserFromSession(session);
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const userId = session.user.id;
+    const userId = user.id;
 
-    // Fetch user data
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        profile: true,
-      },
-    });
-
-    // Fetch OasisBios count
     const oasisBiosCount = await prisma.oasisBio.count({
       where: { userId },
     });
 
-    // Fetch worlds count
     const worldsCount = await prisma.worldItem.count({
-      where: { userId },
+      where: { oasisBio: { userId } },
     });
 
-    // Fetch models count
     const modelsCount = await prisma.modelItem.count({
-      where: { userId },
+      where: { oasisBio: { userId } },
     });
 
-    // Fetch recent activities (mock data for now)
     const recentActivities = [
       {
         id: 1,
@@ -60,7 +50,6 @@ export async function GET(request: NextRequest) {
       },
     ];
 
-    // Fetch account status
     const accountStatus = {
       subscription: 'Free',
       oasisBiosLimit: 3,
@@ -69,19 +58,25 @@ export async function GET(request: NextRequest) {
       storageLimit: 128,
     };
 
-    // Fetch system status
     const systemStatus = {
       api: 'Online',
       database: 'Online',
       storage: 'Online',
     };
 
+    const profile = user.profiles[0];
+
     const dashboardData = {
       user: {
-        id: user?.id,
-        name: user?.name,
-        email: user?.email,
-        profile: user?.profile,
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        profile: profile ? {
+          id: profile.id,
+          username: profile.username,
+          displayName: profile.displayName,
+          avatarUrl: profile.avatarUrl,
+        } : null,
       },
       stats: {
         oasisBios: oasisBiosCount,
@@ -95,7 +90,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(dashboardData);
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
-    return NextResponse.json({ error: 'Failed to fetch dashboard data' }, { status: 500 });
+    return handleApiError(error);
   }
 }

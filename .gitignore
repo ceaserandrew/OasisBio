@@ -25,6 +25,15 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Database files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Prisma
+prisma/migrations/
+
 # Project specific
 prepare/
 .trae/

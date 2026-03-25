@@ -1,23 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// 定义需要保护的路由
 const protectedRoutes = [
   '/dashboard',
   '/api/auth/protected',
 ];
 
+function getSupabaseCookieName(): string {
+  const cookieName = process.env.NEXT_PUBLIC_SUPABASE_COOKIE_NAME;
+  if (cookieName) {
+    return cookieName;
+  }
+  
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (supabaseUrl) {
+    const match = supabaseUrl.match(/https:\/\/([a-z0-9-]+)\.supabase\.co/);
+    if (match && match[1]) {
+      return `sb-${match[1]}-auth-token`;
+    }
+  }
+  
+  return 'sb-auth-token';
+}
+
 export function middleware(request: NextRequest) {
-  // 检查是否访问受保护的路由
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
   );
   
   if (isProtectedRoute) {
-    // 检查是否有Supabase会话cookie
-    const supabaseSession = request.cookies.get('sb-dhkgfdllgtmbkwcbubqt-auth-token');
+    const cookieName = getSupabaseCookieName();
+    const supabaseSession = request.cookies.get(cookieName);
     
     if (!supabaseSession) {
-      // 未登录用户访问受保护路由，重定向到登录页面
       const loginUrl = new URL('/auth/login', request.url);
       loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname);
       return NextResponse.redirect(loginUrl);
@@ -27,14 +41,8 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// 配置中间件适用的路径
 export const config = {
   matcher: [
-    /*
-     * 匹配需要保护的路由：
-     * - /dashboard (dashboard routes)
-     * - /api/auth/protected (protected API routes)
-     */
     '/dashboard/:path*',
     '/api/auth/protected',
   ],
