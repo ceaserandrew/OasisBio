@@ -2,55 +2,52 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, requireWorldOwnership, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 
-// PUT /api/worlds/[id]
+// PUT /api/worlds/[id] - Update world
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const session = await requireAuth();
-    const { id: worldId } = params;
+    const { id } = params;
     const body = await request.json();
 
-    await requireWorldOwnership(worldId, session.user.id);
+    // Verify ownership
+    await requireWorldOwnership(id, session.user.id);
 
-    const updatedWorld = await prisma.worldItem.update({
-      where: { id: worldId },
-      data: {
-        name: body.name,
-        summary: body.summary,
-        timeSetting: body.timeSetting,
-        geography: body.geography,
-        physicsRules: body.physicsRules,
-        socialStructure: body.socialStructure,
-        aestheticKeywords: body.aestheticKeywords,
-        majorConflict: body.majorConflict,
-        visibility: body.visibility,
-        timeline: body.timeline,
-        rules: body.rules,
-        factions: body.factions,
-      },
+    const { name, description, type, setting } = body;
+
+    const updates: any = {};
+    if (name) updates.name = name;
+    if (description) updates.description = description;
+    if (type) updates.type = type;
+    if (setting) updates.setting = setting;
+
+    const world = await prisma.worldItem.update({
+      where: { id },
+      data: updates,
     });
 
-    return NextResponse.json(updatedWorld);
+    return NextResponse.json(world);
   } catch (error) {
     return handleApiError(error);
   }
 }
 
-// DELETE /api/worlds/[id]
+// DELETE /api/worlds/[id] - Delete world
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const session = await requireAuth();
-    const { id: worldId } = params;
+    const { id } = params;
 
-    await requireWorldOwnership(worldId, session.user.id);
+    // Verify ownership
+    await requireWorldOwnership(id, session.user.id);
 
     await prisma.worldItem.delete({
-      where: { id: worldId },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'World deleted successfully' });

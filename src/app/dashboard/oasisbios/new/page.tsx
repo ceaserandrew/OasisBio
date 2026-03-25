@@ -56,10 +56,46 @@ export default function CreateOasisBioPage() {
     }
   };
 
-  const handleSubmit = () => {
-    // Submit form data to API
-    console.log('Submit form data');
-    router.push('/dashboard');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      setError('');
+
+      const response = await fetch('/api/oasisbios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          tagline,
+          identityMode,
+          birthDate,
+          gender,
+          pronouns,
+          placeOfOrigin,
+          currentEra,
+          species,
+          status,
+          description,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create OasisBio');
+      }
+
+      const oasisBio = await response.json();
+      router.push(`/dashboard/oasisbios/${oasisBio.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -76,6 +112,12 @@ export default function CreateOasisBioPage() {
                 <a href="/dashboard">Cancel</a>
               </Button>
             </div>
+
+            {error && (
+              <div className="mb-6 p-4 bg-destructive/10 border border-destructive/30 rounded-md text-destructive">
+                {error}
+              </div>
+            )}
 
         {/* Progress Bar */}
         <div className="flex items-center justify-between mb-12">
@@ -413,17 +455,17 @@ export default function CreateOasisBioPage() {
             {/* Navigation Buttons */}
             <div className="flex justify-between mt-8">
               {step > 1 && (
-                <Button variant="outline" onClick={handlePrevious}>
+                <Button variant="outline" onClick={handlePrevious} disabled={isSubmitting}>
                   Previous
                 </Button>
               )}
               {step < 6 ? (
-                <Button onClick={handleNext}>
+                <Button onClick={handleNext} disabled={isSubmitting}>
                   Next
                 </Button>
               ) : (
-                <Button onClick={handleSubmit}>
-                  Publish
+                <Button onClick={handleSubmit} disabled={isSubmitting} loading={isSubmitting}>
+                  {isSubmitting ? 'Publishing...' : 'Publish'}
                 </Button>
               )}
             </div>

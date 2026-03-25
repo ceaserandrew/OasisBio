@@ -105,7 +105,7 @@ export async function requireReferenceOwnership(referenceId: string, userId: str
 export async function requireWorldDocumentOwnership(documentId: string, userId: string) {
   const document = await prisma.worldDocument.findUnique({
     where: { id: documentId },
-    include: { world: { include: { oasisBio: { include: { user: true } } } },
+    include: { world: { include: { oasisBio: { include: { user: true } } } } },
   });
 
   if (!document) {

@@ -2,49 +2,53 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, requireAbilityOwnership, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 
-// PUT /api/abilities/[id]
+// PUT /api/abilities/[id] - Update ability
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const session = await requireAuth();
-    const { id: abilityId } = params;
+    const { id } = params;
     const body = await request.json();
 
-    await requireAbilityOwnership(abilityId, session.user.id);
+    // Verify ownership
+    await requireAbilityOwnership(id, session.user.id);
 
-    const updatedAbility = await prisma.ability.update({
-      where: { id: abilityId },
-      data: {
-        name: body.name,
-        category: body.category,
-        level: body.level,
-        description: body.description,
-        relatedWorldId: body.relatedWorldId,
-        relatedEraId: body.relatedEraId,
-      },
+    const { name, description, category, level, isActive } = body;
+
+    const updates: any = {};
+    if (name) updates.name = name;
+    if (description) updates.description = description;
+    if (category) updates.category = category;
+    if (level) updates.level = level;
+    if (isActive !== undefined) updates.isActive = isActive;
+
+    const ability = await prisma.ability.update({
+      where: { id },
+      data: updates,
     });
 
-    return NextResponse.json(updatedAbility);
+    return NextResponse.json(ability);
   } catch (error) {
     return handleApiError(error);
   }
 }
 
-// DELETE /api/abilities/[id]
+// DELETE /api/abilities/[id] - Delete ability
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const session = await requireAuth();
-    const { id: abilityId } = params;
+    const { id } = params;
 
-    await requireAbilityOwnership(abilityId, session.user.id);
+    // Verify ownership
+    await requireAbilityOwnership(id, session.user.id);
 
     await prisma.ability.delete({
-      where: { id: abilityId },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Ability deleted successfully' });

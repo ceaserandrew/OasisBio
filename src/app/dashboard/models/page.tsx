@@ -7,6 +7,7 @@ import { Input } from '@/components/Input';
 import { useSession, signOut } from '@/lib/auth.client';
 import { useRouter } from 'next/navigation';
 import NavigationBar from '@/components/navigation/NavigationBar';
+import { ModelUpload, ModelPreviewUpload } from '@/components/FileUpload';
 
 // Mock data for models
 const initialModels = [
@@ -56,36 +57,30 @@ export default function ModelsPage() {
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [newModel, setNewModel] = useState({
     name: '',
-    file: null as File | null,
-    mtlFile: null as File | null,
+    modelUrl: '',
+    previewUrl: '',
     relatedWorldId: null as number | null,
     relatedEraId: null as number | null,
   });
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const mtlFileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setNewModel({ ...newModel, file: e.target.files[0] });
-    }
+  const handleModelUpload = (url: string) => {
+    setNewModel({ ...newModel, modelUrl: url });
   };
 
-  const handleMtlFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setNewModel({ ...newModel, mtlFile: e.target.files[0] });
-    }
+  const handlePreviewUpload = (url: string) => {
+    setNewModel({ ...newModel, previewUrl: url });
   };
 
   const handleUploadModel = () => {
-    if (newModel.name && newModel.file) {
-      // In a real implementation, this would upload the files to a server
+    if (newModel.name && newModel.modelUrl) {
+      // In a real implementation, this would save the model to the database
       // For now, we'll just add a mock model
       const model = {
         id: models.length + 1,
         name: newModel.name,
-        objUrl: `/models/${newModel.name.toLowerCase().replace(/\s+/g, '-')}.obj`,
-        mtlUrl: newModel.mtlFile ? `/models/${newModel.name.toLowerCase().replace(/\s+/g, '-')}.mtl` : null,
-        previewImage: 'https://via.placeholder.com/300x300?text=' + newModel.name.replace(/\s+/g, '+'),
+        objUrl: newModel.modelUrl,
+        mtlUrl: null,
+        previewImage: newModel.previewUrl || 'https://via.placeholder.com/300x300?text=' + newModel.name.replace(/\s+/g, '+'),
         relatedWorldId: newModel.relatedWorldId,
         relatedEraId: newModel.relatedEraId,
         uploadedAt: new Date().toISOString(),
@@ -93,14 +88,12 @@ export default function ModelsPage() {
       setModels([...models, model]);
       setNewModel({
         name: '',
-        file: null,
-        mtlFile: null,
+        modelUrl: '',
+        previewUrl: '',
         relatedWorldId: null,
         relatedEraId: null,
       });
       setShowUploadForm(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      if (mtlFileInputRef.current) mtlFileInputRef.current.value = '';
     }
   };
 
@@ -143,62 +136,23 @@ export default function ModelsPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">OBJ File</label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
-                      <input 
-                        type="file" 
-                        accept=".obj" 
-                        onChange={handleFileChange}
-                        ref={fileInputRef}
-                        className="hidden"
-                        id="obj-file"
-                      />
-                      <label htmlFor="obj-file" className="cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                        <p className="mt-2 text-sm text-gray-600">
-                          <span className="font-medium text-black">Click to upload</span> or drag and drop
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          OBJ files only
-                        </p>
-                      </label>
-                      {newModel.file && (
-                        <p className="mt-2 text-sm text-gray-600">
-                          Selected: {newModel.file.name}
-                        </p>
-                      )}
-                    </div>
+                    <label className="block text-sm font-medium mb-1">3D Model (GLB)</label>
+                    <ModelUpload 
+                      userId={session.user.id}
+                      characterId="models"
+                      modelId={Date.now().toString()}
+                      onSuccess={handleModelUpload}
+                      onError={(error) => console.error('Model upload error:', error)}
+                    />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">MTL File (Optional)</label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
-                      <input 
-                        type="file" 
-                        accept=".mtl" 
-                        onChange={handleMtlFileChange}
-                        ref={mtlFileInputRef}
-                        className="hidden"
-                        id="mtl-file"
-                      />
-                      <label htmlFor="mtl-file" className="cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <p className="mt-2 text-sm text-gray-600">
-                          <span className="font-medium text-black">Click to upload</span> or drag and drop
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          MTL files only (optional)
-                        </p>
-                      </label>
-                      {newModel.mtlFile && (
-                        <p className="mt-2 text-sm text-gray-600">
-                          Selected: {newModel.mtlFile.name}
-                        </p>
-                      )}
-                    </div>
+                    <label className="block text-sm font-medium mb-1">Model Preview (Image)</label>
+                    <ModelPreviewUpload 
+                      userId={session.user.id}
+                      characterId="models"
+                      onSuccess={handlePreviewUpload}
+                      onError={(error) => console.error('Preview upload error:', error)}
+                    />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
