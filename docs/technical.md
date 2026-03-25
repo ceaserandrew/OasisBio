@@ -17,8 +17,10 @@ OasisBio is a cross-era identity system that allows users to create and manage m
 ### Backend
 - **Database**: PostgreSQL (Supabase)
 - **ORM**: Prisma 6.19.1
-- **Authentication**: NextAuth.js with Prisma Adapter
+- **Authentication**: Supabase Auth with OTP
 - **Password Hashing**: bcryptjs 3.0.3
+- **Object Storage**: Cloudflare R2 (for large files)
+- **ZIP Processing**: archiver and unzipper
 
 ### Deployment
 - **Hosting**: Cloudflare Pages
