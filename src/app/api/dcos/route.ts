@@ -43,10 +43,10 @@ export async function POST(request: NextRequest) {
     const session = await requireAuth();
     const body = await request.json();
 
-    const { oasisBioId, name, content, type } = body;
+    const { oasisBioId, title, content } = body;
 
-    if (!oasisBioId || !name || !content) {
-      return NextResponse.json({ error: 'OasisBio ID, name, and content are required' }, { status: 400 });
+    if (!oasisBioId || !title || !content) {
+      return NextResponse.json({ error: 'OasisBio ID, title, and content are required' }, { status: 400 });
     }
 
     // Verify ownership of the OasisBio
@@ -65,9 +65,10 @@ export async function POST(request: NextRequest) {
     const dcosFile = await prisma.dcosFile.create({
       data: {
         oasisBioId,
-        name,
+        title,
         content,
-        type: type || 'text',
+        slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
+        folderPath: '/',
       },
     });
 

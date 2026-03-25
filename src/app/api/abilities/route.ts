@@ -28,7 +28,6 @@ export async function GET(request: NextRequest) {
 
     const abilities = await prisma.ability.findMany({
       where: { oasisBioId },
-      orderBy: { createdAt: 'asc' },
     });
 
     return NextResponse.json(abilities);
@@ -43,7 +42,7 @@ export async function POST(request: NextRequest) {
     const session = await requireAuth();
     const body = await request.json();
 
-    const { oasisBioId, name, description, category, level, isActive } = body;
+    const { oasisBioId, name, description, category, level } = body;
 
     if (!oasisBioId || !name) {
       return NextResponse.json({ error: 'OasisBio ID and name are required' }, { status: 400 });
@@ -69,7 +68,6 @@ export async function POST(request: NextRequest) {
         description,
         category: category || 'general',
         level: level || 1,
-        isActive: isActive !== undefined ? isActive : true,
       },
     });
 

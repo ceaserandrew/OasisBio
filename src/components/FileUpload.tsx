@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Button } from './Button';
+import { storage, validateStorageFile, STORAGE_LIMITS } from '@/lib/storage';
 import { storagePath, uploadFile, validateFile, STORAGE_BUCKETS } from '@/lib/supabase';
 
 interface FileUploadProps {
@@ -277,26 +278,123 @@ export function ModelPreviewUpload({
 export function ModelUpload({
   userId,
   characterId,
-  modelId,
   onSuccess,
   onError,
 }: {
   userId: string;
   characterId: string;
-  modelId: string;
   onSuccess?: (url: string) => void;
   onError?: (error: string) => void;
 }) {
+  const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = (selectedFile: File) => {
+    // Validate file
+    const validation = validateStorageFile(selectedFile, 'model');
+
+    if (!validation.valid) {
+      setError(validation.error || 'Invalid file');
+      onError?.(validation.error || 'Invalid file');
+      return;
+    }
+
+    setFile(selectedFile);
+    setError('');
+  };
+
+  const handleUpload = async () => {
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+      setError('');
+
+      // Upload file to R2
+      const result = await storage.upload(file, {
+        type: 'model',
+        userId,
+        characterId,
+      });
+
+      // Get file URL
+      const url = await storage.getUrl({
+        type: 'model',
+        userId,
+        characterId,
+      });
+
+      onSuccess?.(url);
+      setFile(null);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Upload failed';
+      setError(errorMessage);
+      onError?.(errorMessage);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
-    <FileUpload
-      bucket="MODELS"
-      pathGenerator={() => storagePath.model.getPath(userId, characterId, modelId, 'glb')}
-      allowedTypes={['model/gltf-binary', 'application/octet-stream']}
-      maxSize={10 * 1024 * 1024} // 10 MB
-      onSuccess={onSuccess}
-      onError={onError}
-      buttonText="Upload 3D Model"
-      accept=".glb"
-    />
+    <div className="w-full">
+      <div className="border-2 border-dashed rounded-lg p-6 transition-colors hover:border-gray-400">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".glb"
+          onChange={(e) => {
+            if (e.target.files && e.target.files.length > 0) {
+              handleFileSelect(e.target.files[0]);
+            }
+          }}
+          className="hidden"
+        />
+
+        {!file ? (
+          <div className="text-center">
+            <p className="text-gray-500 mb-4">
+              Drag and drop your 3D model here, or
+            </p>
+            <Button onClick={() => fileInputRef.current?.click()}>
+              Upload 3D Model
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">{file.name}</p>
+                <p className="text-sm text-gray-500">
+                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                </p>
+              </div>
+              <Button
+                onClick={() => setFile(null)}
+                variant="outline"
+                size="sm"
+              >
+                Remove
+              </Button>
+            </div>
+
+            {error && (
+              <div className="p-3 bg-red-50 text-red-600 rounded-md text-sm">
+                {error}
+              </div>
+            )}
+
+            <Button
+              onClick={handleUpload}
+              disabled={isUploading || !!error}
+              className="w-full"
+            >
+              {isUploading ? 'Uploading...' : 'Upload'}
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

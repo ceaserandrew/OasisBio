@@ -13,7 +13,7 @@ export async function PUT(
     const body = await request.json();
 
     // Verify ownership
-    const era = await prisma.era.findUnique({
+    const era = await prisma.eraIdentity.findUnique({
       where: { id },
       include: { oasisBio: true },
     });
@@ -26,17 +26,16 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { title, description, startYear, endYear, location, significance } = body;
+    const { name, eraType, description, startYear, endYear } = body;
 
     const updates: any = {};
-    if (title) updates.title = title;
+    if (name) updates.name = name;
+    if (eraType) updates.eraType = eraType;
     if (description) updates.description = description;
     if (startYear !== undefined) updates.startYear = startYear;
     if (endYear !== undefined) updates.endYear = endYear;
-    if (location) updates.location = location;
-    if (significance) updates.significance = significance;
 
-    const updatedEra = await prisma.era.update({
+    const updatedEra = await prisma.eraIdentity.update({
       where: { id },
       data: updates,
     });
@@ -57,7 +56,7 @@ export async function DELETE(
     const { id } = params;
 
     // Verify ownership
-    const era = await prisma.era.findUnique({
+    const era = await prisma.eraIdentity.findUnique({
       where: { id },
       include: { oasisBio: true },
     });
@@ -70,7 +69,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    await prisma.era.delete({
+    await prisma.eraIdentity.delete({
       where: { id },
     });
 

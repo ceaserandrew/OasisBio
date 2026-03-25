@@ -17,18 +17,19 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String?
-  email         String     @unique
+  email         String          @unique
   emailVerified DateTime?
   image         String?
   password      String
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   accounts      Account[]
   sessions      Session[]
   oasisBios     OasisBio[]
   profiles      Profile[]
+  exportHistory ExportHistory[]
 
   @@index([createdAt])
   @@index([email])
@@ -367,4 +368,18 @@ model CharacterRelationship {
   characterB   OasisBio @relation("CharacterBRelationship", fields: [characterBId], references: [id], onDelete: Cascade)
 
   @@map("character_relationships")
+}
+
+model ExportHistory {
+  id             String   @id @default(cuid())
+  userId         String   @map("user_id")
+  fileName       String   @map("file_name")
+  fileSize       Int      @map("file_size")
+  characterCount Int      @map("character_count")
+  createdAt      DateTime @default(now()) @map("created_at")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("export_history")
 }

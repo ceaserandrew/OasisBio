@@ -28,9 +28,7 @@ async function testStorageUtilities() {
   console.log(`   Preview path: ${previewPath}`);
   console.log(`   Preview URL: ${previewUrl}`);
   
-  // 3D model path
-  const modelPath = storagePath.model.getPath(testUserId, testCharacterId, testModelId);
-  console.log(`   Model path: ${modelPath}`);
+
   
   console.log('\n✅ 路径生成测试通过！');
   
@@ -62,7 +60,6 @@ async function testStorageUtilities() {
   console.log(`   Avatars bucket: ${STORAGE_BUCKETS.AVATARS}`);
   console.log(`   Character covers bucket: ${STORAGE_BUCKETS.CHARACTER_COVERS}`);
   console.log(`   Model previews bucket: ${STORAGE_BUCKETS.MODEL_PREVIEWS}`);
-  console.log(`   Models bucket: ${STORAGE_BUCKETS.MODELS}`);
   
   console.log('\n✅ 存储桶配置测试通过！');
   

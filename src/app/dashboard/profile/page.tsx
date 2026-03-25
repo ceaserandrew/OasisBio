@@ -5,6 +5,7 @@ import { useSession, signOut } from '@/lib/auth.client';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
+import { ExportHistory } from '@/components/ExportHistory';
 import { useRouter } from 'next/navigation';
 import NavigationBar from '@/components/navigation/NavigationBar';
 
@@ -285,6 +286,10 @@ export default function ProfilePage() {
                 </Button>
               </div>
             </form>
+
+            <div className="mt-12">
+              <ExportHistory />
+            </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
-import ModelViewer from '@/components/ModelViewer';
+import { ModelViewer } from '@/components/ModelViewer';
 
 // Client components need to be in separate files
 // Metadata should be exported from server components
@@ -538,7 +538,9 @@ export default function PublicOasisBioPage() {
                 <div className="flex flex-col md:flex-row gap-8">
                   <div className="md:w-2/3 h-96 bg-background">
                     <ModelViewer 
-                      modelUrl="/models/oasis-prime.obj" 
+                      modelPath="/models/oasis-prime.obj" 
+                      mtlPath="/models/oasis-prime.mtl" 
+                      texturePath="/models/oasis-prime.jpg" 
                       width={800} 
                       height={600} 
                     />

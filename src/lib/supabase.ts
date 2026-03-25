@@ -12,7 +12,6 @@ export const STORAGE_BUCKETS = {
   AVATARS: 'avatars',
   CHARACTER_COVERS: 'character-covers',
   MODEL_PREVIEWS: 'model-previews',
-  MODELS: 'models',
 } as const;
 
 // Storage path utilities
@@ -96,41 +95,7 @@ export const storagePath = {
     },
   },
   
-  // 3D model paths
-  model: {
-    /**
-     * Get 3D model file path
-     * @param userId - User ID
-     * @param characterId - Character ID
-     * @param modelId - Model ID
-     * @param extension - File extension (default: glb)
-     */
-    getPath: (userId: string, characterId: string, modelId: string, extension: string = 'glb'): string => {
-      return `${userId}/${characterId}/${modelId}.${extension}`;
-    },
-    
-    /**
-     * Get 3D model URL (signed URL for private bucket)
-     * @param userId - User ID
-     * @param characterId - Character ID
-     * @param modelId - Model ID
-     * @param extension - File extension (default: glb)
-     * @param expiresIn - Expiration time in seconds (default: 3600)
-     */
-    getUrl: async (userId: string, characterId: string, modelId: string, extension: string = 'glb', expiresIn: number = 3600): Promise<string> => {
-      const path = storagePath.model.getPath(userId, characterId, modelId, extension);
-      const { data, error } = await supabase.storage
-        .from(STORAGE_BUCKETS.MODELS)
-        .createSignedUrl(path, expiresIn);
-      
-      if (error) {
-        console.error('Error getting model URL:', error);
-        throw error;
-      }
-      
-      return data.signedUrl;
-    },
-  },
+
 };
 
 // File naming utilities

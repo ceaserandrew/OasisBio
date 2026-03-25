@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const eras = await prisma.era.findMany({
+    const eras = await prisma.eraIdentity.findMany({
       where: { oasisBioId },
       orderBy: { startYear: 'asc' },
     });
@@ -43,10 +43,10 @@ export async function POST(request: NextRequest) {
     const session = await requireAuth();
     const body = await request.json();
 
-    const { oasisBioId, title, description, startYear, endYear, location, significance } = body;
+    const { oasisBioId, name, eraType, description, startYear, endYear } = body;
 
-    if (!oasisBioId || !title || startYear === undefined) {
-      return NextResponse.json({ error: 'OasisBio ID, title, and startYear are required' }, { status: 400 });
+    if (!oasisBioId || !name || !eraType || startYear === undefined) {
+      return NextResponse.json({ error: 'OasisBio ID, name, eraType, and startYear are required' }, { status: 400 });
     }
 
     // Verify ownership of the OasisBio
@@ -62,15 +62,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const era = await prisma.era.create({
+    const era = await prisma.eraIdentity.create({
       data: {
         oasisBioId,
-        title,
+        name,
+        eraType,
         description,
         startYear,
         endYear,
-        location,
-        significance,
       },
     });
 
