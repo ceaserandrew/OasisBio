@@ -1,10 +1,11 @@
-'use client';
-
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/Card';
-import { ModelViewer } from '@/components/ModelViewer';
+
+// ModelViewer is a client component, so we'll import it dynamically
+import dynamic from 'next/dynamic';
+const ModelViewer = dynamic(() => import('@/components/ModelViewer'), { ssr: false });
 
 // 模型数据
 const mascotData = {
