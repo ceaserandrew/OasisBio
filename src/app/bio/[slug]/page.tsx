@@ -1,7 +1,10 @@
 import React from 'react';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
-import { ModelViewer } from '@/components/ModelViewer';
+
+// ModelViewer is a client component, so we'll import it dynamically
+import dynamic from 'next/dynamic';
+const ModelViewer = dynamic(() => import('@/components/ModelViewer'), { ssr: false });
 
 // Client components need to be in separate files
 // Metadata should be exported from server components
