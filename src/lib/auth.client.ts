@@ -1,7 +1,7 @@
 // Client-side authentication utilities using Supabase
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import supabase from './supabase';
+import supabase from './supabase-client';
 
 // Create auth context
 interface AuthContextType {

@@ -30,7 +30,6 @@ export type UserMinAggregateOutputType = {
   email: string | null
   emailVerified: Date | null
   image: string | null
-  password: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -41,7 +40,6 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   emailVerified: Date | null
   image: string | null
-  password: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,7 +50,6 @@ export type UserCountAggregateOutputType = {
   email: number
   emailVerified: number
   image: number
-  password: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -65,7 +62,6 @@ export type UserMinAggregateInputType = {
   email?: true
   emailVerified?: true
   image?: true
-  password?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,7 +72,6 @@ export type UserMaxAggregateInputType = {
   email?: true
   emailVerified?: true
   image?: true
-  password?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -87,7 +82,6 @@ export type UserCountAggregateInputType = {
   email?: true
   emailVerified?: true
   image?: true
-  password?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -171,7 +165,6 @@ export type UserGroupByOutputType = {
   email: string
   emailVerified: Date | null
   image: string | null
-  password: string
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -203,13 +196,13 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
-  password?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   oasisBios?: Prisma.OasisBioListRelationFilter
   profiles?: Prisma.ProfileListRelationFilter
+  exportHistory?: Prisma.ExportHistoryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -218,13 +211,13 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
-  password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   oasisBios?: Prisma.OasisBioOrderByRelationAggregateInput
   profiles?: Prisma.ProfileOrderByRelationAggregateInput
+  exportHistory?: Prisma.ExportHistoryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -236,13 +229,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
-  password?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   oasisBios?: Prisma.OasisBioListRelationFilter
   profiles?: Prisma.ProfileListRelationFilter
+  exportHistory?: Prisma.ExportHistoryListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -251,7 +244,6 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
-  password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -268,39 +260,38 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   emailVerified?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  password?: Prisma.StringWithAggregatesFilter<"User"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
 export type UserCreateInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   oasisBios?: Prisma.OasisBioCreateNestedManyWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   oasisBios?: Prisma.OasisBioUncheckedCreateNestedManyWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -309,13 +300,13 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   oasisBios?: Prisma.OasisBioUpdateManyWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -324,22 +315,21 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   oasisBios?: Prisma.OasisBioUncheckedUpdateManyWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -350,7 +340,6 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -361,7 +350,6 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -372,7 +360,6 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -383,7 +370,6 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -394,7 +380,6 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -476,32 +461,46 @@ export type UserUpdateOneRequiredWithoutOasisBiosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOasisBiosInput, Prisma.UserUpdateWithoutOasisBiosInput>, Prisma.UserUncheckedUpdateWithoutOasisBiosInput>
 }
 
+export type UserCreateNestedOneWithoutExportHistoryInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExportHistoryInput, Prisma.UserUncheckedCreateWithoutExportHistoryInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExportHistoryInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutExportHistoryNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExportHistoryInput, Prisma.UserUncheckedCreateWithoutExportHistoryInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExportHistoryInput
+  upsert?: Prisma.UserUpsertWithoutExportHistoryInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutExportHistoryInput, Prisma.UserUpdateWithoutExportHistoryInput>, Prisma.UserUncheckedUpdateWithoutExportHistoryInput>
+}
+
 export type UserCreateWithoutProfilesInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   oasisBios?: Prisma.OasisBioCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProfilesInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   oasisBios?: Prisma.OasisBioUncheckedCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProfilesInput = {
@@ -526,12 +525,12 @@ export type UserUpdateWithoutProfilesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   oasisBios?: Prisma.OasisBioUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilesInput = {
@@ -540,40 +539,40 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   oasisBios?: Prisma.OasisBioUncheckedUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   oasisBios?: Prisma.OasisBioCreateNestedManyWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   oasisBios?: Prisma.OasisBioUncheckedCreateNestedManyWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -598,12 +597,12 @@ export type UserUpdateWithoutAccountsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   oasisBios?: Prisma.OasisBioUpdateManyWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -612,40 +611,40 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   oasisBios?: Prisma.OasisBioUncheckedUpdateManyWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   oasisBios?: Prisma.OasisBioCreateNestedManyWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   oasisBios?: Prisma.OasisBioUncheckedCreateNestedManyWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -670,12 +669,12 @@ export type UserUpdateWithoutSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   oasisBios?: Prisma.OasisBioUpdateManyWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -684,40 +683,40 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   oasisBios?: Prisma.OasisBioUncheckedUpdateManyWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOasisBiosInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOasisBiosInput = {
-  id?: string
+  id: string
   name?: string | null
   email: string
   emailVerified?: Date | string | null
   image?: string | null
-  password: string
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  exportHistory?: Prisma.ExportHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOasisBiosInput = {
@@ -742,12 +741,12 @@ export type UserUpdateWithoutOasisBiosInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOasisBiosInput = {
@@ -756,11 +755,83 @@ export type UserUncheckedUpdateWithoutOasisBiosInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
+  exportHistory?: Prisma.ExportHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutExportHistoryInput = {
+  id: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  oasisBios?: Prisma.OasisBioCreateNestedManyWithoutUserInput
+  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutExportHistoryInput = {
+  id: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  oasisBios?: Prisma.OasisBioUncheckedCreateNestedManyWithoutUserInput
+  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutExportHistoryInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutExportHistoryInput, Prisma.UserUncheckedCreateWithoutExportHistoryInput>
+}
+
+export type UserUpsertWithoutExportHistoryInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutExportHistoryInput, Prisma.UserUncheckedUpdateWithoutExportHistoryInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutExportHistoryInput, Prisma.UserUncheckedCreateWithoutExportHistoryInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutExportHistoryInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutExportHistoryInput, Prisma.UserUncheckedUpdateWithoutExportHistoryInput>
+}
+
+export type UserUpdateWithoutExportHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  oasisBios?: Prisma.OasisBioUpdateManyWithoutUserNestedInput
+  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutExportHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  oasisBios?: Prisma.OasisBioUncheckedUpdateManyWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -774,6 +845,7 @@ export type UserCountOutputType = {
   sessions: number
   oasisBios: number
   profiles: number
+  exportHistory: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -781,6 +853,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   oasisBios?: boolean | UserCountOutputTypeCountOasisBiosArgs
   profiles?: boolean | UserCountOutputTypeCountProfilesArgs
+  exportHistory?: boolean | UserCountOutputTypeCountExportHistoryArgs
 }
 
 /**
@@ -821,6 +894,13 @@ export type UserCountOutputTypeCountProfilesArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.ProfileWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountExportHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExportHistoryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -828,13 +908,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   emailVerified?: boolean
   image?: boolean
-  password?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   oasisBios?: boolean | Prisma.User$oasisBiosArgs<ExtArgs>
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
+  exportHistory?: boolean | Prisma.User$exportHistoryArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -844,7 +924,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   emailVerified?: boolean
   image?: boolean
-  password?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -855,7 +934,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   emailVerified?: boolean
   image?: boolean
-  password?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -866,17 +944,17 @@ export type UserSelectScalar = {
   email?: boolean
   emailVerified?: boolean
   image?: boolean
-  password?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   oasisBios?: boolean | Prisma.User$oasisBiosArgs<ExtArgs>
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
+  exportHistory?: boolean | Prisma.User$exportHistoryArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -889,6 +967,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     oasisBios: Prisma.$OasisBioPayload<ExtArgs>[]
     profiles: Prisma.$ProfilePayload<ExtArgs>[]
+    exportHistory: Prisma.$ExportHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -896,7 +975,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     emailVerified: Date | null
     image: string | null
-    password: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1297,6 +1375,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   oasisBios<T extends Prisma.User$oasisBiosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$oasisBiosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OasisBioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   profiles<T extends Prisma.User$profilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  exportHistory<T extends Prisma.User$exportHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$exportHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExportHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1331,7 +1410,6 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly emailVerified: Prisma.FieldRef<"User", 'DateTime'>
   readonly image: Prisma.FieldRef<"User", 'String'>
-  readonly password: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1815,6 +1893,30 @@ export type User$profilesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ProfileScalarFieldEnum | Prisma.ProfileScalarFieldEnum[]
+}
+
+/**
+ * User.exportHistory
+ */
+export type User$exportHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExportHistory
+   */
+  select?: Prisma.ExportHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExportHistory
+   */
+  omit?: Prisma.ExportHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExportHistoryInclude<ExtArgs> | null
+  where?: Prisma.ExportHistoryWhereInput
+  orderBy?: Prisma.ExportHistoryOrderByWithRelationInput | Prisma.ExportHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.ExportHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExportHistoryScalarFieldEnum | Prisma.ExportHistoryScalarFieldEnum[]
 }
 
 /**

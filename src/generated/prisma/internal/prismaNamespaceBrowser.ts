@@ -67,7 +67,8 @@ export const ModelName = {
   OasisBioPublication: 'OasisBioPublication',
   Tag: 'Tag',
   EntityTag: 'EntityTag',
-  CharacterRelationship: 'CharacterRelationship'
+  CharacterRelationship: 'CharacterRelationship',
+  ExportHistory: 'ExportHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -92,7 +93,6 @@ export const UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
-  password: 'password',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -372,6 +372,18 @@ export const CharacterRelationshipScalarFieldEnum = {
 } as const
 
 export type CharacterRelationshipScalarFieldEnum = (typeof CharacterRelationshipScalarFieldEnum)[keyof typeof CharacterRelationshipScalarFieldEnum]
+
+
+export const ExportHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fileName: 'fileName',
+  fileSize: 'fileSize',
+  characterCount: 'characterCount',
+  createdAt: 'createdAt'
+} as const
+
+export type ExportHistoryScalarFieldEnum = (typeof ExportHistoryScalarFieldEnum)[keyof typeof ExportHistoryScalarFieldEnum]
 
 
 export const SortOrder = {

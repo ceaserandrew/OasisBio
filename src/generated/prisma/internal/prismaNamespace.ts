@@ -408,7 +408,8 @@ export const ModelName = {
   OasisBioPublication: 'OasisBioPublication',
   Tag: 'Tag',
   EntityTag: 'EntityTag',
-  CharacterRelationship: 'CharacterRelationship'
+  CharacterRelationship: 'CharacterRelationship',
+  ExportHistory: 'ExportHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profile" | "account" | "session" | "verificationToken" | "oasisBio" | "eraIdentity" | "ability" | "dcosFile" | "referenceItem" | "worldItem" | "modelItem" | "abilityCategory" | "abilityPreset" | "worldDocument" | "oasisBioPublication" | "tag" | "entityTag" | "characterRelationship"
+    modelProps: "user" | "profile" | "account" | "session" | "verificationToken" | "oasisBio" | "eraIdentity" | "ability" | "dcosFile" | "referenceItem" | "worldItem" | "modelItem" | "abilityCategory" | "abilityPreset" | "worldDocument" | "oasisBioPublication" | "tag" | "entityTag" | "characterRelationship" | "exportHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1834,6 +1835,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ExportHistory: {
+      payload: Prisma.$ExportHistoryPayload<ExtArgs>
+      fields: Prisma.ExportHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ExportHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ExportHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.ExportHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ExportHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.ExportHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.ExportHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.ExportHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ExportHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.ExportHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload>
+        }
+        update: {
+          args: Prisma.ExportHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.ExportHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ExportHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ExportHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.ExportHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExportHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.ExportHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateExportHistory>
+        }
+        groupBy: {
+          args: Prisma.ExportHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExportHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ExportHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExportHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1879,7 +1954,6 @@ export const UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
-  password: 'password',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2161,6 +2235,18 @@ export const CharacterRelationshipScalarFieldEnum = {
 export type CharacterRelationshipScalarFieldEnum = (typeof CharacterRelationshipScalarFieldEnum)[keyof typeof CharacterRelationshipScalarFieldEnum]
 
 
+export const ExportHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fileName: 'fileName',
+  fileSize: 'fileSize',
+  characterCount: 'characterCount',
+  createdAt: 'createdAt'
+} as const
+
+export type ExportHistoryScalarFieldEnum = (typeof ExportHistoryScalarFieldEnum)[keyof typeof ExportHistoryScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2359,6 +2445,7 @@ export type GlobalOmitConfig = {
   tag?: Prisma.TagOmit
   entityTag?: Prisma.EntityTagOmit
   characterRelationship?: Prisma.CharacterRelationshipOmit
+  exportHistory?: Prisma.ExportHistoryOmit
 }
 
 /* Types for Logging */

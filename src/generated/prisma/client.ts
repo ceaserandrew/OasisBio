@@ -139,3 +139,8 @@ export type EntityTag = Prisma.EntityTagModel
  * 
  */
 export type CharacterRelationship = Prisma.CharacterRelationshipModel
+/**
+ * Model ExportHistory
+ * 
+ */
+export type ExportHistory = Prisma.ExportHistoryModel
