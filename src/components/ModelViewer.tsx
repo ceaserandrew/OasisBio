@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader, OrbitControls } from 'three-stdlib';
+import { GLTFLoader, OrbitControls, OBJLoader, FBXLoader, STLLoader } from 'three-stdlib';
 
 interface ModelViewerProps {
   modelPath: string;
@@ -27,7 +27,7 @@ export function ModelViewer({
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const controlsRef = useRef<THREE.OrbitControls | null>(null);
+  const controlsRef = useRef<any | null>(null);
   const animationFrameRef = useRef<number | null>(null);
 
   // Reset camera to initial position
@@ -37,6 +37,101 @@ export function ModelViewer({
       cameraRef.current.lookAt(0, 0, 0);
       controlsRef.current.reset();
     }
+  };
+
+  // Detect file format from path
+  const detectFileFormat = (modelPath: string): string => {
+    const extension = modelPath.toLowerCase().split('.').pop() || '';
+    
+    switch (extension) {
+      case 'glb':
+      case 'gltf':
+        return 'gltf';
+      case 'obj':
+        return 'obj';
+      case 'fbx':
+        return 'fbx';
+      case 'stl':
+        return 'stl';
+      default:
+        return 'unknown';
+    }
+  };
+
+  // Create loader based on format
+  const createLoader = (format: string): THREE.Loader | null => {
+    switch (format) {
+      case 'gltf':
+        return new GLTFLoader();
+      case 'obj':
+        return new OBJLoader();
+      case 'fbx':
+        return new FBXLoader();
+      case 'stl':
+        return new STLLoader();
+      default:
+        return null;
+    }
+  };
+
+  // Unified model loading function
+  const loadModel = async (modelPath: string, format: string): Promise<THREE.Object3D> => {
+    const loader = createLoader(format);
+    if (!loader) {
+      throw new Error(`Unsupported file format: ${format}`);
+    }
+
+    return new Promise((resolve, reject) => {
+      if (format === 'gltf') {
+        (loader as GLTFLoader).load(
+          modelPath,
+          (gltf) => {
+            resolve(gltf.scene);
+          },
+          undefined,
+          (error) => {
+            reject(new Error(`Failed to load GLTF model: ${error.message}`));
+          }
+        );
+      } else if (format === 'obj') {
+        (loader as OBJLoader).load(
+          modelPath,
+          (object) => {
+            resolve(object);
+          },
+          undefined,
+          (error) => {
+            reject(new Error(`Failed to load OBJ model: ${error.message}`));
+          }
+        );
+      } else if (format === 'fbx') {
+        (loader as FBXLoader).load(
+          modelPath,
+          (object) => {
+            resolve(object);
+          },
+          undefined,
+          (error) => {
+            reject(new Error(`Failed to load FBX model: ${error.message}`));
+          }
+        );
+      } else if (format === 'stl') {
+        (loader as STLLoader).load(
+          modelPath,
+          (geometry) => {
+            const material = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+            const mesh = new THREE.Mesh(geometry, material);
+            resolve(mesh);
+          },
+          undefined,
+          (error) => {
+            reject(new Error(`Failed to load STL model: ${error.message}`));
+          }
+        );
+      } else {
+        reject(new Error(`Unsupported file format: ${format}`));
+      }
+    });
   };
 
   useEffect(() => {
@@ -79,15 +174,17 @@ export function ModelViewer({
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
 
-    const loadModel = async () => {
+    const loadModelWithFormat = async () => {
       try {
         setIsLoading(true);
         setError(null);
 
-        const loader = new GLTFLoader();
-        const gltf = await loader.loadAsync(modelPath);
-        
-        const model = gltf.scene;
+        const format = detectFileFormat(modelPath);
+        if (format === 'unknown') {
+          throw new Error('Unsupported file format');
+        }
+
+        const model = await loadModel(modelPath, format);
         model.scale.set(1, 1, 1);
         model.position.y = -1;
         scene.add(model);
@@ -95,12 +192,12 @@ export function ModelViewer({
         setIsLoading(false);
       } catch (err) {
         console.error('Error loading model:', err);
-        setError('Failed to load 3D model');
+        setError(err instanceof Error ? err.message : 'Failed to load 3D model');
         setIsLoading(false);
       }
     };
 
-    const timeoutId = setTimeout(loadModel, 100);
+    const timeoutId = setTimeout(loadModelWithFormat, 100);
 
     const animate = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
@@ -177,14 +274,6 @@ export function ModelViewer({
         });
       }
     };
-  // Reset camera to initial position
-  const resetCamera = () => {
-    if (cameraRef.current && controlsRef.current) {
-      cameraRef.current.position.set(0, 0, 5);
-      cameraRef.current.lookAt(0, 0, 0);
-      controlsRef.current.reset();
-    }
-  };
 
   }, [modelPath, mtlPath, texturePath, width, height]);
 
