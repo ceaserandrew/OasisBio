@@ -85,13 +85,16 @@ The 3D Character Model system is a key feature of OasisBio that allows users to 
 models/
 ├── {user_id}/                # User-specific directory
 │   ├── {character_id}/        # Character-specific directory
-│   │   ├── model-123.glb      # GLB model file
-│   │   └── preview.webp       # Preview image
+│   │   ├── model.glb          # GLB model file
+│   │   ├── preview.webp       # Preview image
+│   │   └── history/           # Version history
+│   │       ├── {timestamp}/   # Timestamp-based version
+│   │           └── model.glb   # Previous version of model
 ```
 
 ### Storage Options
-- **Development**: Stored in Supabase Storage
-- **Production**: Stored in Supabase Storage
+- **Development**: Stored in Cloudflare R2
+- **Production**: Stored in Cloudflare R2
 - **Access**: Public buckets for images, private bucket for 3D models
 
 ## Model Optimization

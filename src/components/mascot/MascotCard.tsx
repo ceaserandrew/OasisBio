@@ -64,8 +64,8 @@ export function MascotCard({
               modelPath={modelPath}
               mtlPath={mtlPath}
               texturePath={texturePath}
-              width="100%"
-              height="100%"
+              width={800}
+              height={600}
             />
           </div>
         )}

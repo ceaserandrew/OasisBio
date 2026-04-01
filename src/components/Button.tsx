@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 
 export interface ButtonProps {
   children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -26,6 +26,7 @@ export function Button({
     secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
     outline: 'border border-border text-foreground hover:bg-muted',
     ghost: 'text-foreground hover:bg-muted',
+    destructive: 'bg-red-600 text-white hover:bg-red-700',
   };
 
   const sizeClasses = {

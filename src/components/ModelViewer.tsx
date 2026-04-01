@@ -2,8 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import { GLTFLoader } from 'three-stdlib';
 
 interface ModelViewerProps {
   modelPath: string;
@@ -31,27 +30,23 @@ export function ModelViewer({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // 创建场景
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
     sceneRef.current = scene;
 
-    // 创建相机
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.z = 5;
     cameraRef.current = camera;
 
-    // 创建渲染器
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true,
-      powerPreference: 'high-performance' // 优先使用高性能GPU
+      powerPreference: 'high-performance'
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 限制像素比，提高性能
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
-    // 添加灯光
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
@@ -59,25 +54,17 @@ export function ModelViewer({
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
 
-    // 加载模型
     const loadModel = async () => {
       try {
         setIsLoading(true);
         setError(null);
 
-        // 加载材质
-        const mtlLoader = new MTLLoader();
-        const materials = await mtlLoader.loadAsync(mtlPath);
-        materials.preload();
-
-        // 加载模型
-        const objLoader = new OBJLoader();
-        objLoader.setMaterials(materials);
-        const model = await objLoader.loadAsync(modelPath);
-
-        // 调整模型大小和位置
-        model.scale.set(0.01, 0.01, 0.01);
-        model.position.y = -2;
+        const loader = new GLTFLoader();
+        const gltf = await loader.loadAsync(modelPath);
+        
+        const model = gltf.scene;
+        model.scale.set(1, 1, 1);
+        model.position.y = -1;
         scene.add(model);
 
         setIsLoading(false);
@@ -88,14 +75,11 @@ export function ModelViewer({
       }
     };
 
-    // 延迟加载模型，提高页面初始加载速度
     const timeoutId = setTimeout(loadModel, 100);
 
-    // 动画循环
     const animate = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
       
-      // 旋转模型
       if (sceneRef.current) {
         sceneRef.current.traverse((object) => {
           if (object instanceof THREE.Mesh) {
@@ -104,7 +88,6 @@ export function ModelViewer({
         });
       }
 
-      // 渲染场景
       if (rendererRef.current && cameraRef.current && sceneRef.current) {
         rendererRef.current.render(sceneRef.current, cameraRef.current);
       }
@@ -112,7 +95,6 @@ export function ModelViewer({
 
     animate();
 
-    // 处理窗口大小变化
     const handleResize = () => {
       if (cameraRef.current && rendererRef.current && containerRef.current) {
         const width = containerRef.current.clientWidth;
@@ -126,7 +108,6 @@ export function ModelViewer({
 
     window.addEventListener('resize', handleResize);
 
-    // 清理
     return () => {
       clearTimeout(timeoutId);
       
@@ -138,10 +119,9 @@ export function ModelViewer({
       
       if (containerRef.current && rendererRef.current) {
         containerRef.current.removeChild(rendererRef.current.domElement);
-        rendererRef.current.dispose(); // 清理渲染器
+        rendererRef.current.dispose();
       }
       
-      // 清理Three.js资源
       if (sceneRef.current) {
         sceneRef.current.traverse((object) => {
           if (object instanceof THREE.Mesh) {

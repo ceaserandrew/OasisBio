@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
 
 export async function GET(request: NextRequest) {
   try {
@@ -113,21 +112,10 @@ export async function PUT(request: NextRequest) {
       });
     }
 
-    if (section === 'security' && data.currentPassword && data.newPassword) {
-      const passwordMatch = await bcrypt.compare(
-        data.currentPassword,
-        user.password
-      );
-
-      if (!passwordMatch) {
-        return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 });
-      }
-
-      const hashedPassword = await bcrypt.hash(data.newPassword, 10);
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { password: hashedPassword },
-      });
+    if (section === 'security') {
+      return NextResponse.json({ 
+        error: 'Password changes must be done through Supabase authentication. Please use the forgot password feature or contact support.' 
+      }, { status: 400 });
     }
 
     return NextResponse.json({

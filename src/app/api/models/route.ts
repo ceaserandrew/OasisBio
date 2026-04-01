@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/models - Get user's models
 export async function GET(request: NextRequest) {
   try {
     const session = await requireAuth();
@@ -21,40 +20,54 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/models - Create new model
 export async function POST(request: NextRequest) {
   try {
     const session = await requireAuth();
     const body = await request.json();
     const userId = session.user.id;
 
-    const { name, modelUrl, previewUrl, oasisBioId, relatedWorldId, relatedEraId } = body;
+    const { name, filePath, previewImage, oasisBioId, relatedWorldId, relatedEraId, modelFormat } = body;
 
-    if (!name || !modelUrl || !oasisBioId) {
-      return NextResponse.json({ error: 'Name, modelUrl, and oasisBioId are required' }, { status: 400 });
+    if (!name || !filePath) {
+      return NextResponse.json({ error: 'Name and filePath are required' }, { status: 400 });
     }
 
-    // Verify ownership of the OasisBio
-    const oasisBio = await prisma.oasisBio.findUnique({
-      where: { id: oasisBioId },
-    });
+    let targetOasisBioId = oasisBioId;
 
-    if (!oasisBio) {
-      return NextResponse.json({ error: 'OasisBio not found' }, { status: 404 });
-    }
+    if (!targetOasisBioId) {
+      const firstOasisBio = await prisma.oasisBio.findFirst({
+        where: { userId },
+        orderBy: { createdAt: 'asc' },
+      });
 
-    if (oasisBio.userId !== userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      if (!firstOasisBio) {
+        return NextResponse.json({ error: 'No OasisBio found. Please create one first.' }, { status: 400 });
+      }
+
+      targetOasisBioId = firstOasisBio.id;
+    } else {
+      const oasisBio = await prisma.oasisBio.findUnique({
+        where: { id: targetOasisBioId },
+      });
+
+      if (!oasisBio) {
+        return NextResponse.json({ error: 'OasisBio not found' }, { status: 404 });
+      }
+
+      if (oasisBio.userId !== userId) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
     const model = await prisma.modelItem.create({
       data: {
         name,
-        modelUrl,
-        previewUrl,
-        oasisBioId,
+        filePath,
+        previewImage,
+        oasisBioId: targetOasisBioId,
         relatedWorldId,
         relatedEraId,
+        modelFormat: modelFormat || 'glb',
       },
     });
 

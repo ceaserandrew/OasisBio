@@ -1,94 +1,74 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth, handleApiError } from '@/lib/auth-utils';
-import { getUserFromSession } from '@/lib/auth';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAuth, handleApiError } from '@/lib/auth-utils';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await requireAuth();
-    const user = await getUserFromSession(session);
+    const userId = session.user.id;
 
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
+    const [
+      oasisBiosCount,
+      abilitiesCount,
+      worldsCount,
+      modelsCount,
+      referencesCount,
+      dcosFilesCount,
+      erasCount,
+      recentOasisBios,
+    ] = await Promise.all([
+      prisma.oasisBio.count({ where: { userId } }),
+      prisma.ability.count({ where: { oasisBio: { userId } } }),
+      prisma.worldItem.count({ where: { oasisBio: { userId } } }),
+      prisma.modelItem.count({ where: { oasisBio: { userId } } }),
+      prisma.referenceItem.count({ where: { oasisBio: { userId } } }),
+      prisma.dcosFile.count({ where: { oasisBio: { userId } } }),
+      prisma.eraIdentity.count({ where: { oasisBio: { userId } } }),
+      prisma.oasisBio.findMany({
+        where: { userId },
+        orderBy: { updatedAt: 'desc' },
+        take: 5,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          updatedAt: true,
+          _count: {
+            select: {
+              abilities: true,
+              worlds: true,
+              models: true,
+            },
+          },
+        },
+      }),
+    ]);
 
-    const userId = user.id;
-
-    const oasisBiosCount = await prisma.oasisBio.count({
-      where: { userId },
-    });
-
-    const worldsCount = await prisma.worldItem.count({
-      where: { oasisBio: { userId } },
-    });
-
-    const modelsCount = await prisma.modelItem.count({
-      where: { oasisBio: { userId } },
-    });
-
-    const recentActivities = [
-      {
-        id: 1,
-        title: 'OasisBio Prime Updated',
-        description: 'Added new abilities and updated profile',
-        timestamp: '2 hours ago',
-        type: 'oasisbio',
+    const recentActivities = recentOasisBios.map(oasisBio => ({
+      id: oasisBio.id,
+      type: 'oasisBio_update',
+      title: oasisBio.title,
+      slug: oasisBio.slug,
+      timestamp: oasisBio.updatedAt.toISOString(),
+      stats: {
+        abilities: oasisBio._count.abilities,
+        worlds: oasisBio._count.worlds,
+        models: oasisBio._count.models,
       },
-      {
-        id: 2,
-        title: 'World: Neon Desert Created',
-        description: 'New world added to your collection',
-        timestamp: '1 day ago',
-        type: 'world',
-      },
-      {
-        id: 3,
-        title: 'Model: Future Self Uploaded',
-        description: '3D model uploaded successfully',
-        timestamp: '3 days ago',
-        type: 'model',
-      },
-    ];
+    }));
 
-    const accountStatus = {
-      subscription: 'Free',
-      oasisBiosLimit: 3,
-      oasisBiosUsed: oasisBiosCount,
-      storageUsed: 0,
-      storageLimit: 128,
-    };
-
-    const systemStatus = {
-      api: 'Online',
-      database: 'Online',
-      storage: 'Online',
-    };
-
-    const profile = user.profiles[0];
-
-    const dashboardData = {
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        profile: profile ? {
-          id: profile.id,
-          username: profile.username,
-          displayName: profile.displayName,
-          avatarUrl: profile.avatarUrl,
-        } : null,
-      },
+    return NextResponse.json({
       stats: {
         oasisBios: oasisBiosCount,
+        abilities: abilitiesCount,
         worlds: worldsCount,
         models: modelsCount,
+        references: referencesCount,
+        dcosFiles: dcosFilesCount,
+        eras: erasCount,
       },
       recentActivities,
-      accountStatus,
-      systemStatus,
-    };
-
-    return NextResponse.json(dashboardData);
+    });
   } catch (error) {
     return handleApiError(error);
   }

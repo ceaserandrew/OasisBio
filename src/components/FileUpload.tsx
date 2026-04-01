@@ -98,26 +98,18 @@ export function FileUpload({
 
       // Get file URL
       let url = '';
-      if (bucket === 'MODELS') {
-        // For private bucket, get signed URL
-        // This would require additional logic to get signed URL
-        // For now, we'll return the path
-        url = path;
-      } else {
-        // For public buckets, get public URL
-        switch (bucket) {
-          case 'AVATARS':
-            url = storagePath.avatar.getUrl(path.split('/')[0]);
-            break;
-          case 'CHARACTER_COVERS':
-            url = storagePath.characterCover.getUrl(path.split('/')[0], path.split('/')[1]);
-            break;
-          case 'MODEL_PREVIEWS':
-            url = storagePath.modelPreview.getUrl(path.split('/')[0], path.split('/')[1]);
-            break;
-          default:
-            url = path;
-        }
+      switch (bucket) {
+        case 'AVATARS':
+          url = storagePath.avatar.getUrl(path.split('/')[0]);
+          break;
+        case 'CHARACTER_COVERS':
+          url = storagePath.characterCover.getUrl(path.split('/')[0], path.split('/')[1]);
+          break;
+        case 'MODEL_PREVIEWS':
+          url = storagePath.modelPreview.getUrl(path.split('/')[0], path.split('/')[1]);
+          break;
+        default:
+          url = path;
       }
 
       setProgress(100);

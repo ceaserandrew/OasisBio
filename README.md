@@ -34,7 +34,7 @@ OasisBio is a comprehensive identity management system that allows users to crea
 - **Real-time rendering** with lighting effects
 - **GLB format support** for efficient loading
 - **Model preview generation** for quick visualization
-- **Supabase Storage integration** for secure model storage
+- **Cloudflare R2 integration** for secure model storage
 
 ### 5. Era System
 - **Visual timeline** with interactive elements
@@ -61,7 +61,8 @@ OasisBio is a comprehensive identity management system that allows users to crea
 - **Database**: PostgreSQL (Supabase)
 - **ORM**: Prisma 6.19.1
 - **3D Rendering**: Three.js
-- **Authentication**: NextAuth.js
+- **Authentication**: Supabase Auth with OTP
+- **Object Storage**: Cloudflare R2
 
 ## Getting Started
 
@@ -123,21 +124,47 @@ oasisbio/
 │   │   │   ├── oasisbios/       # Character management
 │   │   │   ├── worlds/          # World management
 │   │   │   ├── models/          # Model management
+│   │   │   ├── profile/         # Profile management
+│   │   │   ├── settings/        # Settings page
 │   │   │   └── page.tsx         # Dashboard overview
 │   │   ├── bio/                 # Public character pages
 │   │   │   └── [slug]/          # Dynamic character pages
 │   │   ├── auth/                # Authentication pages
+│   │   ├── create/              # Character creation page
+│   │   ├── explore/             # Explore page
+│   │   ├── about/               # About page
+│   │   ├── manifesto/           # Manifesto page
+│   │   ├── templates/           # Templates page
 │   │   └── api/                 # API routes
 │   ├── components/              # Reusable components
+│   │   ├── auth/                # Authentication components
+│   │   ├── navigation/          # Navigation components
+│   │   ├── mascot/              # Mascot components
 │   │   ├── Button.tsx           # Button component
 │   │   ├── Card.tsx             # Card component
-│   │   └── ModelViewer.tsx      # 3D model viewer
+│   │   ├── Input.tsx            # Input component
+│   │   ├── ModelViewer.tsx      # 3D model viewer
+│   │   └── ...                  # Other components
 │   ├── lib/                     # Utility functions
-│   └── styles/                  # Global styles
+│   │   ├── auth.ts              # Authentication utilities
+│   │   ├── supabase.ts          # Supabase client
+│   │   ├── cloudflare-r2.ts     # Cloudflare R2 client
+│   │   ├── prisma.ts            # Prisma client
+│   │   ├── validation.ts        # Validation utilities
+│   │   └── storage.ts           # Storage utilities
+│   ├── services/                # Business logic services
+│   │   ├── exportService.ts     # Export service
+│   │   └── importService.ts     # Import service
+│   ├── generated/               # Generated Prisma client
+│   └── middleware.ts            # Next.js middleware
 ├── prisma/                      # Database schema
-│   └── schema.prisma            # Prisma schema definition
+│   ├── schema.prisma            # Prisma schema definition
+│   ├── seed.ts                  # Database seed script
+│   └── migrations/              # Database migrations
 ├── public/                      # Static assets
-│   └── models/                  # 3D model files
+│   └── assets/                  # Public assets
+├── docs/                        # Project documentation
+├── scripts/                     # Utility scripts
 ├── .env.example                 # Environment variable example
 ├── next.config.js               # Next.js configuration
 ├── package.json                 # Package configuration

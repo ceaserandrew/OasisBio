@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/worlds - Get worlds for a specific OasisBio
 export async function GET(request: NextRequest) {
   try {
     const session = await requireAuth();
@@ -13,7 +12,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'OasisBio ID is required' }, { status: 400 });
     }
 
-    // Verify ownership of the OasisBio
     const oasisBio = await prisma.oasisBio.findUnique({
       where: { id: oasisBioId },
     });
@@ -28,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     const worlds = await prisma.worldItem.findMany({
       where: { oasisBioId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { name: 'asc' },
     });
 
     return NextResponse.json(worlds);
@@ -37,19 +35,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/worlds - Create new world
 export async function POST(request: NextRequest) {
   try {
     const session = await requireAuth();
     const body = await request.json();
 
-    const { oasisBioId, name, description, type, setting } = body;
+    const { oasisBioId, name, summary, timeSetting, geography, physicsRules, socialStructure, aestheticKeywords, majorConflict } = body;
 
-    if (!oasisBioId || !name) {
-      return NextResponse.json({ error: 'OasisBio ID and name are required' }, { status: 400 });
+    if (!oasisBioId || !name || !summary) {
+      return NextResponse.json({ error: 'OasisBio ID, name, and summary are required' }, { status: 400 });
     }
 
-    // Verify ownership of the OasisBio
     const oasisBio = await prisma.oasisBio.findUnique({
       where: { id: oasisBioId },
     });
@@ -66,9 +62,13 @@ export async function POST(request: NextRequest) {
       data: {
         oasisBioId,
         name,
-        description,
-        type: type || 'fantasy',
-        setting,
+        summary,
+        timeSetting,
+        geography,
+        physicsRules,
+        socialStructure,
+        aestheticKeywords,
+        majorConflict,
       },
     });
 

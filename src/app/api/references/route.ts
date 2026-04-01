@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, handleApiError } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/references - Get references for a specific OasisBio
 export async function GET(request: NextRequest) {
   try {
     const session = await requireAuth();
@@ -13,7 +12,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'OasisBio ID is required' }, { status: 400 });
     }
 
-    // Verify ownership of the OasisBio
     const oasisBio = await prisma.oasisBio.findUnique({
       where: { id: oasisBioId },
     });
@@ -28,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     const references = await prisma.referenceItem.findMany({
       where: { oasisBioId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { title: 'asc' },
     });
 
     return NextResponse.json(references);
@@ -37,19 +35,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/references - Create new reference
 export async function POST(request: NextRequest) {
   try {
     const session = await requireAuth();
     const body = await request.json();
 
-    const { oasisBioId, title, url, description, type } = body;
+    const { oasisBioId, title, url, description, sourceType, tags } = body;
 
     if (!oasisBioId || !title || !url) {
       return NextResponse.json({ error: 'OasisBio ID, title, and URL are required' }, { status: 400 });
     }
 
-    // Verify ownership of the OasisBio
     const oasisBio = await prisma.oasisBio.findUnique({
       where: { id: oasisBioId },
     });
@@ -68,7 +64,8 @@ export async function POST(request: NextRequest) {
         title,
         url,
         description,
-        type: type || 'external',
+        sourceType: sourceType || 'website',
+        tags: tags || '',
       },
     });
 

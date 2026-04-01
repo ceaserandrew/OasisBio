@@ -11,9 +11,6 @@ export async function GET(request: NextRequest) {
     const oasisBios = await prisma.oasisBio.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
-      include: {
-        profiles: true,
-      },
     });
 
     return NextResponse.json(oasisBios);

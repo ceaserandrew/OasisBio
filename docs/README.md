@@ -91,7 +91,7 @@ The [repository system](features/repositories.md) documentation covers:
 
 The [3D character model](features/models.md) documentation includes:
 
-- OBJ file support
+- GLB file support
 - Model preview
 - Era-specific models
 - World-bound visuals

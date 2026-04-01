@@ -17,6 +17,12 @@ interface ImportResult {
   errors: string[];
 }
 
+interface ProcessResult {
+  success: boolean;
+  updated?: boolean;
+  error?: string;
+}
+
 class ImportService {
   // Import characters from ZIP file
   async importCharacters(options: ImportOptions): Promise<ImportResult> {
@@ -116,7 +122,7 @@ class ImportService {
   }
 
   // Process character directory (batch export)
-  private async processCharacterDirectory(userId: string, directoryPath: string) {
+  private async processCharacterDirectory(userId: string, directoryPath: string): Promise<ProcessResult> {
     const fs = require('fs');
     const characterJsonPath = join(directoryPath, 'character.json');
 
@@ -133,7 +139,7 @@ class ImportService {
   }
 
   // Process single character export
-  private async processSingleCharacter(userId: string, directoryPath: string) {
+  private async processSingleCharacter(userId: string, directoryPath: string): Promise<ProcessResult> {
     const fs = require('fs');
     const characterJsonPath = join(directoryPath, 'character.json');
 
@@ -275,22 +281,20 @@ class ImportService {
               });
 
               if (existingReference) {
-                // Update existing reference
                 await prisma.referenceItem.update({
                   where: { id: existingReference.id },
                   data: {
                     title: title.trim(),
-                    notes: notes?.trim(),
+                    description: notes?.trim(),
                   },
                 });
               } else {
-                // Create new reference
                 await prisma.referenceItem.create({
                   data: {
                     oasisBioId: characterId,
                     url: url.trim(),
                     title: title.trim(),
-                    notes: notes?.trim(),
+                    description: notes?.trim(),
                     sourceType: 'web',
                     tags: '',
                   },
@@ -366,11 +370,13 @@ class ImportService {
         const modelBlob = new Blob([modelFile], { type: 'model/gltf-binary' });
 
         // Upload model to R2
-        await storage.upload(modelBlob as File, {
+        const uploadResult = await storage.upload(modelBlob as File, {
           type: 'model',
           userId,
           characterId,
         });
+
+        const filePath = uploadResult.key;
 
         // Update or create model item
         const existingModel = await prisma.modelItem.findFirst({
@@ -381,19 +387,19 @@ class ImportService {
         });
 
         if (existingModel) {
-          // Update existing model
           await prisma.modelItem.update({
             where: { id: existingModel.id },
             data: {
+              filePath,
               modelFormat: 'glb',
               version: { increment: 1 },
             },
           });
         } else {
-          // Create new model item
           await prisma.modelItem.create({
             data: {
               oasisBioId: characterId,
+              filePath,
               name: 'Model',
               modelFormat: 'glb',
               isPrimary: true,

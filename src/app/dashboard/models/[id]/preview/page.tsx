@@ -1,204 +1,197 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/Button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/Card';
+import { Card, CardContent } from '@/components/Card';
+import { useSession, signOut } from '@/lib/auth.client';
+import { useRouter, useParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import NavigationBar from '@/components/navigation/NavigationBar';
 
-// Mock data for the model
-const modelData = {
-  id: 1,
-  name: 'Oasis Prime',
-  objUrl: '/models/oasis-prime.obj',
-  mtlUrl: '/models/oasis-prime.mtl',
-  previewImage: 'https://via.placeholder.com/300x300?text=Oasis+Prime',
-  relatedWorldId: null,
-  relatedEraId: null,
-  uploadedAt: '2024-01-15T10:00:00Z',
-};
+const ModelViewer = dynamic(() => import('@/components/ModelViewer').then(mod => mod.ModelViewer), { ssr: false });
+
+interface Model {
+  id: string;
+  name: string;
+  filePath: string;
+  previewImage: string | null;
+  relatedWorldId: string | null;
+  relatedEraId: string | null;
+  createdAt: string;
+}
 
 export default function ModelPreviewPage() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rendererRef = useRef<any>(null);
-  const sceneRef = useRef<any>(null);
-  const cameraRef = useRef<any>(null);
-  const animationFrameRef = useRef<number | null>(null);
+  const { data: session } = useSession();
+  const router = useRouter();
+  const params = useParams();
+  const modelId = params.id as string;
+  
+  const handleLogout = async () => {
+    await signOut();
+    router.push('/auth/login');
+  };
+
+  const [model, setModel] = useState<Model | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simple 3D preview using Three.js
-    // In a real implementation, this would load and render the OBJ file
-    if (!canvasRef.current) return;
+    if (!session) {
+      router.push('/auth/login');
+      return;
+    }
 
-    // Mock 3D rendering setup
-    const canvas = canvasRef.current;
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    // Create a simple animation to simulate 3D rendering
-    let rotation = 0;
-    const context = canvas.getContext('2d');
-    if (!context) return;
-
-    const animate = () => {
-      context.clearRect(0, 0, width, height);
-      
-      // Draw a rotating cube as a placeholder
-      context.save();
-      context.translate(width / 2, height / 2);
-      context.rotate(rotation);
-      
-      // Draw cube faces
-      context.fillStyle = '#333';
-      context.fillRect(-50, -50, 100, 100);
-      
-      context.fillStyle = '#555';
-      context.beginPath();
-      context.moveTo(-50, -50);
-      context.lineTo(0, -75);
-      context.lineTo(50, -50);
-      context.lineTo(0, -25);
-      context.closePath();
-      context.fill();
-      
-      context.fillStyle = '#777';
-      context.beginPath();
-      context.moveTo(50, -50);
-      context.lineTo(75, 0);
-      context.lineTo(50, 50);
-      context.lineTo(25, 0);
-      context.closePath();
-      context.fill();
-      
-      context.restore();
-      
-      rotation += 0.01;
-      animationFrameRef.current = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
+    const fetchModel = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/models/${modelId}`);
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError('Model not found');
+          } else {
+            throw new Error('Failed to fetch model');
+          }
+          return;
+        }
+        const data = await response.json();
+        setModel(data);
+      } catch (err) {
+        setError('Failed to load model');
+        console.error('Error fetching model:', err);
+      } finally {
+        setLoading(false);
       }
     };
-  }, []);
+
+    fetchModel();
+  }, [session, router, modelId]);
+
+  if (!session) {
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="flex flex-col lg:flex-row">
+          <NavigationBar user={session.user} onLogout={handleLogout} />
+          <div className="flex-1 p-6 md:p-8">
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !model) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="flex flex-col lg:flex-row">
+          <NavigationBar user={session.user} onLogout={handleLogout} />
+          <div className="flex-1 p-6 md:p-8">
+            <div className="text-center py-16">
+              <p className="text-red-600 mb-4">{error || 'Model not found'}</p>
+              <Button onClick={() => router.push('/dashboard/models')}>
+                Back to Models
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Model Preview</h1>
-            <p className="text-gray-600">Preview and interact with your 3D model</p>
-          </div>
-          <Button asChild>
-            <a href="/dashboard/models">Back to Models</a>
-          </Button>
-        </div>
+    <div className="min-h-screen bg-background">
+      <div className="flex flex-col lg:flex-row">
+        <NavigationBar user={session?.user} onLogout={handleLogout} />
 
-        <Card className="border-0 shadow-sm mb-8">
-          <CardHeader>
-            <CardTitle>{modelData.name}</CardTitle>
-            <CardDescription>Uploaded: {new Date(modelData.uploadedAt).toLocaleDateString()}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* 3D Viewer */}
-              <div className="lg:col-span-2">
-                <div className="aspect-[16/9] bg-gray-100 rounded-md overflow-hidden">
-                  <canvas 
-                    ref={canvasRef} 
-                    className="w-full h-full"
-                  />
-                </div>
-                
-                {/* Controls */}
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Button size="sm">Rotate</Button>
-                  <Button size="sm">Zoom In</Button>
-                  <Button size="sm">Zoom Out</Button>
-                  <Button size="sm">Reset View</Button>
-                  <div className="ml-auto">
-                    <Button size="sm">Change Background</Button>
+        <div className="flex-1 p-6 md:p-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-8">
+              <Button 
+                variant="ghost" 
+                onClick={() => router.push('/dashboard/models')}
+                className="mb-4"
+              >
+                ← Back to Models
+              </Button>
+              <h1 className="text-3xl font-display font-bold mb-2">{model.name}</h1>
+              <p className="text-muted-foreground">
+                Uploaded: {new Date(model.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+
+            <Card className="border-0 shadow-sm">
+              <CardContent className="p-8">
+                <div className="flex flex-col lg:flex-row gap-8">
+                  <div className="lg:w-2/3">
+                    <div className="aspect-square bg-gray-100 rounded-md overflow-hidden">
+                      <ModelViewer
+                        modelPath={model.filePath}
+                        mtlPath=""
+                        texturePath=""
+                        width={800}
+                        height={600}
+                      />
+                    </div>
+                  </div>
+                  <div className="lg:w-1/3 space-y-6">
+                    <div>
+                      <div className="text-xs font-mono text-muted-foreground mb-1">MODEL</div>
+                      <p className="font-medium">{model.name}</p>
+                    </div>
+                    <div>
+                      <div className="text-xs font-mono text-muted-foreground mb-1">FILE</div>
+                      <p className="font-medium">{model.filePath.split('.').pop()?.toUpperCase() || 'GLB'}</p>
+                    </div>
+                    {model.relatedWorldId && (
+                      <div>
+                        <div className="text-xs font-mono text-muted-foreground mb-1">WORLD</div>
+                        <p className="font-medium">{model.relatedWorldId}</p>
+                      </div>
+                    )}
+                    {model.relatedEraId && (
+                      <div>
+                        <div className="text-xs font-mono text-muted-foreground mb-1">ERA</div>
+                        <p className="font-medium">{model.relatedEraId}</p>
+                      </div>
+                    )}
+                    <div className="flex flex-wrap gap-2">
+                      <Button size="sm">Rotate</Button>
+                      <Button size="sm">Zoom</Button>
+                      <Button size="sm">Reset</Button>
+                    </div>
+                    <div className="pt-4 border-t">
+                      <Button 
+                        variant="destructive" 
+                        size="sm"
+                        onClick={async () => {
+                          if (confirm('Are you sure you want to delete this model?')) {
+                            try {
+                              const response = await fetch(`/api/models/${model.id}`, {
+                                method: 'DELETE',
+                              });
+                              if (response.ok) {
+                                router.push('/dashboard/models');
+                              }
+                            } catch (err) {
+                              console.error('Error deleting model:', err);
+                            }
+                          }
+                        }}
+                      >
+                        Delete Model
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Model Info */}
-              <div className="lg:col-span-1">
-                <Card className="border-0 shadow-sm">
-                  <CardHeader>
-                    <CardTitle>Model Details</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-sm font-medium mb-1">File Information</h3>
-                        <div className="space-y-2">
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-600">OBJ File</span>
-                            <span className="text-sm">{modelData.objUrl.split('/').pop()}</span>
-                          </div>
-                          {modelData.mtlUrl && (
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm text-gray-600">MTL File</span>
-                              <span className="text-sm">{modelData.mtlUrl.split('/').pop()}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h3 className="text-sm font-medium mb-1">Associations</h3>
-                        <div className="space-y-2">
-                          {modelData.relatedWorldId ? (
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm text-gray-600">Related World</span>
-                              <span className="text-sm">Neon Desert</span>
-                            </div>
-                          ) : (
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm text-gray-600">Related World</span>
-                              <span className="text-sm text-gray-500">None</span>
-                            </div>
-                          )}
-                          {modelData.relatedEraId ? (
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm text-gray-600">Related Era</span>
-                              <span className="text-sm">Future</span>
-                            </div>
-                          ) : (
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm text-gray-600">Related Era</span>
-                              <span className="text-sm text-gray-500">None</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h3 className="text-sm font-medium mb-1">Actions</h3>
-                        <div className="space-y-2">
-                          <Button size="sm" className="w-full">
-                            Download Model
-                          </Button>
-                          <Button size="sm" variant="secondary" className="w-full">
-                            Update Model
-                          </Button>
-                          <Button size="sm" variant="outline" className="w-full">
-                            Delete Model
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

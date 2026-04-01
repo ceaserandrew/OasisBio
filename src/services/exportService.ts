@@ -67,9 +67,10 @@ class ExportService {
       const character = await prisma.oasisBio.findUnique({
         where: { id: characterId },
         include: {
-          dcos: include.dcos,
+          abilities: true,
+          dcosFiles: include.dcos,
           references: include.references,
-          world: include.world,
+          worlds: include.world,
         },
       });
 

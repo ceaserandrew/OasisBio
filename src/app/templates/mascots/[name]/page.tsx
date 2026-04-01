@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/Button';
@@ -5,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 
 // ModelViewer is a client component, so we'll import it dynamically
 import dynamic from 'next/dynamic';
-const ModelViewer = dynamic(() => import('@/components/ModelViewer'), { ssr: false });
+const ModelViewer = dynamic(() => import('@/components/ModelViewer').then(mod => mod.ModelViewer), { ssr: false });
 
 // 模型数据
 const mascotData = {
@@ -134,7 +136,7 @@ export default function MascotDetailPage() {
                       modelPath={mascot.modelPath}
                       mtlPath={mascot.mtlPath}
                       texturePath={mascot.texturePath}
-                      width="100%"
+                      width={800}
                       height={500}
                     />
                   </div>

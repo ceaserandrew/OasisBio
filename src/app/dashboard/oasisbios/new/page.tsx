@@ -464,7 +464,7 @@ export default function CreateOasisBioPage() {
                   Next
                 </Button>
               ) : (
-                <Button onClick={handleSubmit} disabled={isSubmitting} loading={isSubmitting}>
+                <Button onClick={handleSubmit} disabled={isSubmitting}>
                   {isSubmitting ? 'Publishing...' : 'Publish'}
                 </Button>
               )}

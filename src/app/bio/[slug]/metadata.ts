@@ -1,47 +1,53 @@
 import type { Metadata } from 'next';
+import { prisma } from '@/lib/prisma';
 
-// Mock data for the public OasisBio page
-const oasisBioData = {
-  title: 'Oasis Prime',
-  tagline: 'A digital identity beyond time',
-  description: 'Oasis Prime is a digital identity that exists across multiple time periods and dimensions. It serves as a bridge between different versions of self, connecting past, present, and future iterations.',
-};
+interface Props {
+  params: { slug: string };
+}
 
-export const metadata: Metadata = {
-  title: `${oasisBioData.title} – Fictional Character Profile | OasisBio`,
-  description: oasisBioData.tagline + ' - ' + oasisBioData.description,
-  keywords: [
-    'OasisBio',
-    'digital identity',
-    'fictional character',
-    'worldbuilding',
-    '3D model',
-    'GLB',
-    'identity system',
-    'character profile',
-  ],
-  authors: [
-    {
-      name: 'Oasis Company',
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const oasisBio = await prisma.oasisBio.findUnique({
+    where: { slug: params.slug },
+    select: {
+      title: true,
+      tagline: true,
+      description: true,
     },
-  ],
-  openGraph: {
-    title: `${oasisBioData.title} – Fictional Character Profile | OasisBio`,
-    description: oasisBioData.tagline + ' - ' + oasisBioData.description,
-    type: 'profile',
-    images: [
-      {
-        url: 'https://via.placeholder.com/800x600?text=Oasis+Prime+Model',
-        width: 800,
-        height: 600,
-        alt: oasisBioData.title,
-      },
+  });
+
+  if (!oasisBio) {
+    return {
+      title: 'Not Found | OasisBio',
+    };
+  }
+
+  const fullDescription = oasisBio.tagline 
+    ? `${oasisBio.tagline}${oasisBio.description ? ' - ' + oasisBio.description : ''}`
+    : oasisBio.description || 'A digital identity on OasisBio';
+
+  return {
+    title: `${oasisBio.title} – Character Profile | OasisBio`,
+    description: fullDescription,
+    keywords: [
+      'OasisBio',
+      'digital identity',
+      'fictional character',
+      'worldbuilding',
+      '3D model',
+      'GLB',
+      'identity system',
+      'character profile',
     ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: `${oasisBioData.title} – Fictional Character Profile | OasisBio`,
-    description: oasisBioData.tagline + ' - ' + oasisBioData.description,
-    images: ['https://via.placeholder.com/800x600?text=Oasis+Prime+Model'],
-  },
-};
+    authors: [{ name: 'Oasis Company' }],
+    openGraph: {
+      title: `${oasisBio.title} – Character Profile | OasisBio`,
+      description: fullDescription,
+      type: 'profile',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${oasisBio.title} – Character Profile | OasisBio`,
+      description: fullDescription,
+    },
+  };
+}

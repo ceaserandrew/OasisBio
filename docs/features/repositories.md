@@ -202,7 +202,7 @@ interface WorldDocument {
 ## Authentication and Authorization
 
 All repository endpoints implement:
-- **Authentication**: Uses NextAuth.js to verify user is logged in
+- **Authentication**: Uses Supabase Auth to verify user is logged in
 - **Authorization**: Verifies that the requested resource belongs to the authenticated user
 - **Error Handling**: Proper error responses for unauthorized access, not found resources, and server errors
 

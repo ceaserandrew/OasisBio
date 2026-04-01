@@ -18,7 +18,6 @@ OasisBio is a cross-era identity system that allows users to create and manage m
 - **Database**: PostgreSQL (Supabase)
 - **ORM**: Prisma 6.19.1
 - **Authentication**: Supabase Auth with OTP
-- **Password Hashing**: bcryptjs 3.0.3
 - **Object Storage**: Cloudflare R2 (for large files)
 - **ZIP Processing**: archiver and unzipper
 
@@ -79,7 +78,6 @@ OasisBio/
 ### 5. User Authentication
 - Secure registration and login
 - Supabase Auth with OTP (One-Time Password) authentication
-- Password hashing (bcryptjs)
 - Session management with Supabase Auth helpers
 - User profile information included in session
 - Protected routes with middleware
@@ -115,7 +113,6 @@ OasisBio/
 - email: String (unique)
 - emailVerified: DateTime (optional)
 - image: String (optional)
-- password: String
 - createdAt: DateTime
 - updatedAt: DateTime
 - oasisBios: Array of OasisBio
@@ -339,7 +336,7 @@ OasisBio/
 
 ### Authentication
 - `POST /api/auth/register` - User registration
-- `POST /api/auth/[...nextauth]` - NextAuth.js authentication endpoints
+- `POST /api/auth/supabase-webhook` - Supabase Auth webhook for user sync
 
 ### User Management
 - `GET /api/profile` - Get user profile
@@ -405,7 +402,7 @@ OasisBio/
 1. Connect your GitHub repository to Cloudflare Pages
 2. Configure build settings:
    - Build command: `npm run build`
-   - Publish directory: `.next/static`
+   - Publish directory: `.next`
 3. Add environment variables
 4. Deploy the project
 
@@ -456,8 +453,7 @@ NODE_ENV="development"
 - Run lint: `npm run lint`
 
 ## Security Considerations
-- Passwords are hashed using bcryptjs
-- Authentication is handled through NextAuth.js
+- Authentication is handled through Supabase Auth
 - Protected routes require valid session
 - Environment variables are kept secure
 - Input validation is implemented for all user inputs
