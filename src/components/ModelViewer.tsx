@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three-stdlib';
+import { GLTFLoader, OrbitControls } from 'three-stdlib';
 
 interface ModelViewerProps {
   modelPath: string;
@@ -22,10 +22,22 @@ export function ModelViewer({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [autoRotate, setAutoRotate] = useState(false);
+  const [autoRotateSpeed, setAutoRotateSpeed] = useState(2);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const controlsRef = useRef<THREE.OrbitControls | null>(null);
   const animationFrameRef = useRef<number | null>(null);
+
+  // Reset camera to initial position
+  const resetCamera = () => {
+    if (cameraRef.current && controlsRef.current) {
+      cameraRef.current.position.set(0, 0, 5);
+      cameraRef.current.lookAt(0, 0, 0);
+      controlsRef.current.reset();
+    }
+  };
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -46,6 +58,19 @@ export function ModelViewer({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
+
+    // Initialize OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.screenSpacePanning = false;
+    controls.minDistance = 1;
+    controls.maxDistance = 10;
+    controls.maxPolarAngle = Math.PI / 2;
+    controls.enablePan = true;
+    controls.enableZoom = true;
+    controls.enableRotate = true;
+    controlsRef.current = controls;
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -80,12 +105,9 @@ export function ModelViewer({
     const animate = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
       
-      if (sceneRef.current) {
-        sceneRef.current.traverse((object) => {
-          if (object instanceof THREE.Mesh) {
-            object.rotation.y += 0.005;
-          }
-        });
+      // Update controls
+      if (controlsRef.current) {
+        controlsRef.current.update();
       }
 
       if (rendererRef.current && cameraRef.current && sceneRef.current) {
@@ -95,6 +117,14 @@ export function ModelViewer({
 
     animate();
 
+    // Handle auto rotate state changes
+    useEffect(() => {
+      if (controlsRef.current) {
+        controlsRef.current.autoRotate = autoRotate;
+        controlsRef.current.autoRotateSpeed = autoRotateSpeed;
+      }
+    }, [autoRotate, autoRotateSpeed]);
+
     const handleResize = () => {
       if (cameraRef.current && rendererRef.current && containerRef.current) {
         const width = containerRef.current.clientWidth;
@@ -103,6 +133,11 @@ export function ModelViewer({
         cameraRef.current.aspect = width / height;
         cameraRef.current.updateProjectionMatrix();
         rendererRef.current.setSize(width, height);
+        
+        // Update controls after resize
+        if (controlsRef.current) {
+          controlsRef.current.update();
+        }
       }
     };
 
@@ -116,6 +151,11 @@ export function ModelViewer({
       }
       
       window.removeEventListener('resize', handleResize);
+      
+      // Dispose controls
+      if (controlsRef.current) {
+        controlsRef.current.dispose();
+      }
       
       if (containerRef.current && rendererRef.current) {
         containerRef.current.removeChild(rendererRef.current.domElement);
@@ -137,6 +177,15 @@ export function ModelViewer({
         });
       }
     };
+  // Reset camera to initial position
+  const resetCamera = () => {
+    if (cameraRef.current && controlsRef.current) {
+      cameraRef.current.position.set(0, 0, 5);
+      cameraRef.current.lookAt(0, 0, 0);
+      controlsRef.current.reset();
+    }
+  };
+
   }, [modelPath, mtlPath, texturePath, width, height]);
 
   return (
@@ -167,6 +216,37 @@ export function ModelViewer({
           </div>
         </div>
       )}
+
+      {/* Control Panel */}
+      <div className="absolute bottom-4 left-4 right-4 bg-white/80 backdrop-blur-sm rounded-lg p-3 shadow-md flex items-center gap-2">
+        <button 
+          onClick={() => setAutoRotate(!autoRotate)}
+          className={`p-2 rounded-full ${autoRotate ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'} hover:bg-gray-300 transition-colors`}
+          title={autoRotate ? 'Pause Auto Rotate' : 'Start Auto Rotate'}
+        >
+          {autoRotate ? '⏸️' : '▶️'}
+        </button>
+        <button 
+          onClick={resetCamera}
+          className="p-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+          title="Reset Camera"
+        >
+          🔄
+        </button>
+        <div className="flex-1">
+          <input
+            type="range"
+            min="0.1"
+            max="10"
+            step="0.1"
+            value={autoRotateSpeed}
+            onChange={(e) => setAutoRotateSpeed(parseFloat(e.target.value))}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            title="Rotation Speed"
+          />
+        </div>
+        <span className="text-sm text-gray-600 min-w-[40px]">{autoRotateSpeed.toFixed(1)}x</span>
+      </div>
     </div>
   );
 }
